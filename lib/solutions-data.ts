@@ -48,7 +48,7 @@ export const businessCategories: BusinessCategory[] = [
       "Online appointment booking for patients, 24/7 from any device",
       "Automated WhatsApp & SMS reminders to reduce no-shows",
     ],
-    learnMoreHref: REGISTER_GOOGLE_URL,
+    learnMoreHref: `${REGISTER_GOOGLE_URL}`,
     image: "/grow-doctor.jpg",
     imageAlt: "Medical and health services appointment scheduling",
     businessTypes: [
@@ -83,7 +83,7 @@ export const businessCategories: BusinessCategory[] = [
       "Easily group services into categories for simple searching",
       "Stylist calendars, team sync, and WhatsApp client reminders",
     ],
-    learnMoreHref: REGISTER_GOOGLE_URL,
+    learnMoreHref: `${REGISTER_GOOGLE_URL}`,
     image: "/salon-appointment.jpg",
     imageAlt: "Beauty and wellness appointment scheduling",
     businessTypes: [
@@ -117,7 +117,7 @@ export const businessCategories: BusinessCategory[] = [
       "Synchronise your business calendar with Google Calendar",
       "Accept online bookings and send automated reminders",
     ],
-    learnMoreHref: REGISTER_GOOGLE_URL,
+    learnMoreHref: `${REGISTER_GOOGLE_URL}`,
     image: "/physiotherapy-appointment.jpg",
     imageAlt: "Personal services appointment scheduling",
     businessTypes: [
@@ -151,7 +151,7 @@ export const businessCategories: BusinessCategory[] = [
       "Easy scheduling of fitness classes and sports coaching",
       "Set availability for trainers and manage recurring bookings",
     ],
-    learnMoreHref: REGISTER_GOOGLE_URL,
+    learnMoreHref: `${REGISTER_GOOGLE_URL}`,
     image: "/physiotherapy-services.jpg",
     imageAlt: "Sports and fitness appointment scheduling",
     businessTypes: [

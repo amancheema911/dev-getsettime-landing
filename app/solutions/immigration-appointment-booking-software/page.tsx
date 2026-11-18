@@ -256,7 +256,7 @@ export default function ImmigrationAppointmentBookingSoftwarePage() {
 
               <div className="flex gap-2 max-[425px]:flex-col flex-row flex-wrap">
                 <Link
-                  href={REGISTER_GOOGLE_URL}
+                  href={`${REGISTER_GOOGLE_URL}`}
                   target="_blank"
                   aria-label="Sign up with Google"
                   className="bg-indigo-600 text-white text-xs sm:text-sm px-4 py-3 rounded-xl flex items-center justify-center gap-3"
@@ -272,7 +272,7 @@ export default function ImmigrationAppointmentBookingSoftwarePage() {
                   Sign up with Google
                 </Link>
                 <Link
-                  href={REGISTER_URL}
+                  href={`${REGISTER_URL}`}
                   aria-label="Get Started for Free - Immigration Appointment Booking Software"
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-900 px-4 py-3 text-xs sm:text-sm text-white drop-shadow-lg transition"
                 >

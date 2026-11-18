@@ -170,7 +170,7 @@ export default function HelpCenterContent() {
                 Email: {contactInfo.email}
               </Link>
               <Link
-                href={LOGIN_URL}
+                href={`${LOGIN_URL}`}
                 target="_blank"
                 className="inline-flex items-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-50"
               >
