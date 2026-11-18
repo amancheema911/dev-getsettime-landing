@@ -122,6 +122,8 @@ export default function TrustedCompanies() {
                     alt={`${company.name} logo`}
                     width={50}
                     height={50}
+                    priority={true}
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="rounded-lg p-2 object-contain sm:grayscale sm:brightness-90 transition hover:grayscale-0 hover:brightness-100"
                   />
                 </div>

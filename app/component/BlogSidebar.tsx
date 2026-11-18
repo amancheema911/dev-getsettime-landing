@@ -28,7 +28,7 @@ export function BlogSidebar({ currentPostSlug, relatedPosts = [] }: BlogSidebarP
           {recentPosts.slice(0, 4).map((post) => (
             <Link key={post.id} href={`${BASE_URL}/blog/${post.slug}`} className="group flex gap-4 p-2 -mx-2 rounded-xl hover:bg-neutral-50 transition-all duration-200">
               <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
-                <Image src={`/${post.coverImage}`} alt={post.title} fill className="object-cover transition-transform duration-300 group-hover:scale-110"/>
+                <Image src={`/${post.coverImage}`} alt={post.title} fill priority={true} sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-transform duration-300 group-hover:scale-110"/>
               </div>
               <div className="flex-1">
                 <h4 className="text-sm font-semibold text-neutral-900 group-hover:text-indigo-600 transition-colors">{post.title}</h4>

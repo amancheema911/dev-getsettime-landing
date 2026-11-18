@@ -391,9 +391,9 @@ export default function DemoFreeForm({ businessType }: DemoFreeFormProps = {}) {
   };
 
   const inputClass = (hasError = false) =>
-    `block w-full rounded-lg border ${hasError ? "border-red-400" : "border-neutral-200"} bg-white py-2.5 pl-10 pr-3 text-sm text-neutral-800 placeholder:text-neutral-400 focus:border-[#3D3AF3] focus:outline-none focus:ring-2 focus:ring-[#3D3AF3]/20`;
+    `block w-full rounded-lg border ${hasError ? "border-red-400" : "border-neutral-200"} bg-white py-3 sm:py-2.5 pl-10 pr-3 text-sm text-neutral-800 placeholder:text-neutral-400 focus:border-[#3D3AF3] focus:outline-none focus:ring-2 focus:ring-[#3D3AF3]/20`;
   const selectClass = (hasError = false) =>
-    `block w-full rounded-lg border ${hasError ? "border-red-400" : "border-neutral-200"} bg-white py-2.5 pl-10 pr-8 text-sm text-neutral-800 focus:border-[#3D3AF3] focus:outline-none focus:ring-2 focus:ring-[#3D3AF3]/20 appearance-none`;
+    `block w-full rounded-lg border ${hasError ? "border-red-400" : "border-neutral-200"} bg-white py-3 sm:py-2.5 pl-10 pr-8 text-sm text-neutral-800 focus:border-[#3D3AF3] focus:outline-none focus:ring-2 focus:ring-[#3D3AF3]/20 appearance-none`;
 
   return (
     <div id="apply-form" className="mx-auto rounded-2xl border border-neutral-200 bg-white p-5 drop-shadow-lg sm:p-6 ">

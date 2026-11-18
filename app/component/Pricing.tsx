@@ -9,7 +9,7 @@ import {
   type RegionalPricing,
 } from "@/lib/pricing-data";
 import { useRegionalPricing } from "./useRegionalPricing";
-import Link from "next/link";
+import Button from "./ui/button/Button";
 import type { FC } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Heading from "./Heading";
@@ -68,6 +68,7 @@ interface PricingProps {
   bottomCtaContent?: PricingBottomCtaContent;
   trustContent?: PricingTrustContent;
   variant?: "home" | "page";
+  pricingSource?: string;
 }
 
 export type { PricingHeaderContent };
@@ -76,7 +77,8 @@ export const PricingCard: FC<{
   tier: PricingTier;
   isAnnual: boolean;
   region: RegionalPricing;
-}> = ({ tier, isAnnual, region }) => {
+  pricingSource?: string;
+}> = ({ tier, isAnnual, region, pricingSource }) => {
   const annualDiscount = tier.name === "Starter" || tier.price === "Free" ? 1 : 0.9;
   const monthlyPrice = Number(tier.price);
   const annualPrice = Math.round(monthlyPrice * annualDiscount);
@@ -148,24 +150,20 @@ export const PricingCard: FC<{
         ))}
       </div>
 
-      <Link
-        href={tier.buttonLink}
-        target="_blank"
-        aria-label={`Start with - ${tier.name} plan`}
-        className={`mt-6 flex w-full shrink-0 items-center justify-center rounded-xl px-4 py-3 text-sm transition-all duration-300 ${
-          tier.popular
-            ? "bg-indigo-600 text-white drop-shadow-lg drop-shadow-indigo-500/25 hover:drop-shadow-xl"
-            : "border border-slate-200 bg-neutral-900 text-white hover:bg-neutral-800"
-        }`}
-      >
-        {tier.buttonText}
-      </Link>
+      <Button
+        buttonLink={tier.buttonLink}
+        buttonText={tier.buttonText}
+        ariaLabel={`Start with - ${tier.name} plan`}
+        tone={tier.popular ? "primary" : "dark"}
+        className={`mt-6 w-full`}
+        source={pricingSource}
+      />
     </div>
   );
 };
 
-export const BillingToggle: FC<{ isAnnual: boolean; onChange: (annual: boolean) => void }> = ({ isAnnual, onChange }) => (
-  <div className="flex flex-col items-center gap-4 px-4 py-3">
+export const BillingToggle: FC<{ isAnnual: boolean; onChange: (annual: boolean) => void; pricingSource?: string }> = ({ isAnnual, onChange, pricingSource }) => (
+  <div className="flex flex-col items-center gap-4 px-4 py-3" data-source={pricingSource}>
     <div className="relative">
       <div className="pointer-events-none absolute -right-2 -top-3 z-20 sm:-right-5 sm:-top-3.5" aria-hidden>
         <div className="flex items-center gap-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-lg shadow-emerald-500/25 ring-2 ring-white sm:px-3 sm:text-[11px]">
@@ -211,7 +209,8 @@ const PricingCardsSlider: FC<{
   tiers: PricingTier[];
   isAnnual: boolean;
   region: RegionalPricing;
-}> = ({ tiers, isAnnual, region }) => {
+  pricingSource?: string;
+}> = ({ tiers, isAnnual, region, pricingSource }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slidesPerView, setSlidesPerView] = useState(1);
   const touchStartX = useRef<number | null>(null);
@@ -295,7 +294,7 @@ const PricingCardsSlider: FC<{
         <div className="flex items-stretch gap-6 transition-transform duration-300 ease-out" style={{ transform: `translateX(${trackOffset})` }}>
           {tiers.map((tier) => (
             <div key={tier.name} className="flex shrink-0 flex-col py-4" style={{ flexBasis: slideBasis }}>
-              <PricingCard tier={tier} isAnnual={isAnnual} region={region} />
+              <PricingCard tier={tier} isAnnual={isAnnual} region={region} pricingSource={pricingSource} />
             </div>
           ))}
         </div>
@@ -334,6 +333,7 @@ const PricingCardsSlider: FC<{
             onClick={goNext}
             disabled={currentIndex >= maxIndex}
             aria-label="Next pricing plans"
+            data-source={pricingSource}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-600 shadow-sm transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-40 sm:hidden"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden>
@@ -349,6 +349,7 @@ const PricingCardsSlider: FC<{
 export default function Pricing({
   variant = "home",
   headerContent,
+  pricingSource,
 }: PricingProps = {}) {
   const [isAnnual, setIsAnnual] = useState(false);
   const isPage = variant === "page";
@@ -416,9 +417,7 @@ export default function Pricing({
                 <div className="rounded-2xl bg-indigo-50 p-4">
                   <div className="text-sm">Start accepting appointments without payment. Upgrade when your workspace needs more seats or more capacity.</div>
                 </div>
-                <Link href={`${REGISTER_URL}`} target="_blank" aria-label="Start Free Now" role="button" className="mt-5 flex w-full items-center justify-center rounded-xl bg-indigo-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-indigo-700">
-                  Start Free Now
-                </Link>
+                <Button buttonLink={`${REGISTER_URL}`} buttonText="Start Free Now" ariaLabel="Start Free Now" source={pricingSource} tone="primary" className="w-full" />
               </div>
             </div>
           </div>
@@ -436,7 +435,7 @@ export default function Pricing({
 
         <BillingToggle isAnnual={isAnnual} onChange={setIsAnnual} />
 
-        <PricingCardsSlider tiers={tiers} isAnnual={isAnnual} region={region} />
+        <PricingCardsSlider tiers={tiers} isAnnual={isAnnual} region={region} pricingSource={pricingSource} />
 
         {/* BOTTOM CTA SECTION */}
         <div className="mt-10 rounded-2xl bg-white p-6 drop-shadow-sm">

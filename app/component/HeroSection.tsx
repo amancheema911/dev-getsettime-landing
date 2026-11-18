@@ -1,8 +1,9 @@
 import Image from "next/image";
-import { REGISTER_GOOGLE_URL, REGISTER_URL } from "@/lib/config";
+import { REGISTER_URL } from "@/lib/config";
 import Logo from "./Logo";
 import Link from "next/link";
 import Heading from "./Heading";
+import SigngoogleButton from "./ui/button/SigngoogleButton";
 
 export default function HeroSection() {
   return (
@@ -26,17 +27,7 @@ export default function HeroSection() {
             />
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href={`${REGISTER_GOOGLE_URL}`} target="_blank" aria-label="Sign up with Google" className="bg-indigo-600 text-white text-sm px-4 py-2.5 rounded-xl flex items-center justify-center gap-3">
-                <svg width="26" height="28" viewBox="0 0 48 48" className="inline-block rounded-sm bg-white p-1">
-                  <g>
-                    <path fill="#4285F4" d="M43.6 20.5H42V20.4H24v7.2h11.2C33.9 32.1 29.4 35 24 35c-6.1 0-11-4.9-11-11s4.9-11 11-11c2.6 0 5 .9 6.9 2.5l5.8-5.8C33.5 7.1 28.9 5 24 5 12.9 5 4 13.9 4 25s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/>
-                    <path fill="#34A853" d="M6.3 14.1l5.9 4.3C14.2 15.1 18.7 12 24 12c2.6 0 5 .9 6.9 2.5l5.8-5.8C33.5 7.1 28.9 5 24 5c-7.1 0-13.1 4.1-16.1 10.1z"/>
-                    <path fill="#FBBC05" d="M24 44c5.3 0 10.1-1.8 13.8-4.9l-6.4-5.2C29.5 35.7 26.9 36.7 24 36.7c-5.4 0-9.9-3.6-11.5-8.5l-6.1 4.7C7 39.1 14.9 44 24 44z"/>
-                    <path fill="#EA4335" d="M43.6 20.5H42V20.4H24v7.2h11.2c-1.1 3.1-3.6 5.7-6.6 7.1l6.4 5.2C39.9 37.1 44 31.9 44 25c0-1.3-.1-2.7-.4-4z"/>
-                  </g>
-                </svg>
-                Sign up with Google
-              </Link>
+              <SigngoogleButton />
               <Link href={`${REGISTER_URL}`} aria-label="Contact Us - Hero Section" className="bg-gray-900 text-white text-sm px-4 py-2.5 rounded-xl flex items-center justify-center">Get Started for Free</Link>
             </div>
 
@@ -152,7 +143,7 @@ export default function HeroSection() {
                         <div key={idx} className="flex items-center gap-2 p-2 rounded-lg sm:rounded-xl bg-white drop-shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer">
                           <div className="relative flex-shrink-0">
                             <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center">
-                              <Image src={meeting.avatar} alt={meeting.name} width={32} height={32} className="object-cover" />
+                              <Image src={meeting.avatar} alt={meeting.name} width={32} height={32} priority={true} sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
                             </div>
                             <div className="absolute -bottom-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-green-600 border-2 border-white"></div>
                           </div>

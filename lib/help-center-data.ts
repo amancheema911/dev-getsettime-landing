@@ -38,7 +38,7 @@ export const helpSections: HelpSection[] = [
       {
         title: "Choose your plan",
         description:
-          "Select Basic, Professional, or Enterprise based on your team size and booking volume. You can upgrade anytime.",
+          "Select Starter, Professional, or Enterprise based on your team size and booking volume. You can upgrade anytime.",
       },
     ],
     tip: "Use Google signup if you want one-click access without remembering a separate password.",

@@ -4,11 +4,13 @@ import Heading from "@/app/component/Heading";
 import Card from "@/app/component/Card";
 import Link from "next/link";
 import Image from "next/image";
-import { APP_NAME, BASE_URL, contactInfo, REGISTER_GOOGLE_URL, REGISTER_URL } from "@/lib/config";
+import { APP_NAME, BASE_URL, contactInfo, REGISTER_URL } from "@/lib/config";
+import SigngoogleButton from "@/app/component/ui/button/SigngoogleButton";
 import type { ReactNode } from "react";
 import { FaqSection } from "@/app/component/FaqSection";
 import SolutionCtaSection from "@/app/component/SolutionCtaSection";
 import ScreenGate from "@/app/component/ScreenGate";
+import Button from "@/app/component/ui/button/Button";
 
 const pageUrl = `${BASE_URL}/solutions/dermatology-appointment-scheduling-software`;
 const pageDescription = "All-in-one dermatology clinic scheduling software for online appointment booking based on different treatment procedures, durations, or room requirements.";
@@ -408,18 +410,8 @@ export default function DermatologyAppointmentSchedulingSoftware() {
                     </div>
 
                     <div className="flex gap-2 max-[425px]:flex-col flex-row flex-wrap">
-                        <Link href={`${REGISTER_GOOGLE_URL}`} target="_blank" aria-label="Sign up with Google" className="bg-indigo-600 text-white text-sm px-4 py-3 rounded-xl flex items-center justify-center gap-3">
-                        <svg viewBox="0 0 48 48" className="w-5 h-5 sm:w-6 sm:h-6 inline-block rounded-sm bg-white p-1">
-                        <g>
-                            <path fill="#4285F4" d="M43.6 20.5H42V20.4H24v7.2h11.2C33.9 32.1 29.4 35 24 35c-6.1 0-11-4.9-11-11s4.9-11 11-11c2.6 0 5 .9 6.9 2.5l5.8-5.8C33.5 7.1 28.9 5 24 5 12.9 5 4 13.9 4 25s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/>
-                            <path fill="#34A853" d="M6.3 14.1l5.9 4.3C14.2 15.1 18.7 12 24 12c2.6 0 5 .9 6.9 2.5l5.8-5.8C33.5 7.1 28.9 5 24 5c-7.1 0-13.1 4.1-16.1 10.1z"/>
-                            <path fill="#FBBC05" d="M24 44c5.3 0 10.1-1.8 13.8-4.9l-6.4-5.2C29.5 35.7 26.9 36.7 24 36.7c-5.4 0-9.9-3.6-11.5-8.5l-6.1 4.7C7 39.1 14.9 44 24 44z"/>
-                            <path fill="#EA4335" d="M43.6 20.5H42V20.4H24v7.2h11.2c-1.1 3.1-3.6 5.7-6.6 7.1l6.4 5.2C39.9 37.1 44 31.9 44 25c0-1.3-.1-2.7-.4-4z"/>
-                        </g>
-                        </svg>
-                            Sign up with Google
-                        </Link>
-                        <Link href={`${REGISTER_URL}`} aria-label="Get Started for Free - Dermatology Appointment Scheduling Software" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-900 px-4 py-3 text-sm text-white drop-shadow-lg transition">Get Started for Free</Link>
+                        <SigngoogleButton signupSource="dermatology-appointment-scheduling-software" />
+                        <Button buttonLink={`${REGISTER_URL}`} buttonText="Get Started for Free" ariaLabel="Get Started for Free" source="dermatology-appointment-scheduling-software" tone="dark" />
                     </div>
                 </div>
             </div>
@@ -434,6 +426,8 @@ export default function DermatologyAppointmentSchedulingSoftware() {
                     className="h-full w-full object-cover rounded-2xl"
                     width={1000}
                     height={1000}
+                    priority={true}
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     />
 
                     {/* Book Appointment — overlaps left edge of image */}
@@ -490,7 +484,7 @@ export default function DermatologyAppointmentSchedulingSoftware() {
                     {/* Confirmation — bottom-right of image */}
                     <div className="hidden lg:block absolute bottom-4 left-[35%] lg:left-[50%] xl:left-[40%] z-20 w-1/2 rounded-2xl bg-white p-3 shadow-[0_20px_55px_rgba(15,23,42,0.2)] sm:-bottom-4 sm:p-3.5 w-[min(88%,15.75rem)]">
                         <div className="flex items-center gap-3">
-                        <Image src="/dermatology-patient-1.png" alt="Dr. Sarah Johnson" width={40} height={40} className="h-10 w-10 rounded-full object-cover"/>
+                        <Image src="/dermatology-patient-1.png" alt="Dr. Sarah Johnson" width={40} height={40} priority={true} sizes="(max-width: 768px) 100vw, 50vw" className="h-10 w-10 rounded-full object-cover"/>
                         <div className="min-w-0">
                             <p className="truncate text-sm font-semibold text-slate-900">Sarah Johnson</p>
                             <div className="text-xs text-slate-500">Follow-up Visit</div>
@@ -559,7 +553,7 @@ export default function DermatologyAppointmentSchedulingSoftware() {
                     {/* Left — doctor dashboard mockup */}
                     <div className="lg:col-span-7 relative mx-auto w-full">
                         {/* <DermatologyDashboardMockup /> */}
-                        <Image src='/best-software-for-dermatology-practices.webp' alt='best software for dermatology practices' width={800} height={800} />
+                        <Image src='/best-software-for-dermatology-practices.webp' alt='best software for dermatology practices' width={800} height={800} priority={true} sizes="(max-width: 768px) 100vw, 50vw" />
                     </div>
 
                     {/* Right — heading + checklist + CTA */}
@@ -570,7 +564,6 @@ export default function DermatologyAppointmentSchedulingSoftware() {
                             highlightText="Dermatology Practices"
                             description="Its advanced dashboard is shaped around the routine dermatology scheduling requirements."
                         />
-
                         <div className="space-y-3">
                             {[
                             "Easy to set up, customise, and user-friendly dashboard",
@@ -585,8 +578,7 @@ export default function DermatologyAppointmentSchedulingSoftware() {
                                 </div>
                             ))}
                         </div>
-
-                        <Link href={`${REGISTER_URL}`} target="_blank" aria-label="Start your salon booking setup - Salon Appointment Scheduling Software" className="inline-flex items-center justify-center gap-3 rounded-xl bg-indigo-600 px-4 py-3 text-sm text-white">Sign Up for Free</Link>
+                        <Button buttonLink={`${REGISTER_URL}`} buttonText="Sign Up for Free" ariaLabel="Sign Up for Free" source="dermatology-appointment-scheduling-software" tone="primary" />
                     </div>
                 </div>
             </div>

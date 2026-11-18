@@ -129,7 +129,7 @@ const ContactForm = () => {
         <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-indigo-500" aria-hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </span>
-        <input id="name" name="name" type="text" required placeholder="Full Name" value={formData.name} onChange={handleChange} className="block w-full rounded-xl border border-slate-200/80 bg-white/80 py-3 pl-10 pr-4 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
+        <input id="name" name="name" type="text" required placeholder="Full Name" value={formData.name} onChange={handleChange} className="block w-full rounded-xl border border-slate-200/80 bg-white/80 py-3 sm:py-2.5 pl-10 pr-4 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-3">
@@ -148,7 +148,7 @@ const ContactForm = () => {
           <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-indigo-500" aria-hidden>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
           </span>
-          <input id="email" name="email" type="email" required placeholder="Email" value={formData.email} onChange={handleChange} className="block w-full rounded-xl border border-slate-200/80 bg-white/80 py-3 pl-10 pr-4 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
+          <input id="email" name="email" type="email" required placeholder="Email" value={formData.email} onChange={handleChange} className="block w-full rounded-xl border border-slate-200/80 bg-white/80 py-3 sm:py-2.5 pl-10 pr-4 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
         </div>
       </div>
 
@@ -162,7 +162,7 @@ const ContactForm = () => {
               <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
             </svg>
           </span>
-          <select id="professions" aria-label="Select Professions" name="professions" value={formData.professions} onChange={handleChange} className="block w-full appearance-none rounded-xl border border-slate-200/80 bg-white/80 py-3 pl-10 pr-10 text-neutral-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <select id="professions" aria-label="Select Professions" name="professions" value={formData.professions} onChange={handleChange} className="block w-full appearance-none rounded-xl border border-slate-200/80 bg-white/80 py-3 sm:py-2.5 pl-10 pr-10 text-neutral-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             <option value="">Select a Profession</option>
             {professions.map((profession) => (
               <option key={profession} value={profession}>{profession}</option>
@@ -181,7 +181,7 @@ const ContactForm = () => {
       
       {status === "success" && (
         <div className="mt-2 p-3 rounded-md bg-green-50 border border-green-200 text-sm text-green-700">
-          ✓ Email sent successfully! We&apos;ll get back to you shortly.
+          ✓ Thank you for contacting GetSetTime! Your inquiry has been submitted successfully.
         </div>
       )}
       {status === "error" && (

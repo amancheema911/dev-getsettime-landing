@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Heading from "./Heading";
 import { CheckListItem } from "./CheckList";
 
@@ -68,10 +68,9 @@ function buildCalendarCells(viewDate: Date): CalendarCell[] {
 
 function CalendarMonthPanel() {
   const today = new Date();
-  const [viewDate, setViewDate] = useState(
-    new Date(today.getFullYear(), today.getMonth(), 1),
-  );
-  const [selectedDate, setSelectedDate] = useState(today);
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const viewDate = useMemo(() => new Date(year, month, 1), [year, month]);
 
   const cells = useMemo(() => buildCalendarCells(viewDate), [viewDate]);
   const weeks = useMemo(() => {
@@ -87,39 +86,10 @@ function CalendarMonthPanel() {
     year: "numeric",
   });
 
-  const goToPrevMonth = () => {
-    setViewDate(
-      (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1),
-    );
-  };
-
-  const goToNextMonth = () => {
-    setViewDate(
-      (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1),
-    );
-  };
-
-  const handleDateSelect = (cell: CalendarCell) => {
-    setSelectedDate(cell.date);
-    if (!cell.isCurrentMonth) {
-      setViewDate(new Date(cell.date.getFullYear(), cell.date.getMonth(), 1));
-    }
-  };
-
   return (
     <div className="rounded-xl bg-white p-3 drop-shadow-xl">
-      <div className="mb-4 flex items-center justify-between text-neutral-900">
-        <button type="button" onClick={goToPrevMonth} className="cursor-pointer rounded-md bg-indigo-600 px-1 py-1 text-white transition-colors hover:brightness-110" aria-label="Show previous month">
-          <svg className="h-4 w-4 text-white transition-all duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <div className="px-2 text-sm text-center font-medium">{monthLabel}</div>
-        <button type="button" onClick={goToNextMonth} className="cursor-pointer rounded-md bg-indigo-600 px-1 py-1 text-white transition-colors hover:brightness-110" aria-label="Show next month">
-          <svg className="h-4 w-4 text-white transition-all duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
-          </svg>
-        </button>
+      <div className="mb-4 text-center text-sm font-medium text-neutral-900">
+        {monthLabel}
       </div>
 
       <div className="mb-2 grid grid-cols-7 gap-1 text-xs text-neutral-600">
@@ -132,24 +102,23 @@ function CalendarMonthPanel() {
         {weeks.map((row, rowIndex) => (
           <div key={`${monthLabel}-${rowIndex}`} className="grid grid-cols-7 gap-1">
             {row.map((cell) => {
-              const isSelected = isSameDay(cell.date, selectedDate);
+              const isToday = isSameDay(cell.date, today);
               const isMuted = !cell.isCurrentMonth;
 
               return (
-                <button
+                <div
                   key={cell.date.toISOString()}
-                  type="button"
-                  onClick={() => handleDateSelect(cell)}
-                  className={`flex aspect-square items-center justify-center rounded-lg text-xs text-slate-500 transition-all cursor-pointer sm:rounded-md ${
-                    isSelected
+                  aria-current={isToday ? "date" : undefined}
+                  className={`flex aspect-square items-center justify-center rounded-lg text-xs sm:rounded-md ${
+                    isToday
                       ? "bg-indigo-600 text-white drop-shadow-lg drop-shadow-indigo-900/20"
                       : isMuted
-                        ? "bg-white/10 text-slate-50 hover:bg-slate-100"
-                        : "bg-white/15 text-slate-950 hover:-translate-y-0.5 hover:bg-slate-100"
+                        ? "bg-white/10 text-slate-50"
+                        : "bg-white/15 text-slate-950"
                   }`}
                 >
                   {cell.dayNumber}
-                </button>
+                </div>
               );
             })}
           </div>

@@ -3,8 +3,8 @@ import Script from "next/script";
 import { APP_NAME, BASE_URL, contactInfo, LOGIN_URL } from "@/lib/config";
 import { helpSections } from "@/lib/help-center-data";
 import HelpCenterContent from "./HelpCenterContent";
-import Link from "next/link";
 import Heading from "../component/Heading";
+import Button from "../component/ui/button/Button";
 
 const pageUrl = `${BASE_URL}/help-center`;
 
@@ -163,7 +163,7 @@ export default function HelpCenterPage() {
             <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-500 p-4 sm:p-10">
               <div className="relative grid grid-cols-1 lg:grid-cols-2 items-center gap-6">
                 {/* left: Content */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Heading
                     badge="Built for Modern Business"
                     title="Ready for GetSetTime To Manage Your Appointments"
@@ -171,12 +171,10 @@ export default function HelpCenterPage() {
                     titleClassName="text-2xl sm:text-3xl font-bold text-white md:text-4xl lg:text-[40px] capitalize"
                     descriptionClassName = "text-white"
                   />
-                  
-                  <div className="mt-8">
-                    <Link href={`${LOGIN_URL}`} target="_blank" aria-label="Get Started - Help Center" className="rounded-xl bg-white px-4 py-3 text-sm text-indigo-600 transition">Get Started</Link>
+                  <div className="">
+                      <Button buttonLink={`${LOGIN_URL}`} buttonText="Get Started" ariaLabel="Get Started" tone="light" />
                   </div>
-
-                  <div className="mt-8 flex flex-wrap gap-3 text-white">
+                  <div className="flex flex-wrap gap-3 text-white">
                     {['Online booking', 'Auto reminders', 'Team calendar'].map((item) => (
                       <span key={item} className="text-white flex items-center gap-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M20 6 9 17l-5-5"/></svg> {item}</span>
                     ))}

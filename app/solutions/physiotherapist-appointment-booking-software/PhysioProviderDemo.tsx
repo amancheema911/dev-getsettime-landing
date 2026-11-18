@@ -48,18 +48,10 @@ export default function PhysioProviderDemo() {
   const eligible = THERAPISTS.filter((therapist) => therapist.services.includes(service));
 
   return (
-    <div className="rounded-3xl border border-indigo-100 bg-white shadow-xl shadow-indigo-500/10">
-      <div className="overflow-hidden rounded-3xl bg-white text-neutral-900">
-        <div className="border-b border-neutral-100 px-4 py-4 sm:px-5">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-base font-semibold tracking-tight">Example physiotherapy clinic</p>
-              <div className="mt-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-neutral-500">Services and therapist eligibility</div>
-            </div>
-            <span className="shrink-0 rounded-full bg-indigo-50 px-2.5 py-1 text-[11px] font-semibold text-indigo-700">Example</span>
-          </div>
-
-          <div className="mt-4 overflow-hidden rounded-2xl border border-neutral-200">
+    <div className="rounded-2xl border border-indigo-100 bg-white shadow-xl shadow-indigo-500/10">
+      <div className="overflow-hidden rounded-2xl bg-white text-neutral-900">
+        <div className="border-b border-neutral-100 p-3">
+          <div className="overflow-hidden rounded-2xl border border-neutral-200">
             <div className="grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.2fr)] gap-3 border-b border-neutral-200 bg-neutral-50 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
               <span>Therapist</span>
               <span>Assigned services</span>
@@ -84,8 +76,7 @@ export default function PhysioProviderDemo() {
         </div>
 
         <div className="bg-neutral-50/70 px-4 py-4 sm:px-5">
-          <p className="text-sm font-semibold">Customer booking example</p>
-          <p className="mt-3 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">Customer selects</p>
+          <div className="text-[11px] font-semibold uppercase tracking-wide text-neutral-500">Customer selects</div>
           <div className="mt-2 flex flex-wrap gap-1.5" role="radiogroup" aria-label="Service the customer selects">
             {SERVICES.map((item) => {
               const selected = item === service;
@@ -139,9 +130,9 @@ export default function PhysioProviderDemo() {
             })}
           </ul>
 
-          <p className="mt-3 text-sm font-medium text-emerald-700">
+          <div className="mt-3 text-sm font-medium text-emerald-700">
             Expected result: {expectedResult(eligible.map((therapist) => therapist.name))}
-          </p>
+          </div>
         </div>
       </div>
     </div>

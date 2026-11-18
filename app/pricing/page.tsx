@@ -9,9 +9,11 @@ import PricingHeroPreview from "../component/PricingHeroPreview";
 import RegionalPrice from "../component/RegionalPrice";
 import { PricingFaqItem, pricingFaqItems } from "../component/PricingFaqSection";
 import Heading from "../component/Heading";
+import SigngoogleButton from "../component/ui/button/SigngoogleButton";
 import Card from "../component/Card";
 import { FaqSection } from "../component/FaqSection";
 import ScreenGate from "../component/ScreenGate";
+import Button from "../component/ui/button/Button";
 
 const heroHighlights = [
   { key: "plans", node: <RegionalPrice plan="starter" prefix="Plans from " suffix="/month" /> },
@@ -357,18 +359,8 @@ export default function PricingPage() {
               />
 
               <div className="flex gap-2 max-[425px]:flex-col flex-row flex-wrap">
-                <Link href={`${REGISTER_GOOGLE_URL}`} target="_blank" aria-label="Sign up with Google" className="bg-indigo-600 text-white text-sm px-4 py-3 rounded-xl flex items-center justify-center gap-3">
-                  <svg viewBox="0 0 48 48" className="w-5 h-5 sm:w-6 sm:h-6 inline-block rounded-sm bg-white p-1">
-                    <g>
-                        <path fill="#4285F4" d="M43.6 20.5H42V20.4H24v7.2h11.2C33.9 32.1 29.4 35 24 35c-6.1 0-11-4.9-11-11s4.9-11 11-11c2.6 0 5 .9 6.9 2.5l5.8-5.8C33.5 7.1 28.9 5 24 5 12.9 5 4 13.9 4 25s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/>
-                        <path fill="#34A853" d="M6.3 14.1l5.9 4.3C14.2 15.1 18.7 12 24 12c2.6 0 5 .9 6.9 2.5l5.8-5.8C33.5 7.1 28.9 5 24 5c-7.1 0-13.1 4.1-16.1 10.1z"/>
-                        <path fill="#FBBC05" d="M24 44c5.3 0 10.1-1.8 13.8-4.9l-6.4-5.2C29.5 35.7 26.9 36.7 24 36.7c-5.4 0-9.9-3.6-11.5-8.5l-6.1 4.7C7 39.1 14.9 44 24 44z"/>
-                        <path fill="#EA4335" d="M43.6 20.5H42V20.4H24v7.2h11.2c-1.1 3.1-3.6 5.7-6.6 7.1l6.4 5.2C39.9 37.1 44 31.9 44 25c0-1.3-.1-2.7-.4-4z"/>
-                    </g>
-                    </svg>
-                    Sign up with Google
-                </Link>
-                <Link href={`${BASE_URL}/contact-us`} aria-label="Talk to sales - Pricing" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-900 px-4 py-3 text-sm text-white drop-shadow-lg transition">Talk to sales</Link>
+                <SigngoogleButton signupSource="pricing" />
+                <Button buttonLink={`${BASE_URL}/contact-us`} buttonText="Talk to sales" ariaLabel="Talk to sales" source="pricing" tone="dark" />
               </div>
 
               <div className="flex flex-wrap gap-2 font-medium text-neutral-600">
@@ -487,6 +479,7 @@ export default function PricingPage() {
             badge: "Free Price Card",
             wrapperClassName: "mb-8 space-y-3 text-center",
           }} 
+          pricingSource="pricing-page"
         />
 
         {/* Feature comparison */}
@@ -513,10 +506,8 @@ export default function PricingPage() {
                       badge="Add-on"
                       title="Need more providers?"
                       description="Scale your team without changing tools. Extra seats bill monthly and can be added anytime from your workspace."
-                      wrapperClassName="space-y-3"
-                      badgeClassName="inline-flex items-center gap-3 rounded-full border border-indigo-200 bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-indigo-600 drop-shadow-sm backdrop-blur"
-                      titleClassName="text-2xl font-bold tracking-tight sm:text-3xl"
-                      descriptionClassName=""
+                      wrapperClassName="space-y-3"                      
+                      titleClassName="text-2xl font-bold tracking-tight sm:text-3xl"                      
                     />
 
                     <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur sm:mt-6 sm:p-5">
@@ -534,7 +525,7 @@ export default function PricingPage() {
                       ))}
                     </div>
 
-                    <Link href={`${BASE_URL}/contact-us`} aria-label="Talk to sales about teams - Pricing" className="mt-6 inline-flex items-center justify-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-50 w-auto">Talk to Sales</Link>
+                    <Button buttonLink={`${BASE_URL}/contact-us`} buttonText="Talk to Sales" ariaLabel="Talk to Sales" source="pricing" tone="light" className="mt-6" />
                   </div>
                 </div>
 
@@ -611,7 +602,7 @@ export default function PricingPage() {
             <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-500 p-4 sm:p-10">
               <div className="relative grid grid-cols-1 lg:grid-cols-2 items-center gap-6">
                 {/* left: Content */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Heading
                     badge="Built for Modern Business"
                     title="Ready for GetSetTime To Manage Your Appointments"
@@ -620,11 +611,11 @@ export default function PricingPage() {
                     descriptionClassName = "text-white"
                   />
                   
-                  <div className="mt-8">
-                    <Link href={`${REGISTER_URL}`} target="_blank" aria-label="Get Started - Pricing" className="rounded-xl bg-white px-4 py-3 text-sm text-indigo-600 transition">Sign Up for Free</Link>
+                  <div className="">
+                    <Button buttonLink={`${REGISTER_URL}`} buttonText="Sign Up for Free" ariaLabel="Sign Up for Free" source="pricing-cta" tone="light" />
                   </div>
 
-                  <div className="mt-8 flex flex-wrap gap-3 text-white">
+                  <div className="flex flex-wrap gap-3 text-white">
                     {['Online booking', 'Auto reminders', 'Team calendar'].map((item) => (
                       <span key={item} className="text-white flex items-center gap-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M20 6 9 17l-5-5"/></svg> {item}</span>
                     ))}

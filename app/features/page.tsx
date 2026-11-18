@@ -7,6 +7,8 @@ import Card from "../component/Card";
 import CheckList from "../component/CheckList";
 import RegionalPrice from "../component/RegionalPrice";
 import ScreenGate from "../component/ScreenGate";
+import SigngoogleButton from "../component/ui/button/SigngoogleButton";
+import Button from "../component/ui/button/Button";
 
 const pageUrl = `${BASE_URL}/features`;
 
@@ -431,18 +433,8 @@ export default function FeaturesPage() {
                     />
 
                     <div className="flex gap-2 max-[425px]:flex-col flex-row flex-wrap">
-                        <Link href={`${REGISTER_GOOGLE_URL}`} target="_blank" aria-label="Sign up with Google" className="bg-indigo-600 text-white text-sm px-4 py-3 rounded-xl flex items-center justify-center gap-3">
-                        <svg viewBox="0 0 48 48" className="w-5 h-5 sm:w-6 sm:h-6 inline-block rounded-sm bg-white p-1">
-                        <g>
-                            <path fill="#4285F4" d="M43.6 20.5H42V20.4H24v7.2h11.2C33.9 32.1 29.4 35 24 35c-6.1 0-11-4.9-11-11s4.9-11 11-11c2.6 0 5 .9 6.9 2.5l5.8-5.8C33.5 7.1 28.9 5 24 5 12.9 5 4 13.9 4 25s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/>
-                            <path fill="#34A853" d="M6.3 14.1l5.9 4.3C14.2 15.1 18.7 12 24 12c2.6 0 5 .9 6.9 2.5l5.8-5.8C33.5 7.1 28.9 5 24 5c-7.1 0-13.1 4.1-16.1 10.1z"/>
-                            <path fill="#FBBC05" d="M24 44c5.3 0 10.1-1.8 13.8-4.9l-6.4-5.2C29.5 35.7 26.9 36.7 24 36.7c-5.4 0-9.9-3.6-11.5-8.5l-6.1 4.7C7 39.1 14.9 44 24 44z"/>
-                            <path fill="#EA4335" d="M43.6 20.5H42V20.4H24v7.2h11.2c-1.1 3.1-3.6 5.7-6.6 7.1l6.4 5.2C39.9 37.1 44 31.9 44 25c0-1.3-.1-2.7-.4-4z"/>
-                        </g>
-                        </svg>
-                            Sign up with Google
-                        </Link>
-                        <Link href={`${BASE_URL}/pricing`} aria-label="View Pricing - Features" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-900 px-4 py-3 text-sm text-white drop-shadow-lg transition">View Pricing</Link>
+                        <SigngoogleButton signupSource="features" />
+                        <Button buttonLink={`${BASE_URL}/pricing`} buttonText="View Pricing" ariaLabel="View Pricing - Features" source="features" tone="dark" />
                     </div>
 
                     <div className="flex flex-wrap gap-2 text-sm font-medium text-neutral-600">
@@ -1061,7 +1053,7 @@ export default function FeaturesPage() {
 
                     <div className="relative flex flex-wrap items-start justify-between gap-4">
                       <div>
-                        <div className="text-xs font-semibold uppercase tracking-widest text-indigo-600">Basic plan</div>
+                        <div className="text-xs font-semibold uppercase tracking-widest text-indigo-600">Starter plan</div>
                         <div className="mt-2 flex items-end gap-1">
                           <span className="text-5xl font-bold tracking-tight text-neutral-900">
                             <RegionalPrice plan="starter" />
@@ -1099,14 +1091,12 @@ export default function FeaturesPage() {
                     </ul>
 
                     <div className="relative flex flex-col sm:flex-row gap-3 mt-8">
-                      <Link href={`${REGISTER_URL}`} target="_blank" className="flex w-full items-center justify-center rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white drop-shadow-lg transition hover:bg-indigo-700"
-                      >Get Started Free</Link>
-                      <Link href={`${BASE_URL}/pricing`} className="flex items-center justify-center w-full rounded-xl bg-gray-900 px-4 py-3 text-sm text-white drop-shadow-lg transition">Compare all plans</Link>
+                      <Button buttonLink={`${REGISTER_URL}`} buttonText="Get Started Free" ariaLabel="Get Started Free" source="features" tone="primary" className="w-full" />
+                      <Button buttonLink={`${BASE_URL}/pricing`} buttonText="Compare all plans" ariaLabel="Compare all plans" source="features" tone="dark" className="w-full" />
                     </div>
                   </div>
                 </div>
               </div>
-            
             </div>
         </section>
 
@@ -1116,7 +1106,7 @@ export default function FeaturesPage() {
             <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-500 p-4 sm:p-10">
               <div className="relative grid grid-cols-1 lg:grid-cols-2 items-center gap-6">
                 {/* left: Content */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Heading
                     badge="Built for Modern Business"
                     title="Ready for GetSetTime To Manage Your Appointments"
@@ -1125,11 +1115,11 @@ export default function FeaturesPage() {
                     descriptionClassName = "text-white"
                   />
                   
-                  <div className="mt-8">
-                    <Link href={`${REGISTER_URL}`} target="_blank" aria-label="Get Started - Features" className="rounded-xl bg-white px-4 py-2.5 text-sm text-indigo-600 transition">Sign Up for Free</Link>
+                  <div className="">
+                    <Button buttonLink={`${REGISTER_URL}`} buttonText="Sign Up for Free" ariaLabel="Sign Up for Free" source="features-cta" tone="light" />
                   </div>
 
-                  <div className="mt-8 flex flex-wrap gap-3 text-white">
+                  <div className="flex flex-wrap gap-3 text-white">
                     {['Online booking', 'Auto reminders', 'Team calendar'].map((item) => (
                       <span key={item} className="text-white flex items-center gap-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M20 6 9 17l-5-5"/></svg> {item}</span>
                     ))}

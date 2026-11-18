@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { helpSections, getHelpCategories } from "@/lib/help-center-data";
 import { BASE_URL, contactInfo, LOGIN_URL } from "@/lib/config";
+import Button from "../component/ui/button/Button";
 
 export default function HelpCenterContent() {
   const categories = getHelpCategories();
@@ -163,19 +164,8 @@ export default function HelpCenterContent() {
               Put these guides into action — create your account and start accepting online bookings today.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
-              <Link
-                href={`mailto:${contactInfo.email}`}
-                className="inline-flex items-center rounded-xl text-sm font-medium text-white"
-              >
-                Email: {contactInfo.email}
-              </Link>
-              <Link
-                href={`${LOGIN_URL}`}
-                target="_blank"
-                className="inline-flex items-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-50"
-              >
-                Go to dashboard
-              </Link>
+              <Link href={`mailto:${contactInfo.email}`} className="inline-flex items-center rounded-xl text-sm font-medium text-white">Email: {contactInfo.email}</Link>
+              <Button buttonLink={`${LOGIN_URL}`} buttonText="Go to dashboard" ariaLabel="Go to dashboard" tone="light" className="gap-2" />
             </div>
           </div>
         </div>

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Script from "next/script";
-import { BASE_URL, APP_NAME, contactInfo, REGISTER_GOOGLE_URL, REGISTER_URL } from "@/lib/config";
+import { BASE_URL, APP_NAME, contactInfo, REGISTER_URL } from "@/lib/config";
+import SigngoogleButton from "@/app/component/ui/button/SigngoogleButton";
 import Link from "next/link";
 import { FaqSection } from "@/app/component/FaqSection";
 import Card from "@/app/component/Card";
@@ -10,6 +11,7 @@ import { CheckListItem } from "@/app/component/CheckList";
 import SolutionCtaSection from "@/app/component/SolutionCtaSection";
 import { dentistCtaTrustBadges } from "@/lib/cta-section-data";
 import ScreenGate from "@/app/component/ScreenGate";
+import Button from "@/app/component/ui/button/Button";
 
 const pageUrl = `${BASE_URL}/solutions/dentist-appointment-scheduling-software`;
 
@@ -276,18 +278,8 @@ return (
                     />
 
                     <div className="flex gap-2 max-[425px]:flex-col flex-row flex-wrap">
-                        <Link href={`${REGISTER_GOOGLE_URL}`} target="_blank" aria-label="Sign up with Google" className="bg-indigo-600 text-white text-sm px-4 py-3 rounded-xl flex items-center justify-center gap-3">
-                            <svg viewBox="0 0 48 48" className="w-5 h-5 sm:w-6 sm:h-6 inline-block rounded-sm bg-white p-1">
-                            <g>
-                                <path fill="#4285F4" d="M43.6 20.5H42V20.4H24v7.2h11.2C33.9 32.1 29.4 35 24 35c-6.1 0-11-4.9-11-11s4.9-11 11-11c2.6 0 5 .9 6.9 2.5l5.8-5.8C33.5 7.1 28.9 5 24 5 12.9 5 4 13.9 4 25s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/>
-                                <path fill="#34A853" d="M6.3 14.1l5.9 4.3C14.2 15.1 18.7 12 24 12c2.6 0 5 .9 6.9 2.5l5.8-5.8C33.5 7.1 28.9 5 24 5c-7.1 0-13.1 4.1-16.1 10.1z"/>
-                                <path fill="#FBBC05" d="M24 44c5.3 0 10.1-1.8 13.8-4.9l-6.4-5.2C29.5 35.7 26.9 36.7 24 36.7c-5.4 0-9.9-3.6-11.5-8.5l-6.1 4.7C7 39.1 14.9 44 24 44z"/>
-                                <path fill="#EA4335" d="M43.6 20.5H42V20.4H24v7.2h11.2c-1.1 3.1-3.6 5.7-6.6 7.1l6.4 5.2C39.9 37.1 44 31.9 44 25c0-1.3-.1-2.7-.4-4z"/>
-                            </g>
-                            </svg>
-                            Sign up with Google
-                        </Link>
-                        <Link href={`${REGISTER_URL}`} aria-label="Contact Us - Dentist Appointment Scheduling Software" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-900 px-4 py-3 text-sm text-white drop-shadow-lg transition">Get Started for Free</Link>
+                        <SigngoogleButton signupSource="dentist-appointment-scheduling-software" />
+                        <Button buttonLink={`${REGISTER_URL}`} buttonText="Get Started for Free" ariaLabel="Get Started for Free" source="dentist-appointment-scheduling-software" tone="dark" />
                     </div>
                     
                     <ScreenGate minWidth={768}>
@@ -345,10 +337,10 @@ return (
                     <ScreenGate minWidth={768}>
                     <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
                         <div className="rounded-2xl overflow-hidden drop-shadow-lg">
-                            <Image src="/dentist-appointment.webp" className="h-64 w-full object-cover" alt="Dental Clinic Dashboard" width={500} height={500} />
+                            <Image src="/dentist-appointment.webp" className="h-64 w-full object-cover" alt="Dental Clinic Dashboard" width={500} height={500} priority={true} sizes="(max-width: 768px) 100vw, 50vw" />
                         </div>
                         <div className="rounded-2xl overflow-hidden drop-shadow-lg">
-                            <Image src="/dentist-booking.webp" className="h-64 w-full object-cover" alt="Dental Clinic Bookings" width={500} height={500} />
+                            <Image src="/dentist-booking.webp" className="h-64 w-full object-cover" alt="Dental Clinic Bookings" width={500} height={500} priority={true} sizes="(max-width: 768px) 100vw, 50vw" />
                         </div>
                     </div>
                     </ScreenGate>
@@ -551,7 +543,8 @@ return (
                                         className="relative min-h-14 min-w-14 rounded-full border-4 border-white object-cover drop-shadow-md"
                                         width={50}
                                         height={50}
-                                        priority
+                                        priority={true}
+                                        sizes="(max-width: 768px) 100vw, 50vw"
                                         />
                                     </div>
                                     <div>
@@ -616,7 +609,7 @@ return (
             <div className="grid gap-6 lg:grid-cols-2">
                 {/* Left column - Content */}
                 <div className="relative rounded-2xl overflow-hidden bg-white p-3 drop-shadow-xl">
-                    <Image src="/dentist-service.webp" alt="dentist services available" className="h-full w-full object-cover rounded-xl" width={500} height={500} />
+                    <Image src="/dentist-service.webp" alt="dentist services available" className="h-full w-full object-cover rounded-xl" width={500} height={500} priority={true} sizes="(max-width: 768px) 100vw, 50vw" />
                 </div>
                 {/* Right column - Interactive Demo */}
                 <div className="relative space-y-3">
@@ -684,7 +677,7 @@ return (
                     ))}
                 </div>
                 <div className="mt-4">
-                    <Link href={`${REGISTER_URL}`} target="_blank" aria-label="Start your dental clinic booking setup - Dentist Appointment Scheduling Software" className="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-4 py-3 text-white drop-shadow-md transition hover:bg-indigo-700">Sign Up for Free</Link>
+                    <Button buttonLink={`${REGISTER_URL}`} buttonText="Sign Up for Free" ariaLabel="Sign Up for Free" source="dentist-appointment-scheduling-software" tone="primary" />
                 </div>
             </div>
 
@@ -723,7 +716,7 @@ return (
                 </div>
               </div>
               <div className="relative overflow-hidden rounded-2xl border border-neutral-200">
-                <Image src="/dentist-realty.webp" alt="Dental Clinic Appointment Schedule Interface" width={700} height={700} className="h-full w-full object-cover" />
+                <Image src="/dentist-realty.webp" alt="Dental Clinic Appointment Schedule Interface" width={700} height={700} priority={true} sizes="(max-width: 768px) 100vw, 50vw" className="h-full w-full object-cover" />
                 <div className="absolute left-2 top-2 rounded-md bg-indigo-600/90 px-2 py-1 text-xs uppercase tracking-widest text-white">Smart slots</div>
               </div>
             </div>
@@ -789,7 +782,7 @@ return (
             <ScreenGate minWidth={768}>
             {/* RIGHT FEATURES GRID */}
             <div className="relative rounded-2xl drop-shadow-xl bg-white p-3">                
-                <Image src="/dentist-grow-2.1.webp" alt="Dental Clinic Growth Roadmap" width={700} height={600} className="w-full h-full rounded-xl object-cover"/>
+                <Image src="/dentist-grow-2.1.webp" alt="Dental Clinic Growth Roadmap" width={700} height={600} priority={true} sizes="(max-width: 768px) 100vw, 50vw" className="w-full h-full rounded-xl object-cover"/>
 
                 <div className="absolute right-0 -top-10 hidden lg:block w-50 rounded-xl bg-white p-4 drop-shadow-md animate-float">
                     <div className="text-sm uppercase text-neutral-400">Dental Clinic Growth</div>

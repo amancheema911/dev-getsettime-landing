@@ -104,7 +104,7 @@ export const TestimonialSlider = ({
                     }`}
                   >
                     {current.avatar ? (
-                      <Image src={current.avatar} alt={current.name} width={48} height={48} className="h-12 w-12 rounded-xl object-cover" />
+                      <Image src={current.avatar} alt={current.name} width={48} height={48} priority={true} sizes="(max-width: 768px) 100vw, 50vw" className="h-12 w-12 rounded-xl object-cover" />
                     ) : (
                       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-base font-bold text-white">
                         {currentInitials}

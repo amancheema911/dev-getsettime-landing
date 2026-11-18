@@ -14,7 +14,7 @@ export function BlogCard({ post }: BlogCardProps) {
 
           <div className="relative">
             <div className="relative overflow-hidden">
-              <Image src={`/${post.coverImage}`} alt={post.title} width={800} height={400} className="object-cover aspect-[16/8] sm:aspect-[4/3] w-full h-full transition-transform duration-700 group-hover:scale-110"/>
+              <Image src={`/${post.coverImage}`} alt={post.title} width={800} height={400} priority={true} sizes="(max-width: 768px) 100vw, 50vw" className="object-cover aspect-[16/8] sm:aspect-[4/3] w-full h-full transition-transform duration-700 group-hover:scale-110"/>
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <span className="flex items-center gap-2 absolute top-4 right-4 text-white text-xs font-medium bg-indigo-600 rounded-full px-2 py-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>

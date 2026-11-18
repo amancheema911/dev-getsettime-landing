@@ -13,6 +13,7 @@ import ScreenGate from "./component/ScreenGate";
 import Pricing from "./component/Pricing";
 import Support from "./component/Support";
 import TrustedCompanies from "./component/TrustedCompanies";
+import Button from "./component/ui/button/Button";
 
 export const metadata: Metadata = {
   title: `Appointment Scheduling Software for Online Booking`,
@@ -66,7 +67,7 @@ const faqItems = [
   },
   {
     title: "Is GetSetTime affordable?",
-    content: `Whether you are an independent professional or run your business with multiple practitioners, you will find GetSetTime much more affordable compared to others. You can use its demo plan to get started, then upgrade to the basic, professional, or enterprise plans as needed.`,
+    content: `Whether you are an independent professional or run your business with multiple practitioners, you will find GetSetTime much more affordable compared to others. You can use its free plan to get started, then upgrade to the basic, professional, or enterprise plans as needed.`,
   },
   {
     title: "Does GetSetTime offer a demo or trial?",
@@ -555,7 +556,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Pricing />
+      <Pricing pricingSource="home-pricing" />
 
       <Support />
 
@@ -601,7 +602,7 @@ export default function Home() {
           <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-500 p-4 sm:p-10">
             <div className="relative grid grid-cols-1 lg:grid-cols-2 items-center gap-6">
               {/* left: Content */}
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <Heading
                   badge="Built for Modern Business"
                   title="Ready for GetSetTime To Manage Your Appointments"
@@ -610,11 +611,11 @@ export default function Home() {
                   descriptionClassName = "text-white"
                 />
                 
-                <div className="mt-8">
-                  <Link href={`${LOGIN_URL}`} target="_blank" aria-label="Get Started - Home" className="rounded-xl bg-white px-4 py-3 text-sm text-indigo-600 transition">Sign Up for Free</Link>
+                <div className="">
+                  <Button buttonLink={`${LOGIN_URL}`} buttonText="Sign Up for Free" ariaLabel="Get Started - Home" source="home-cta" tone="light" />
                 </div>
 
-                <div className="mt-8 flex flex-wrap gap-3 text-white">
+                <div className="flex flex-wrap gap-3 text-white">
                   {['Online booking', 'Auto reminders', 'Team calendar'].map((item) => (
                     <span key={item} className="text-white flex items-center gap-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M20 6 9 17l-5-5"/></svg> {item}</span>
                   ))}

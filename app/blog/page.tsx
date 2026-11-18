@@ -1,35 +1,35 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Suspense } from "react";
+//import { Suspense } from "react";
 import { APP_NAME, BASE_URL, contactInfo, LOGIN_URL } from "@/lib/config";
 import { blogPosts } from "@/lib/blog-data";
 import { BlogList } from "../component/BlogList";
 import Link from "next/link";
 import Heading from "../component/Heading";
 
-function BlogListSkeleton() {
-  return (
-    <div className="space-y-12">
-      <div className="flex items-center justify-center gap-2 flex-wrap">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="h-10 w-24 bg-neutral-200 rounded-xl animate-pulse" />
-        ))}
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="bg-white rounded-2xl overflow-hidden drop-shadow-md">
-            <div className="h-52 bg-neutral-200 animate-pulse" />
-            <div className="p-6 space-y-3">
-              <div className="h-4 w-20 bg-neutral-200 rounded animate-pulse" />
-              <div className="h-6 w-full bg-neutral-200 rounded animate-pulse" />
-              <div className="h-4 w-3/4 bg-neutral-200 rounded animate-pulse" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+// function BlogListSkeleton() {
+//   return (
+//     <div className="space-y-12">
+//       <div className="flex items-center justify-center gap-2 flex-wrap">
+//         {[1, 2, 3, 4, 5, 6].map((i) => (
+//           <div key={i} className="h-10 w-24 bg-neutral-200 rounded-xl animate-pulse" />
+//         ))}
+//       </div>
+//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+//         {[1, 2, 3, 4, 5, 6].map((i) => (
+//           <div key={i} className="bg-white rounded-2xl overflow-hidden drop-shadow-md">
+//             <div className="h-52 bg-neutral-200 animate-pulse" />
+//             <div className="p-6 space-y-3">
+//               <div className="h-4 w-20 bg-neutral-200 rounded animate-pulse" />
+//               <div className="h-6 w-full bg-neutral-200 rounded animate-pulse" />
+//               <div className="h-4 w-3/4 bg-neutral-200 rounded animate-pulse" />
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
 
 const pageUrl = `${BASE_URL}/blog`;
 
@@ -230,9 +230,7 @@ export default function BlogPage() {
       {/* Blog List Section */}
       <section className="relative pb-14 sm:pb-20">
         <div className="relative z-10 mx-auto container px-4 sm:px-6 lg:px-8">
-            <Suspense fallback={<BlogListSkeleton />}>
-              <BlogList posts={blogPosts} postsPerPage={12} />
-            </Suspense>
+            <BlogList posts={blogPosts} postsPerPage={12} />
         </div>
       </section>
 

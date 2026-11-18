@@ -10,6 +10,8 @@ import Heading from "../component/Heading";
 import Card from "../component/Card";
 import { FaqSection } from "../component/FaqSection";
 import ScreenGate from "@/app/component/ScreenGate";
+import DemoVideoButton from "@/app/component/DemoVideoButton";
+import Button from "@/app/component/ui/button/Button";
 
 const pageUrl = `${BASE_URL}/claim-now-free-appointment-scheduling-software`;
 
@@ -278,16 +280,16 @@ const faqItems = [
     content: "Any individual or business looking for appointment scheduling software can use GetSetTime for free, subject to the platform's current terms and conditions.",
   },
   {
-    title: "What's included in the demo plan?",
-    content: "The demo plan is tailored to let you experience the platform and see how it fits your real workflow before committing to a paid tier.<br/>Currently, we offer up to 250 bookings per month, a public booking page, email notifications, a basic calendar view, and community support.",
+    title: "What's included in the free plan?",
+    content: "The free plan is tailored to let you experience the platform and see how it fits your real workflow before committing to a paid tier.<br/>Currently, we offer up to 250 bookings per month, a public booking page, email notifications, a basic calendar view, and community support.",
   },
   {
-    title: "How do I get started with the demo plan?",
+    title: "How do I get started with the free plan?",
     content: "Sign up and set up your profile — your booking link goes live right away, ready to share with clients via email, social media, or embedded directly on your website.<br/>No credit card or debit card is required to start accepting bookings.",
   },
   {
-    title: "Can I add staff members under the demo plan?",
-    content: "The demo plan is limited to a single user and 250 bookings per month, valid for three months from your sign-up date, so staff accounts aren't included at this stage. To add team members, take a look at our paid plans and choose the one that fits your business.",
+    title: "Can I add staff members under the free plan?",
+    content: "The free plan is limited to a single user and 250 bookings per month, valid for three months from your sign-up date, so staff accounts aren't included at this stage. To add team members, take a look at our paid plans and choose the one that fits your business.",
   },
 ];
 
@@ -295,7 +297,7 @@ const testimonials = [
   {
     name: "Ava Reynolds",
     role: "Salon Owner, Mumbai",
-    image: "/salon-profile.webp",
+    image: "/salon-staff.webp",
     review: '"GetSetTime completely transformed how we manage appointments. Our bookings increased by 60% in the first month!"',
   },
   {
@@ -527,12 +529,7 @@ export default function FreeBookingPage() {
                               <ClaimFreeBookingButton className="bg-indigo-600 text-white text-sm px-4 py-3 rounded-xl flex items-center justify-center gap-3 disabled:opacity-70">
                               Claim My Free Booking Page
                               </ClaimFreeBookingButton>
-
-                              <Link href="/app-functionality-demo-video" className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm text-gray-800 drop-shadow-lg transition">
-                              <span className="flex h-5 w-5 items-center justify-center rounded-full border border-neutral-200"><svg className="translate-x-px" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
-                              </span>
-                              Watch 60-sec Demo
-                              </Link>
+                              <DemoVideoButton />
                           </div>
 
                           
@@ -560,7 +557,7 @@ export default function FreeBookingPage() {
                           <div className="flex flex-wrap items-center justify-center xl:justify-between mt-6 gap-4">
                               {partnerLogos.map((p) => (
                               <div key={p.logo}>
-                                  <Image src={p.logo} alt={p.logo} width={110} height={110} className="object-contain grayscale filter"/>
+                                  <Image src={p.logo} alt={p.logo} width={110} height={110} priority={true} sizes="(max-width: 768px) 100vw, 50vw" className="object-contain grayscale filter"/>
                               </div>
                               ))}
                           </div>
@@ -637,7 +634,7 @@ export default function FreeBookingPage() {
                     <div className="relative">
                       <div className="relative rounded-full ">
                         <span className="w-128 h-128 text-indigo-600">
-                          <Image src="/gift-card.webp" alt="Gift" width={256} height={256} className="object-contain"/>
+                          <Image src="/gift-card.webp" alt="Gift" width={256} height={256} priority={true} sizes="(max-width: 768px) 100vw, 50vw" className="object-contain"/>
                         </span>
                       </div>
                     </div>
@@ -738,6 +735,8 @@ export default function FreeBookingPage() {
                       alt="Customer"
                       width={240}
                       height={240}
+                      priority={true}
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="xl:w-[220px] object-contain"
                     />
                   </div>
@@ -775,6 +774,8 @@ export default function FreeBookingPage() {
                       alt={item.name}
                       width={48}
                       height={48}
+                      priority={true}
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="rounded-full object-cover"
                     />
                     <div>
@@ -845,13 +846,7 @@ export default function FreeBookingPage() {
                 <div className="flex items-center justify-center xl:justify-between gap-2">
                   <div className="flex flex-col gap-2">
                     <div className="flex gap-3 flex-col sm:flex-row md:flex-row xl:flex-row">
-                      <Link href="/contact-us" className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-semibold text-indigo-600 drop-shadow-md transition">
-                        Claim My Free Booking Page
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-                          <path d="M5 12h14" />
-                          <path d="m12 5 7 7-7 7" />
-                        </svg>
-                      </Link>
+                      <Button buttonLink={`${REGISTER_URL}`} buttonText="Claim My Free Booking Page" ariaLabel="Claim My Free Booking Page" tone="light"/>
 
                       <Link href="/app-functionality-demo-video" className="inline-flex items-center justify-center gap-2 border border-white/30 rounded-lg px-4 py-3 text-sm font-semibold text-white drop-shadow-md transition">
                         Watch Demo

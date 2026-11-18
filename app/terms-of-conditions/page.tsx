@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { APP_NAME, BASE_URL, contactInfo, LOGIN_URL } from "@/lib/config";
-import Link from "next/link";
 import Heading from "../component/Heading";
+import Link from "next/link";
+import Button from "../component/ui/button/Button";
 
 const { email } = contactInfo;
 
@@ -74,7 +75,7 @@ export default function TermsOfConditions() {
               <div className="mb-10 p-6 bg-gradient-to-br from-neutral-50 to-slate-50 rounded-xl border border-neutral-100">
                 <p className="text-neutral-600 mb-3">
                   Please read these Terms and Conditions (&quot;Terms&quot;, &quot;Terms and Conditions&quot;) carefully before using the{" "}
-                  <a href={BASE_URL} className="text-indigo-600 hover:text-indigo-700 font-medium hover:underline">{`${BASE_URL}`}</a>
+                  <Link href={`${BASE_URL}`} className="text-indigo-600 hover:text-indigo-700 font-medium hover:underline">{`${BASE_URL}`}</Link>
                   website (the &quot;Service&quot;) operated by GetSetTime (&quot;us&quot;, &quot;we&quot;, or &quot;our&quot;).
                 </p>
                 <p className="text-neutral-600 mb-3">
@@ -146,7 +147,7 @@ export default function TermsOfConditions() {
                 </h2>
                 <div className="space-y-4 text-neutral-600 sm:pl-11">
                   <p className="font-semibold text-neutral-900">Paid Subscription Cancellation Policy</p>
-                  <p>Paid subscriptions will automatically renew for the same subscription period unless the account owner cancels them before the end of the current subscription period. You can cancel your paid subscription at any time via the in-app billing modal. Alternatively, you can contact customer support in the app or by email (<a href={`mailto:${email}`} className="text-indigo-600 hover:text-indigo-700 font-medium hover:underline">{email}</a>) with your cancellation request.</p>
+                  <p>Paid subscriptions will automatically renew for the same subscription period unless the account owner cancels them before the end of the current subscription period. You can cancel your paid subscription at any time via the in-app billing modal. Alternatively, you can contact customer support in the app or by email (<Link href={`mailto:${email}`} className="text-indigo-600 hover:text-indigo-700 font-medium hover:underline">{email}</Link>) with your cancellation request.</p>
                   <p>When a cancellation is issued, the downgrade from premium to free is scheduled for the time of subscription renewal. Until the end of the cycle, all premium features will remain active for the organization.</p>
                 </div>
               </div>
@@ -233,20 +234,18 @@ export default function TermsOfConditions() {
             <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-500 p-4 sm:p-10">
               <div className="relative grid grid-cols-1 lg:grid-cols-2 items-center gap-6">
                 {/* left: Content */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Heading
                     badge="Built for Modern Business"
                     title="Ready for GetSetTime To Manage Your Appointments"
                     description="Switch your manual operations to a unified scheduling platform to meet modern needs like online booking, reminders and more."
                     titleClassName="text-2xl sm:text-3xl font-bold text-white md:text-4xl lg:text-[40px] capitalize"
                     descriptionClassName = "text-white"
-                  />
-                  
-                  <div className="mt-8">
-                    <Link href={`${LOGIN_URL}`} target="_blank" aria-label="Get Started - Terms of Conditions" className="rounded-xl bg-white px-4 py-3 text-sm text-indigo-600 transition">Get Started</Link>
+                  />  
+                  <div className="">
+                    <Button buttonLink={`${LOGIN_URL}`} buttonText="Get Started" ariaLabel="Get Started" tone="light" />
                   </div>
-
-                  <div className="mt-8 flex flex-wrap gap-3 text-white">
+                  <div className=" flex flex-wrap gap-3 text-white">
                     {['Online booking', 'Auto reminders', 'Team calendar'].map((item) => (
                       <span key={item} className="text-white flex items-center gap-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M20 6 9 17l-5-5"/></svg> {item}</span>
                     ))}

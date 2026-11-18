@@ -1,10 +1,13 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useLayoutEffect, useRef } from "react";
+
+const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 import { createPortal } from "react-dom";
 import { BASE_URL, socialLinks, LOGIN_URL, REGISTER_URL } from "@/lib/config";
 import Logo from "./Logo";
+import Button from "./ui/button/Button";
 
 function scrollToHashSection(hash: string) {
   if (typeof window === "undefined" || !hash) return;
@@ -23,6 +26,7 @@ export default function Navbar() {
   const [mobileSolutionsOpen, setMobileSolutionsOpen] = useState<boolean>(false);
   const [desktopSolutionsOpen, setDesktopSolutionsOpen] = useState<boolean>(false);
   const desktopSolutionsRef = useRef<HTMLDivElement | null>(null);
+  const [menuPosition, setMenuPosition] = useState<{ left: number; top: number; width: number } | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -49,6 +53,29 @@ export default function Navbar() {
     },
     [isHome]
   );
+
+  const placeDesktopSolutionsMenu = useCallback(() => {
+    const trigger = desktopSolutionsRef.current;
+    if (!trigger) return;
+    const triggerRect = trigger.getBoundingClientRect();
+    const padding = 16;
+    const width = Math.min(400, window.innerWidth - padding * 2);
+    const maxLeft = window.innerWidth - padding - width;
+    const left = Math.min(Math.max(triggerRect.left, padding), Math.max(padding, maxLeft));
+    setMenuPosition({ left, top: triggerRect.bottom, width });
+  }, []);
+
+  useIsoLayoutEffect(() => {
+    if (!desktopSolutionsOpen) return;
+    placeDesktopSolutionsMenu();
+    const closeOnScroll = () => setDesktopSolutionsOpen(false);
+    window.addEventListener("resize", placeDesktopSolutionsMenu);
+    window.addEventListener("scroll", closeOnScroll);
+    return () => {
+      window.removeEventListener("resize", placeDesktopSolutionsMenu);
+      window.removeEventListener("scroll", closeOnScroll);
+    };
+  }, [desktopSolutionsOpen, placeDesktopSolutionsMenu]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -80,7 +107,7 @@ export default function Navbar() {
     <>
     <header className="sticky z-999 top-0 border-b border-gray-200 bg-white w-full">
         <div className="mx-auto container px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center lg:items-stretch justify-between h-16">
+          <div className="flex items-center justify-between h-16 md:items-stretch">
             <Logo />
             
             <nav className="hidden md:flex items-stretch justify-between gap-8">
@@ -120,8 +147,12 @@ export default function Navbar() {
                   </svg>
                   <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-indigo-500 to-secondary-500 transition-all duration-300 ${desktopSolutionsOpen || isActive("/solutions") ? "w-full" : "w-0"}`}></span>
                 </button>
-                <div className="absolute left-1/2 top-full w-[400px] -translate-x-1/2">
-                  <div className={`${desktopSolutionsOpen ? "block pointer-events-auto opacity-100 translate-y-0" : "hidden pointer-events-none opacity-0 translate-y-2"} transition-all duration-200 rounded-2xl bg-white/95 backdrop-blur border border-gray-200 drop-shadow-[0_16px_40px_rgba(15,23,42,0.12)] p-3`}>
+                {desktopSolutionsOpen && menuPosition && (
+                <div
+                  className="fixed z-50"
+                  style={{ left: menuPosition.left, top: menuPosition.top, width: menuPosition.width }}
+                >
+                  <div className="rounded-2xl bg-white/95 backdrop-blur border border-gray-200 drop-shadow-[0_16px_40px_rgba(15,23,42,0.12)] p-3">
                     <div className="mb-3 border-b border-[#e0dbd2] pb-3">
                       <div className="flex items-center justify-between gap-2">
                         <div className="text-[12px] font-bold uppercase tracking-wider text-zinc-400">Solutions</div>
@@ -163,7 +194,9 @@ export default function Navbar() {
                     </div>
                   </div>
                 </div>
+                )}
               </div>
+              
               <Link href={`${BASE_URL}/blog`} onClick={(e) => handleAnchorClick(e, null)} aria-label="Blog - Navbar" aria-current={isActive("/blog") ? "page" : undefined} className={`text-sm font-medium hover:text-indigo-600 transition-all duration-200 relative group flex items-center ${isActive("/blog") ? "text-indigo-600" : ""}`}>
                 Blog
                 <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-indigo-500 to-secondary-500 transition-all duration-300 ${isActive("/blog") ? "w-full" : "w-0 group-hover:w-full"}`}></span>
@@ -171,8 +204,8 @@ export default function Navbar() {
             </nav>
 
             <div className="flex md:hidden lg:flex items-center justify-between gap-4">
-              <Link href={`${LOGIN_URL}`} target="_blank" aria-label="Sign In - Navbar" className="hidden sm:block text-sm text-indigo-600 cursor-pointer px-5 py-2.5 rounded-xl bg-indigo-500/10">Sign In</Link>
-              <Link href={`${REGISTER_URL}`} target="_blank" aria-label="Sign Up - Navbar" className="rounded-xl bg-indigo-600 text-white sm:text-sm text-xs px-3 py-2 sm:px-5 sm:py-2.5">Start Free</Link>
+              <Button buttonLink={`${LOGIN_URL}`} buttonText="Sign In" ariaLabel="Sign In - Navbar" source="navbar" tone="light" className="hidden sm:inline-flex" />
+              <Button buttonLink={`${REGISTER_URL}`} buttonText="Start Free" ariaLabel="Sign Up - Navbar" source="navbar" tone="primary" />
             </div>
 
           </div>
