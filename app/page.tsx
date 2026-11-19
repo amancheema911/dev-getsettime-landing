@@ -1,7 +1,8 @@
-import { APP_NAME, BASE_URL, contactInfo, LOGIN_URL, REGISTER_URL } from "@/lib/config";
+import { APP_NAME, BASE_URL, contactInfo, LOGIN_URL } from "@/lib/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
+import CallToAction from "./component/CallToAction";
 import Card from "./component/Card";
 import { CheckListItem } from "./component/CheckList";
 import { FaqSection } from "./component/FaqSection";
@@ -11,9 +12,8 @@ import HeroBanner from "./component/HeroBanner";
 import InteractiveCalendar from "./component/InteractiveCalendar";
 import ScreenGate from "./component/ScreenGate";
 import Pricing from "./component/Pricing";
-import Support from "./component/Support";
+//import Support from "./component/Support";
 import TrustedCompanies from "./component/TrustedCompanies";
-import Button from "./component/ui/button/Button";
 
 export const metadata: Metadata = {
   title: `Appointment Scheduling Software for Online Booking`,
@@ -297,7 +297,7 @@ export default function Home() {
               description="The same booking page, shaped around the appointments your clients already expect."
             />
           </div>
-          <ul className="mx-auto grid w-full max-w-md grid-cols-2 justify-items-center gap-4 sm:max-w-2xl sm:grid-cols-3 sm:gap-5 lg:max-w-none lg:grid-cols-6 lg:gap-4">
+          <ul className="mx-auto grid w-full max-w-md grid-cols-2 justify-items-center gap-4 sm:max-w-2xl sm:grid-cols-3 sm:gap-5 lg:max-w-3xl lg:grid-cols-3 lg:gap-4 xl:max-w-none xl:grid-cols-6">
             {industries.map((item, index) => {
               const tones = [
                 "bg-rose-50 text-rose-600",
@@ -470,7 +470,7 @@ export default function Home() {
                           PICK A DAY
                         </div>
                       </div>
-                      <div className="flex flex-wrap gap-1.25 sm:gap-2">
+                      <div className="grid grid-cols-4 gap-1.5 min-[520px]:grid-cols-7 sm:gap-2">
                         {[
                           { day: "Mon", date: "25", active: false },
                           { day: "Tue", date: "26", active: false },
@@ -482,7 +482,7 @@ export default function Home() {
                         ].map((item) => (
                           <span
                             key={`${item.day}-${item.date}`}
-                            className={`rounded-lg border px-1 py-2 text-center text-xs font-medium text-neutral-600 transition-all duration-200 sm:rounded-xl w-1/8 ${
+                            className={`min-w-0 rounded-lg border px-1 py-2 text-center text-xs font-medium text-neutral-600 transition-all duration-200 sm:rounded-xl ${
                               item.active
                                 ? "border-indigo-500 bg-gradient-to-b from-indigo-500 to-indigo-600 text-white drop-shadow-md drop-shadow-indigo-300/60"
                                 : "border-neutral-200 bg-neutral-50 text-neutral-700 hover:border-indigo-200 hover:bg-indigo-50"
@@ -504,7 +504,7 @@ export default function Home() {
                         AVAILABLE TIMES
                       </div>
 
-                      <div className="grid grid-cols-4 gap-2 sm:grid-cols-4 lg:grid-cols-4">
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-4">
                         {[
                           "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM"
                         ].map((time) => (
@@ -558,7 +558,7 @@ export default function Home() {
 
       <Pricing pricingSource="home-pricing" />
 
-      <Support />
+      {/* <Support /> */}
 
       <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.14),transparent_28%),radial-gradient(circle_at_top_right,rgba(168,85,247,0.16),transparent_24%),linear-gradient(180deg,#f8fafc_0%,#ffffff_48%,#f8fafc_100%)] py-14 sm:py-20">
         
@@ -596,72 +596,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Call-to-Action Section */}
-      <section className="w-full bg-gradient-to-br from-indigo-500/10 via-indigo-200/20 to-indigo-500/10 py-14 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-500 p-4 sm:p-10">
-            <div className="relative grid grid-cols-1 lg:grid-cols-2 items-center gap-6">
-              {/* left: Content */}
-              <div className="space-y-4">
-                <Heading
-                  badge="Built for Modern Business"
-                  title="Ready for GetSetTime To Manage Your Appointments"
-                  description="Switch your manual operations to a unified scheduling platform to meet modern needs like online booking, reminders and more."
-                  titleClassName="text-2xl sm:text-3xl font-bold text-white md:text-4xl lg:text-[40px] capitalize"
-                  descriptionClassName = "text-white"
-                />
-                
-                <div className="">
-                  <Button buttonLink={`${LOGIN_URL}`} buttonText="Sign Up for Free" ariaLabel="Get Started - Home" source="home-cta" tone="light" />
-                </div>
-
-                <div className="flex flex-wrap gap-3 text-white">
-                  {['Online booking', 'Auto reminders', 'Team calendar'].map((item) => (
-                    <span key={item} className="text-white flex items-center gap-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M20 6 9 17l-5-5"/></svg> {item}</span>
-                  ))}
-                </div>
-              </div>
-              {/* right: Image */}
-              <div className="relative mx-auto w-full hidden lg:block">
-                <div className="rounded-xl bg-white/14 sm:p-4 backdrop-blur-xl">
-                  <div className="rounded-xl bg-white p-3 sm:p-4 drop-shadow-xl">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-semibold text-neutral-900">Today’s bookings</div>
-                      </div>
-                    </div>
-                    <div className="mt-4 space-y-3">
-                      {[
-                        { time: '10:00 AM', title: 'Consultation' },
-                        { time: '12:30 PM', title: '15 Minutes chat' },
-                        { time: '03:00 PM', title: 'Follow-up Call' },
-                      ].map((item) => (
-                        <div key={item.time} className="flex items-center justify-between rounded-lg bg-neutral-50 px-3 sm:px-4 py-2 sm:py-3">
-                          <div>
-                            <div className="text-sm sm:text-base font-medium text-neutral-900">{item.title}</div>
-                            <div className="text-xs sm:text-sm text-neutral-600">{item.time}</div>
-                          </div>
-                          <span className="rounded-md bg-emerald-50 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-emerald-700">Confirmed</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="mt-4 rounded-xl bg-indigo-50 p-4">
-                      <div>Reminders sent</div>
-                      <div className="text-2xl font-bold text-neutral-900">1,284</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute -right-5 -bottom-6 hidden lg:block rounded-xl bg-white px-4 py-3 drop-shadow-xl animate-float">
-                  <div>No-show reduction</div>
-                  <div className="text-xl font-bold text-neutral-900">-32%</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CallToAction
+        badge="Built for Modern Business"
+        title="Ready for GetSetTime To Manage Your Appointments"
+        description="Switch your manual operations to a unified scheduling platform to meet modern needs like online booking, reminders and more."
+        buttonLink={`${LOGIN_URL}`}
+        buttonText="Sign Up for Free"
+        buttonAriaLabel="Get Started - Home"
+        buttonSource="home-cta"
+        buttonTone="light"
+        highlights={["Online booking", "Auto reminders", "Team calendar"]}
+      />
 
     </>
   );

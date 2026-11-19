@@ -758,7 +758,7 @@ export default function FreeBookingPage() {
             {/* Cards */}
             <div className="mt-8 grid gap-8 lg:grid-cols-3">
               {testimonials.map((item, index) => (
-                <div key={index} className="rounded-2xl bg-white p-4 sm:p-6 lg:p-8 drop-shadow-lg transition-all duration-300 hover:-translate-y-2 hover:drop-shadow-xl">
+                <div key={index} className="flex h-full flex-col rounded-2xl bg-white p-4 drop-shadow-lg transition-transform duration-300 hover:-translate-y-2 hover:drop-shadow-xl sm:p-6 lg:p-8">
                   {/* Stars */}
                   <div className="mb-5 flex gap-1">
                     {Array.from({ length: 5 }).map((_, index) => (
@@ -767,16 +767,15 @@ export default function FreeBookingPage() {
                       </svg>
                     ))}
                   </div>
-                  <p>{item.review}</p>
-                  <div className="mt-6 flex items-center gap-3">
+                  <p className="min-h-[4.5rem] flex-1">{item.review}</p>
+                  <div className="mt-6 flex min-h-12 items-center gap-3">
                     <Image
                       src={item.image}
                       alt={item.name}
                       width={48}
                       height={48}
-                      priority={true}
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      className="rounded-full object-cover"
+                      sizes="48px"
+                      className="h-12 w-12 shrink-0 rounded-full object-cover"
                     />
                     <div>
                       <div className="text-md font-bold text-neutral-900">{item.name}</div>

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import Link from "next/link";
-import { APP_NAME, BASE_URL, REGISTER_URL, REGISTER_GOOGLE_URL, contactInfo } from "@/lib/config";
+import { APP_NAME, BASE_URL, REGISTER_URL, REGISTER_GOOGLE_URL, contactInfo, LOGIN_URL } from "@/lib/config";
 import Heading from "../component/Heading";
 import Card from "../component/Card";
 import CheckList from "../component/CheckList";
@@ -9,6 +8,7 @@ import RegionalPrice from "../component/RegionalPrice";
 import ScreenGate from "../component/ScreenGate";
 import SigngoogleButton from "../component/ui/button/SigngoogleButton";
 import Button from "../component/ui/button/Button";
+import CallToAction from "../component/CallToAction";
 
 const pageUrl = `${BASE_URL}/features`;
 
@@ -533,7 +533,7 @@ export default function FeaturesPage() {
                                         {stat.trend}
                                     </span>
                                 </div>
-                                <div className="mt-1.5 truncate text-xs font-semibold tracking-wide text-neutral-500 sm:mt-2 sm:text-[10px]">{stat.label}</div>
+                                <div className="mt-1.5 truncate text-sm font-semibold tracking-wide text-neutral-500 sm:mt-2">{stat.label}</div>
                                 <div className={`mt-0.5 truncate text-base font-bold tabular-nums sm:text-xl md:text-2xl ${stat.accent}`}>{stat.value}</div>
                             </div>
                             ))}
@@ -544,8 +544,8 @@ export default function FeaturesPage() {
                             <ScreenGate minWidth={1024}>
                               <div className="min-w-0 w-full rounded-xl border border-neutral-100 bg-white p-3 drop-shadow-sm lg:col-span-3">
                                   <div className="flex items-center justify-between gap-2">
-                                      <span className="text-[10px] font-semibold uppercase tracking-wide text-neutral-500">Bookings this week</span>
-                                      <span className="inline-flex shrink-0 items-center gap-0.5 text-[10px] font-bold text-emerald-600">
+                                      <span className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Bookings this week</span>
+                                      <span className="inline-flex shrink-0 items-center gap-0.5 text-xs font-bold text-emerald-600">
                                           <svg className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" /></svg>
                                           +18%
                                       </span>
@@ -671,7 +671,7 @@ export default function FeaturesPage() {
                   />
               </div>
 
-              <div className="grid gap-4 grid-cols-1 min-[440px]:grid-cols-2 lg:grid-cols-4 pb-2">
+              <div className="grid grid-cols-1 gap-4 pb-2 min-[440px]:grid-cols-2 xl:grid-cols-4">
                   {[
                   {
                       label: "Centralized Platform",
@@ -769,7 +769,7 @@ export default function FeaturesPage() {
                   wrapperClassName="space-y-3"
                 />
                 <ScreenGate minWidth={768}>
-                <div className="mt-8 grid grid-cols-4 lg:grid-cols-2 gap-3">
+                <div className="mt-8 grid grid-cols-2 gap-3">
                   <div className="rounded-2xl border border-indigo-100 bg-white p-4 drop-shadow-sm">
                     <div className="text-3xl font-bold text-indigo-600">4</div>
                     <p className="text-sm text-neutral-600">Automated stages</p>
@@ -790,7 +790,7 @@ export default function FeaturesPage() {
                 </ScreenGate>
               </div>
 
-              <div className="grid max-[576px]:grid-cols-1 grid-cols-2 lg:grid-cols-1 gap-4 relative space-y-4">
+              <div className="relative grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-1">
                 {workflowSteps.map((item) => (
                   <article key={item.title} className="group relative overflow-hidden rounded-2xl border border-white/80 bg-white/90 p-5 drop-shadow-md drop-shadow-indigo-100/20 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:drop-shadow-xl sm:p-6">
                     <div className={`absolute inset-y-0 left-0 w-1 ${item.accentBar}`} aria-hidden />
@@ -828,7 +828,7 @@ export default function FeaturesPage() {
                   />
                 </div>
 
-                <div className="grid gap-5 sm:grid-cols-3 md:grid-cols-3 md:items-stretch">
+                <div className="grid gap-5 sm:grid-cols-2 md:items-stretch lg:grid-cols-3">
                   {industryCards.map((card) => (
                     <Card
                       key={card.title}
@@ -1101,71 +1101,17 @@ export default function FeaturesPage() {
         </section>
 
         {/* Call-to-Action Section */}
-        <section className="w-full bg-gradient-to-br from-indigo-500/10 via-indigo-200/20 to-indigo-500/10 py-14 sm:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-500 p-4 sm:p-10">
-              <div className="relative grid grid-cols-1 lg:grid-cols-2 items-center gap-6">
-                {/* left: Content */}
-                <div className="space-y-4">
-                  <Heading
-                    badge="Built for Modern Business"
-                    title="Ready for GetSetTime To Manage Your Appointments"
-                    description="Switch your manual operations to a unified scheduling platform to meet modern needs like online booking, reminders and more."
-                    titleClassName="text-2xl sm:text-3xl font-bold text-white md:text-4xl lg:text-[40px] capitalize"
-                    descriptionClassName = "text-white"
-                  />
-                  
-                  <div className="">
-                    <Button buttonLink={`${REGISTER_URL}`} buttonText="Sign Up for Free" ariaLabel="Sign Up for Free" source="features-cta" tone="light" />
-                  </div>
-
-                  <div className="flex flex-wrap gap-3 text-white">
-                    {['Online booking', 'Auto reminders', 'Team calendar'].map((item) => (
-                      <span key={item} className="text-white flex items-center gap-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M20 6 9 17l-5-5"/></svg> {item}</span>
-                    ))}
-                  </div>
-                </div>
-                {/* right: Image */}
-                <div className="relative mx-auto w-full hidden lg:block">
-                  <div className="rounded-xl bg-white/14 sm:p-4 backdrop-blur-xl">
-                    <div className="rounded-xl bg-white p-3 sm:p-4 drop-shadow-xl">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-semibold text-neutral-900">Today’s bookings</div>
-                        </div>
-                      </div>
-                      <div className="mt-4 space-y-3">
-                        {[
-                          { time: '10:00 AM', title: 'Consultation' },
-                          { time: '12:30 PM', title: '15 Minutes chat' },
-                          { time: '03:00 PM', title: 'Follow-up Call' },
-                        ].map((item) => (
-                          <div key={item.time} className="flex items-center justify-between rounded-lg bg-neutral-50 px-3 sm:px-4 py-2 sm:py-3">
-                            <div>
-                              <div className="text-sm sm:text-base font-medium text-neutral-900">{item.title}</div>
-                              <div className="text-xs sm:text-sm text-neutral-600">{item.time}</div>
-                            </div>
-                            <span className="rounded-md bg-emerald-50 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-emerald-700">Confirmed</span>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="mt-4 rounded-xl bg-indigo-50 p-4">
-                        <div>Reminders sent</div>
-                        <div className="text-2xl font-bold text-neutral-900">1,284</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="absolute -right-5 -bottom-6 hidden lg:block rounded-xl bg-white px-4 py-3 drop-shadow-xl animate-float">
-                    <div>No-show reduction</div>
-                    <div className="text-xl font-bold text-neutral-900">-32%</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <CallToAction
+          badge="Built for Modern Business"
+          title="Ready for GetSetTime To Manage Your Appointments"
+          description="Switch your manual operations to a unified scheduling platform to meet modern needs like online booking, reminders and more."
+          buttonLink={`${LOGIN_URL}`}
+          buttonText="Sign Up for Free"
+          buttonAriaLabel="Get Started - Home"
+          buttonSource="home-cta"
+          buttonTone="light"
+          highlights={["Online booking", "Auto reminders", "Team calendar"]}
+        />
     </>
   );
 }

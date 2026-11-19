@@ -78,7 +78,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         </noscript>
 
         <Navbar />
-        <main>
+        <main className="min-w-0 overflow-x-clip">
           {children}
         </main>
         <Footer />

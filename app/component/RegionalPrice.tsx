@@ -1,9 +1,12 @@
 "use client";
 import {
   formatRegionalPrice,
+  getRegionalPricing,
   type RegionalPricePlan,
 } from "@/lib/pricing-data";
 import { useRegionalPricing } from "./useRegionalPricing";
+
+const INR_REGION = getRegionalPricing("IN");
 
 type RegionalPriceProps = {
   /** Which value to display */
@@ -26,11 +29,18 @@ export default function RegionalPrice({
   suffix,
 }: RegionalPriceProps) {
   const region = useRegionalPricing();
+  const amount = formatRegionalPrice(plan, region);
+  const reserved = formatRegionalPrice(plan, INR_REGION);
 
   return (
     <>
       {prefix}
-      {formatRegionalPrice(plan, region)}
+      <span className="inline-grid align-baseline">
+        <span className="invisible col-start-1 row-start-1 whitespace-nowrap tabular-nums" aria-hidden="true">
+          {reserved}
+        </span>
+        <span className="col-start-1 row-start-1 whitespace-nowrap tabular-nums">{amount}</span>
+      </span>
       {suffix}
     </>
   );

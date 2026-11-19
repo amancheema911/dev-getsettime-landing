@@ -92,7 +92,7 @@ function CalendarMonthPanel() {
         {monthLabel}
       </div>
 
-      <div className="mb-2 grid grid-cols-7 gap-1 text-xs text-neutral-600">
+      <div className="mb-2 grid grid-cols-7 gap-1 text-xs font-medium text-neutral-600">
         {WEEK_DAYS.map((day) => (
           <div key={day}>{day}</div>
         ))}
@@ -169,7 +169,7 @@ export default function InteractiveCalendar() {
                 <div className="text-sm font-medium tracking-widest text-white">LIVE SCHEDULE</div>
               </div>
 
-              <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                 <CalendarMonthPanel />
 
                 <div className="space-y-3 sm:space-y-4 hidden sm:block">
@@ -178,7 +178,7 @@ export default function InteractiveCalendar() {
                       <div className="text-sm font-medium text-white">Automation</div>
                       <span className="rounded-full bg-white text-emerald-700 px-2 py-0.5 text-xs font-medium">Active</span>
                     </div>
-                    <div className="space-y-2 text-xs">
+                    <div className="space-y-2 text-xs font-medium text-neutral-600">
                       <div className="flex items-center justify-between rounded-2xl bg-white px-3 py-2">
                         <span>Instant confirmation</span>
                         <span className="h-2 w-2 rounded-full bg-emerald-600" />
@@ -202,8 +202,8 @@ export default function InteractiveCalendar() {
               <div className="mb-3 text-sm font-medium text-neutral-900">Upcoming booking</div>
               <div className="space-y-2">
                 <div className="rounded-xl pb-1">
-                  <div className="text-xs font-medium text-neutral-900">Consultation Call</div>
-                  <div className="text-xs text-neutral-600">with Julia Walker</div>
+                  <div className="text-[12px] font-medium text-neutral-900">Consultation Call</div>
+                  <div className="text-[11px] font-medium text-neutral-600">with Julia Walker</div>
                 </div>
 
                 <div className="space-y-2 text-xs text-neutral-600">
@@ -233,7 +233,7 @@ export default function InteractiveCalendar() {
             description="Turn this section into a premium live experience instead of a flat illustration. Show a real calendar, active time slots, automation status, and booking flow so visitors instantly understand how powerful your platform feels."
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1">
             {FEATURES.map((feature) => (
               <CheckListItem key={feature} text={feature} />
             ))}

@@ -41,7 +41,7 @@ export default function Button({
       data-source={source}
       className={[
         displayClass.test(className) ? "" : "inline-flex",
-        "items-center justify-center rounded-xl px-4 py-3 text-sm font-medium transition",
+        "items-center justify-center rounded-xl px-4 py-3 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-400 focus-visible:ring-offset-2",
         toneClass,
         className,
       ].filter(Boolean).join(" ")}

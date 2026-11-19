@@ -120,7 +120,7 @@ function BenefitIcon({ id }: { id: string }) {
 
 export function SolutionCardGrid({ solutions }: { solutions: readonly HubSolution[] }) {
   return (
-    <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6">
+    <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3 xl:gap-6">
       {solutions.map((solution) => (
         <li key={solution.id} className="min-w-0">
           <Card

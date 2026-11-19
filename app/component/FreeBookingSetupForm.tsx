@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import InternationalPhoneField, {
-  isValidInternationalPhone,
-} from "./InternationalPhoneField";
+import { useCallback, useState } from "react";
+import InternationalPhoneField from "./InternationalPhoneField";
+import { isValidInternationalPhone } from "./InternationalPhoneField";
 import { COUNTRY_LIST } from "@/lib/CountryList";
 
 type FormData = {
@@ -100,6 +99,11 @@ export default function FreeBookingSetupForm() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const handlePhoneChange = useCallback((phone: string) => {
+    setFormData((prev) => (prev.phone === phone ? prev : { ...prev, phone }));
+    setErrorMessage((prev) => (prev ? "" : prev));
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -355,10 +359,7 @@ export default function FreeBookingSetupForm() {
               variant="booking"
               placeholder="Phone"
               value={formData.phone}
-              onChange={(phone) => {
-                setFormData((prev) => ({ ...prev, phone }));
-                if (errorMessage) setErrorMessage("");
-              }}
+              onChange={handlePhoneChange}
               className="text-xs"
             />
           </div>

@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal, flushSync } from "react-dom";
+import { useDialogBehavior } from "./useDialogBehavior";
 
 type ClaimFreeBookingButtonProps = {
   className?: string;
@@ -42,35 +43,19 @@ export default function ClaimFreeBookingButton({
   const [mounted, setMounted] = useState(false);
   const titleId = useId();
   const descriptionId = useId();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const dialogOpen = Boolean(error) && !loading;
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (!error) return;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setError("");
-        setSpotsFull(false);
-      }
-    };
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [error]);
-
-  function closeDialog() {
+  const closeDialog = useCallback(() => {
     setError("");
     setSpotsFull(false);
-  }
+  }, []);
+
+  useDialogBehavior(dialogOpen, closeDialog, dialogRef);
 
   async function handleClick() {
     if (loading) return;
@@ -108,7 +93,7 @@ export default function ClaimFreeBookingButton({
   const dialog =
     error && mounted && !loading
       ? createPortal(
-          <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[1100] flex items-center justify-center p-4">
             <button
               type="button"
               className="absolute inset-0 bg-neutral-950/50"
@@ -116,16 +101,18 @@ export default function ClaimFreeBookingButton({
               onClick={closeDialog}
             />
             <div
+              ref={dialogRef}
               role="alertdialog"
               aria-modal="true"
               aria-labelledby={titleId}
               aria-describedby={descriptionId}
-              className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl sm:p-7"
+              tabIndex={-1}
+              className="relative flex max-h-[min(90dvh,calc(100dvh-2rem))] w-full max-w-md flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
             >
               <button
                 type="button"
                 onClick={closeDialog}
-                className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-800"
+                className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-800"
                 aria-label="Close"
               >
                 <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -133,6 +120,7 @@ export default function ClaimFreeBookingButton({
                 </svg>
               </button>
 
+              <div className="overflow-y-auto overscroll-contain p-6 sm:p-7">
               <div
                 className={`mb-4 flex h-12 w-12 items-center justify-center rounded-full ${
                   spotsFull ? "bg-amber-100 text-amber-600" : "bg-red-100 text-red-600"
@@ -171,6 +159,7 @@ export default function ClaimFreeBookingButton({
               >
                 OK
               </button>
+              </div>
             </div>
           </div>,
           document.body

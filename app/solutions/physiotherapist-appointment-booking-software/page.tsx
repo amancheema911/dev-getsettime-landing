@@ -400,7 +400,7 @@ const growthRoadmap = [
               description="Beyond physio online booking, the right appointment system integrates with your work system and handles it automatically. And you can spend more time on patient care. Solve your routine puzzles, let's look at how:"
               wrapperClassName="text-center max-w-4xl mx-auto mb-8 space-y-3"
             />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
               {features.map((feature) => (
                 <Card key={feature.title} title={feature.title} description={feature.description} icon={feature.icon} />
               ))}

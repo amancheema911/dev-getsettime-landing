@@ -6,7 +6,7 @@ export default function Logo() {
   return (
     <a href={BASE_URL} aria-label="GetSetTime - Logo" className="flex items-center gap-3 group">
         <div className="logo-container" style={{ overflow: 'visible', padding: '15px', margin: '-15px', display: 'inline-block' }}>
-            <svg id="Layer_1" data-name="Layer 1" viewBox="0 0 3448.58 799.54" className="h-10 w-auto" width="200" height="48" preserveAspectRatio="xMidYMid meet" style={{ overflow: 'visible', display: 'block' }}>
+            <svg id="Layer_1" data-name="Layer 1" viewBox="0 0 3448.58 799.54" className="h-9 w-auto max-w-[42vw] sm:h-10 sm:max-w-[11.5rem] lg:max-w-none" width="200" height="48" preserveAspectRatio="xMidYMid meet" style={{ overflow: 'visible', display: 'block' }}>
             <g aria-hidden={true}>
               <circle fill="#4b39f4" cx="399.77" cy="399.77" r="360" className="" style={{ transformOrigin: '399.77px 399.77px' }}/>
               <circle fill="#4b39f4" cx="399.77" cy="399.77" r="250" className="animate-ping" style={{ transformOrigin: '399.77px 399.77px' }}/>

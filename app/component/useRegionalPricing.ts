@@ -45,12 +45,13 @@ function pricingFromCountry(country: string): RegionalPricing {
   return getRegionalPricing(country);
 }
 
+const DEFAULT_REGION = pricingFromCountry("IN");
+
 /** Client hook: resolves regional pricing from geo or phone country selection. */
 export function useRegionalPricing(): RegionalPricing {
-  const [region, setRegion] = useState<RegionalPricing>(() => {
-    const cached = getCachedVisitorLocation();
-    return pricingFromCountry(cached?.country ?? "IN");
-  });
+  // Same value on the server and the first client render. A cached country is
+  // applied after mount so price text can update without a hydration mismatch.
+  const [region, setRegion] = useState<RegionalPricing>(DEFAULT_REGION);
 
   const refresh = useCallback(() => {
     const cached = getCachedVisitorLocation();

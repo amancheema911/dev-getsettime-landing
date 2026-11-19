@@ -505,7 +505,7 @@ return (
               description="GetSetTime is the perfect software for every type of salon e.g. hair salon, barber shop, nail studio, and more, designed to manage resources efficiently and let users book appointments online quickly."
               wrapperClassName="text-center max-w-4xl mx-auto mb-8 space-y-3"
             />
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
                 {features.map((feature) => (
                     <Card key={feature.title} title={feature.title} description={feature.description} icon={feature.icon} />
                 ))}

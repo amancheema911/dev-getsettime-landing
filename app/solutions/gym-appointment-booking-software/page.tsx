@@ -520,7 +520,7 @@ export default function GymAppointmentBookingSoftwarePage() {
             wrapperClassName="mx-auto max-w-4xl space-y-4 text-center"
             titleClassName="text-2xl font-bold text-neutral-900 sm:text-3xl md:text-4xl lg:text-[40px] capitalize"
           />
-          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {features.map((feature) => (
               <Card key={feature.title} title={feature.title} description={feature.description} icon={feature.icon} />
             ))}

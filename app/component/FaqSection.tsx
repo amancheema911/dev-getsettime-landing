@@ -26,13 +26,13 @@ export const FaqSection = ({ items = [] }: FaqSectionProps) => {
       {safeItems.map((item, index) => { const isOpen = openIndex === index;
         return (
           <div key={index}
-            className={`group overflow-hidden rounded-xl border transition-all duration-300 ${
+            className={`group overflow-hidden rounded-xl border transition-[border-color,background-color,box-shadow,transform] duration-300 ${
               isOpen
                 ? "border-indigo-200/90 bg-white drop-shadow-[0_16px_60px_rgba(109,40,217,0.14)]"
                 : "border-slate-200/80 bg-white/80 drop-shadow-[0_10px_35px_rgba(15,23,42,0.06)] hover:-translate-y-0.5 hover:border-indigo-200 hover:drop-shadow-[0_18px_50px_rgba(99,102,241,0.10)]"
             }`}
           >
-            <button type="button" onClick={() => toggle(index)} className="flex w-full items-center gap-3 p-3 sm:p-5 text-left cursor-pointer" aria-expanded={isOpen} aria-controls={`faq-content-${index}`} id={`faq-trigger-${index}`}>
+            <button type="button" onClick={() => toggle(index)} className="flex min-h-[3.25rem] w-full items-center gap-3 p-3 text-left cursor-pointer sm:min-h-[4.75rem] sm:p-5" aria-expanded={isOpen} aria-controls={`faq-content-${index}`} id={`faq-trigger-${index}`}>
               <div
                 className={`mt-0.5 h-11 w-11 hidden sm:flex shrink-0 items-center justify-center rounded-xl border transition-all ${
                   isOpen

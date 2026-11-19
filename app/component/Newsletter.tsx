@@ -58,7 +58,7 @@ export default function Newsletter({ className }: NewsletterProps) {
               <button type="submit" disabled={status === "loading"} className="bg-indigo-600 disabled:bg-indigo-400 disabled:cursor-not-allowed text-white text-sm px-5 py-3 rounded-xl transition-all duration-300 cursor-pointer">{status === "loading" ? "Subscribing..." : "Subscribe"}</button>
           </form>
           {feedback && (
-              <div className={`text-sm ${ status === "success" ? "text-green-600" : "text-red-500" }`}>{feedback}</div>
+              <div className={`text-sm ${ status === "success" ? "text-emerald-800" : "text-red-600" }`}>{feedback}</div>
           )}
         </div>
     </>

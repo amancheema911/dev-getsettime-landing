@@ -417,7 +417,7 @@ export default function DoctorAppointmentSchedulingSoftware() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-4 gap-2.5">
+                <div className="grid grid-cols-2 gap-2.5 min-[420px]:grid-cols-3 sm:grid-cols-4">
                   {[
                     { time: "09:30 AM", status: "Booked" },
                     { time: "10:00 AM", status: "Booked" },
@@ -680,7 +680,7 @@ export default function DoctorAppointmentSchedulingSoftware() {
                         <div className="text-neutral-500">Manage time slots beautifully in real time</div>
                       </div>
                     </div>
-                    <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 gap-2 min-[420px]:grid-cols-3 lg:grid-cols-3">
                       {[
                         { label: "09:00 AM", status: "available" },
                         { label: "09:30 AM", status: "available" },

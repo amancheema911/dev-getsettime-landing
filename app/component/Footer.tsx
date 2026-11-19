@@ -38,10 +38,10 @@ export default function Footer() {
       <div className="relative z-10">
         {/* Main Footer Content */}
         <div className="mx-auto container px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 sm:gap-8">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             
             {/* Brand Column */}
-            <div className="sm:col-span-3 lg:col-span-1">
+            <div className="sm:col-span-2 lg:col-span-1">
               <div className="lg:col-span-1 space-y-3">
                 <div><Logo /></div>
                 <p>GetSetTime is a cloud-based scheduling software built for appointment-based services and businesses to manage bookings effortlessly. Simple scheduling, fewer no-shows, more time for what matters — running your practice.</p>
@@ -63,20 +63,17 @@ export default function Footer() {
             </div>
 
             {/* Useful Links */}
-            <div className="flex justify-start lg:justify-center sm:col-span-2 lg:col-span-1">
+            <div className="flex justify-start lg:justify-center lg:col-span-1">
               <div className="w-full">             
                 <ScreenGate minWidth={640}>
                   <div className="flex justify-start lg:justify-center">
                     <div>
                       <div className="font-semibold text-neutral-900 mb-4">Quick Links</div>
-                      <ul className="flex flex-row flex-wrap lg:flex-col gap-2">
-                        {usefulLinks.map((link, index) => (
+                      <ul className="flex flex-col gap-2">
+                        {usefulLinks.map((link) => (
                           <li key={link.href}>
                             <Link href={link.href} aria-label={link.label} className="hover:text-indigo-600 duration-200">
                               {link.label}
-                              {index < usefulLinks.length - 1 && (
-                                <span className="lg:hidden"> | </span>
-                              )}
                             </Link>
                           </li>
                         ))}
@@ -116,7 +113,7 @@ export default function Footer() {
             </div>
 
             {/* Solutions */}
-            <div className="sm:col-span-2 lg:col-span-1">
+            <div className="lg:col-span-1">
               <div className="w-full">
                 <ScreenGate minWidth={640}>
                   <div className="">
@@ -161,19 +158,16 @@ export default function Footer() {
             </div>
 
             {/* Resources */}
-            <div className="sm:col-span-2 lg:col-span-1">
+            <div className="lg:col-span-1">
               <div className="w-full">
                 <ScreenGate minWidth={640}>
                   <div className="">
                     <div className="font-semibold text-neutral-900 mb-4">Resources</div>
-                    <ul className="flex flex-row flex-wrap lg:flex-col gap-2">
-                      {resourcesLinks.map((link, index) => (
+                    <ul className="flex flex-col gap-2">
+                      {resourcesLinks.map((link) => (
                         <li key={link.href}>
                           <Link href={link.href} aria-label={link.label} className="hover:text-indigo-600 duration-200">
                             {link.label}
-                            {index < resourcesLinks.length - 1 && (
-                              <span className="lg:hidden"> | </span>
-                            )}
                           </Link>
                         </li>
                       ))}

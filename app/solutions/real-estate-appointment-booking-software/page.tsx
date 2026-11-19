@@ -288,7 +288,7 @@ const faqItems = [
                 description="Built for real-estate consultants who manage appointments across offices, projects, listings, and remote calls." 
                 wrapperClassName="mx-auto max-w-4xl text-center space-y-4"
               />
-              <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
                   {features.map((feature) => (
                       <Card key={feature.title} title={feature.title} description={feature.description} icon={feature.icon} />
                   ))}

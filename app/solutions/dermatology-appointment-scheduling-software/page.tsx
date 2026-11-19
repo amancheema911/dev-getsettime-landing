@@ -11,6 +11,7 @@ import { FaqSection } from "@/app/component/FaqSection";
 import SolutionCtaSection from "@/app/component/SolutionCtaSection";
 import ScreenGate from "@/app/component/ScreenGate";
 import Button from "@/app/component/ui/button/Button";
+import { TestimonialSlider } from "@/app/component/TestimonialSlider";
 
 const pageUrl = `${BASE_URL}/solutions/dermatology-appointment-scheduling-software`;
 const pageDescription = "All-in-one dermatology clinic scheduling software for online appointment booking based on different treatment procedures, durations, or room requirements.";
@@ -190,22 +191,25 @@ function CheckIcon() {
 
 const testimonials = [
   {
-    quote: "GetSetTime has transformed the way we manage appointments. Our no-show rate has dropped significantly!",
+    id: "amanda-williams",
+    text: "GetSetTime has transformed the way we manage appointments. Our no-show rate has dropped significantly!",
     name: "Dr. Amanda Williams",
-    organization: "Dermatologist",
-    image: "/review-2.jpg",
+    role: "Dermatologist",
+    avatar: "/review-2.jpg",
   },
   {
-    quote: "Patients love the easy online booking and reminders. It saves us so much time every day.",
+    id: "mark-stevens",
+    text: "Patients love the easy online booking and reminders. It saves us so much time every day.",
     name: "Dr. Mark Stevens",
-    organization: "Skin Dermatologist",
-    image: "/review-1.jpg",
+    role: "Skin Dermatologist",
+    avatar: "/review-1.jpg",
   },
   {
-    quote: "The best scheduling software we've used. Simple, reliable, and excellent customer support.",
+    id: "priya-patel",
+    text: "The best scheduling software we've used. Simple, reliable, and excellent customer support.",
     name: "Dr. Priya Patel",
-    organization: "Glow Dermatologist",
-    image: "/review-3.jpg",
+    role: "Glow Dermatologist",
+    avatar: "/review-3.jpg",
   },
 ];
 
@@ -397,7 +401,7 @@ export default function DermatologyAppointmentSchedulingSoftware() {
                         highlightText="Dermatologists"
                         description="GetSetTime is built for modern skincare clinics to manage every booking seamlessly, from routine skin checks to specialised cosmetic procedures."
                         headingTag="h1"
-                        titleClassName="text-3xl md:text-4xl lg:text-[50px] font-black text-neutral-900 capitalize"
+                        titleClassName="text-3xl font-black capitalize text-neutral-900 md:text-4xl xl:text-[50px]"
                     />
 
                     <div className="grid grid-cols-1 gap-x-6 gap-y-2 md:gap-y-5 min-[520px]:grid-cols-2">
@@ -533,7 +537,7 @@ export default function DermatologyAppointmentSchedulingSoftware() {
               wrapperClassName="mx-auto mb-10 max-w-3xl space-y-4 text-center"          
             />
 
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6">
               {featureCards.map((feature) => (
                 <Card
                   key={feature.title}
@@ -584,34 +588,12 @@ export default function DermatologyAppointmentSchedulingSoftware() {
             </div>
         </section>
 
-        {/* Testimonials */}
-        <section className="bg-indigo-100/10 py-14 sm:py-20">
-          <div className="mx-auto container px-4 sm:px-6 lg:px-8">
-            <Heading
-              badge="TESTIMONIALS"
-              title="Loved by"
-              highlightText="Dermatologists"
-              wrapperClassName="mx-auto mb-6 max-w-3xl space-y-4 text-center"              
-            />
-
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {testimonials.map((item) => (
-                <article key={item.name} className="rounded-2xl bg-white p-6 shadow-lg sm:p-8">
-                    <span className="leading-none" aria-hidden>
-                      <svg fill="#e0e7ff" width="50px" height="50px" viewBox="0 0 24 24"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M6.5 10c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35l.539-.222.474-.197-.485-1.938-.597.144c-.191.048-.424.104-.689.171-.271.05-.56.187-.882.312-.318.142-.686.238-1.028.466-.344.218-.741.4-1.091.692-.339.301-.748.562-1.05.945-.33.358-.656.734-.909 1.162-.293.408-.492.856-.702 1.299-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539l.025.168.026-.006A4.5 4.5 0 1 0 6.5 10zm11 0c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35l.539-.222.474-.197-.485-1.938-.597.144c-.191.048-.424.104-.689.171-.271.05-.56.187-.882.312-.317.143-.686.238-1.028.467-.344.218-.741.4-1.091.692-.339.301-.748.562-1.05.944-.33.358-.656.734-.909 1.162-.293.408-.492.856-.702 1.299-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539l.025.168.026-.006A4.5 4.5 0 1 0 17.5 10z"></path></g></svg>
-                    </span>
-                    <p>{item.quote}</p>
-                    <div className="mt-6 flex items-center gap-3">
-                      <div>
-                          <p className="text-sm font-bold text-neutral-900">{item.name}</p>
-                          <p className="text-sm text-neutral-500">{item.organization}</p>
-                      </div>
-                    </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
+        <TestimonialSlider
+          badgeLabel="Testimonials"
+          title="Loved by Dermatologists"
+          description="Dermatology clinics use GetSetTime to keep bookings, reminders, and follow-ups in one place."
+          testimonials={testimonials}
+        />
 
         {/* FAQ SECTION */} 
         <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.14),transparent_28%),radial-gradient(circle_at_top_right,rgba(168,85,247,0.16),transparent_24%),linear-gradient(180deg,#f8fafc_0%,#ffffff_48%,#f8fafc_100%)] py-14 sm:py-20">

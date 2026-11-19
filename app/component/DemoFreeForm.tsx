@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import InternationalPhoneField, {
   isValidInternationalPhone,
 } from "./InternationalPhoneField";
 import PrivacyPolicyContent from "./PrivacyPolicyContent";
+import { useDialogBehavior } from "./useDialogBehavior";
 
 type FormData = {
   fullName: string;
@@ -208,6 +209,7 @@ export default function DemoFreeForm({ businessType }: DemoFreeFormProps = {}) {
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const privacyButtonRef = useRef<HTMLButtonElement>(null);
+  const privacyDialogRef = useRef<HTMLDivElement>(null);
   const privacyTitleId = useId();
   const privacyConsentId = useId();
 
@@ -217,20 +219,8 @@ export default function DemoFreeForm({ businessType }: DemoFreeFormProps = {}) {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (!privacyOpen) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setPrivacyOpen(false);
-    };
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", onKey);
-      privacyButtonRef.current?.focus();
-    };
-  }, [privacyOpen]);
+  const closePrivacy = useCallback(() => setPrivacyOpen(false), []);
+  useDialogBehavior(privacyOpen, closePrivacy, privacyDialogRef);
 
   useEffect(() => {
     if (!businessType || businessType === PLACEHOLDER_BUSINESS_TYPE) return;
@@ -940,7 +930,7 @@ export default function DemoFreeForm({ businessType }: DemoFreeFormProps = {}) {
         )}
       </form>
       {mounted && privacyOpen && createPortal(
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[1100] flex items-center justify-center overflow-y-auto p-4">
           <button
             type="button"
             className="absolute inset-0 bg-neutral-950/50"
@@ -948,17 +938,19 @@ export default function DemoFreeForm({ businessType }: DemoFreeFormProps = {}) {
             onClick={() => setPrivacyOpen(false)}
           />
           <div
+            ref={privacyDialogRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby={privacyTitleId}
-            className="relative flex h-[min(80vh,760px)] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+            tabIndex={-1}
+            className="relative flex h-[min(85dvh,760px)] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
           >
-            <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3">
+            <div className="flex items-center justify-between gap-3 border-b border-neutral-200 px-4 py-3">
               <h2 id={privacyTitleId} className="text-base font-semibold text-neutral-950">Privacy Policy</h2>
               <button
                 type="button"
                 onClick={() => setPrivacyOpen(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-full text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-800"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-800"
                 aria-label="Close"
               >
                 <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>

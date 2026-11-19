@@ -5,13 +5,14 @@ import {
   applyRegionalPrices,
   formatPrice,
   formatRegionalPrice,
+  getRegionalPricing,
   type PricingTier,
   type RegionalPricing,
 } from "@/lib/pricing-data";
 import { useRegionalPricing } from "./useRegionalPricing";
 import Button from "./ui/button/Button";
 import type { FC } from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Heading from "./Heading";
 
 function getSlidesPerView(width: number) {
@@ -93,33 +94,29 @@ export const PricingCard: FC<{
       )}
 
       <div className="relative shrink-0 space-y-3">
-        <div className="flex flex-row justify-between gap-2">
-          <div>
+        <div className="flex flex-row items-start justify-between gap-2">
+          <div className="min-w-0 flex-1">
             <div className="text-xs font-semibold uppercase tracking-widest text-indigo-600">{tier.name}</div>
-            <div className="text-sm">{tier.subtitle}</div>
+            <div className="min-h-5 text-sm">{tier.subtitle}</div>
           </div>
-          <span className="w-[90px] text-right">
-            {tier.price === "Free" || !region.taxLabel ? (
-              ""
-            ) : (
-              <span className="inline-block rounded-lg border border-indigo-200 bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-600">
+          <span className="flex h-7 w-[8.75rem] shrink-0 items-center justify-end">
+            {tier.price !== "Free" && region.taxLabel ? (
+              <span className="inline-flex max-w-full items-center truncate whitespace-nowrap rounded-lg border border-indigo-200 bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-600">
                 {region.taxLabel}
               </span>
-            )}
+            ) : null}
           </span>
         </div>
 
-        <div className="relative">
-          <span className="text-4xl font-bold text-neutral-900">
+        <div className="relative flex min-h-11 items-baseline whitespace-nowrap">
+          <span className="text-4xl font-bold tabular-nums text-neutral-900">
             {tier.price === "Free"
               ? displayPrice
               : formatPrice(Number(displayPrice), region.currency)}
           </span>
-          {tier.price !== "Free" && (
-            <span className="ml-1 text-neutral-600">
-              /{isAnnual ? `${tier.period}` : tier.period}
-            </span>
-          )}
+          <span className={`ml-1 text-neutral-600 ${tier.price === "Free" ? "invisible" : ""}`}>
+            /{tier.period}
+          </span>
           {/* {isAnnual && tier.price !== "Free" && annualDiscount < 1 && (
             <div className="mt-1 text-sm font-medium text-emerald-600">Save 10% annually</div>
           )} */}
@@ -215,7 +212,7 @@ const PricingCardsSlider: FC<{
   const [slidesPerView, setSlidesPerView] = useState(1);
   const touchStartX = useRef<number | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const updateSlidesPerView = () => setSlidesPerView(getSlidesPerView(window.innerWidth));
     updateSlidesPerView();
     window.addEventListener("resize", updateSlidesPerView);
@@ -239,11 +236,6 @@ const PricingCardsSlider: FC<{
   const goPrev = useCallback(() => goTo(currentIndex - 1), [currentIndex, goTo]);
   const goNext = useCallback(() => goTo(currentIndex + 1), [currentIndex, goTo]);
 
-  const slideBasis = useMemo(
-    () => `calc((100% - ${(slidesPerView - 1) * 1.5}rem) / ${slidesPerView})`,
-    [slidesPerView]
-  );
-
   const trackOffset = `calc(-${currentIndex} * ((100% + 1.5rem) / ${slidesPerView}))`;
 
   const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
@@ -263,14 +255,15 @@ const PricingCardsSlider: FC<{
 
   return (
     <div className="relative">
-      {canSlide && (
+      {tiers.length > 1 && (
         <>
           <button
             type="button"
             onClick={goPrev}
             disabled={currentIndex === 0}
             aria-label="Previous pricing plans"
-            className="absolute -left-2 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-600 shadow-md transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-40 sm:flex lg:-left-4"
+            data-tier-count={tiers.length}
+            className="pricing-slider-arrow absolute -left-2 top-1/2 z-10 h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-600 shadow-md transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-40 lg:-left-4"
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -281,7 +274,8 @@ const PricingCardsSlider: FC<{
             onClick={goNext}
             disabled={currentIndex >= maxIndex}
             aria-label="Next pricing plans"
-            className="absolute -right-2 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-600 shadow-md transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-40 sm:flex lg:-right-4"
+            data-tier-count={tiers.length}
+            className="pricing-slider-arrow absolute -right-2 top-1/2 z-10 h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-indigo-600 shadow-md transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-40 lg:-right-4"
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -293,15 +287,15 @@ const PricingCardsSlider: FC<{
       <div className="overflow-hidden pt-4" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
         <div className="flex items-stretch gap-6 transition-transform duration-300 ease-out" style={{ transform: `translateX(${trackOffset})` }}>
           {tiers.map((tier) => (
-            <div key={tier.name} className="flex shrink-0 flex-col py-4" style={{ flexBasis: slideBasis }}>
+            <div key={tier.name} className="pricing-slide flex flex-col py-4">
               <PricingCard tier={tier} isAnnual={isAnnual} region={region} pricingSource={pricingSource} />
             </div>
           ))}
         </div>
       </div>
 
-      {canSlide && (
-        <div className="mt-6 flex items-center justify-center gap-3">
+      {tiers.length > 1 && (
+        <div className="pricing-slider-controls mt-6 flex items-center justify-center gap-3" data-tier-count={tiers.length}>
           <button
             type="button"
             onClick={goPrev}
@@ -409,10 +403,10 @@ export default function Pricing({
                 </div>
               </div>
               <div className="rounded-3xl bg-white p-4 drop-shadow-2xl sm:p-6 space-y-3">
-                <div className="text-sm font-semibold uppercase tracking-widest text-slate-500">Included Free</div>
+                <div className="text-sm font-semibold uppercase tracking-widest text-neutral-500">Included Free</div>
                 <div className="flex items-end gap-2">
-                  <span className="text-5xl font-black tracking-tight text-slate-950">250</span>
-                  <span className="pb-2 text-sm font-bold text-slate-600">bookings/month</span>
+                  <span className="text-5xl font-black tracking-tight text-neutral-900">250</span>
+                  <span className="pb-2 text-sm font-bold text-neutral-600">bookings/month</span>
                 </div>
                 <div className="rounded-2xl bg-indigo-50 p-4">
                   <div className="text-sm">Start accepting appointments without payment. Upgrade when your workspace needs more seats or more capacity.</div>
@@ -447,7 +441,14 @@ export default function Pricing({
             <div className="rounded-xl bg-neutral-900 px-6 py-4 text-white">
               <p className="text-sm text-white">Extra Seat</p>
               <p className="text-2xl font-bold">
-                {formatRegionalPrice("extraSeat", region)} / month + GST
+                <span className="inline-grid">
+                  <span className="invisible col-start-1 row-start-1 whitespace-nowrap tabular-nums" aria-hidden="true">
+                    {formatRegionalPrice("extraSeat", getRegionalPricing("IN"))} / month + GST
+                  </span>
+                  <span className="col-start-1 row-start-1 whitespace-nowrap tabular-nums">
+                    {formatRegionalPrice("extraSeat", region)} / month + GST
+                  </span>
+                </span>
               </p>
             </div>
           </div>

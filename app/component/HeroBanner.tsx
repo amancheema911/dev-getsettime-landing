@@ -128,7 +128,7 @@ export default function HeroBanner() {
                             <div className="text-xs font-semibold text-neutral-800">Free Bookings</div>
                         </div>
                     </div>
-                    <div className="text-xs text-neutral-500">For first-time users only</div>
+                    <div className="text-xs font-medium text-neutral-500">For first-time users only</div>
                 </div>
 
                 <div className="rounded-2xl border border-neutral-100 bg-white p-3 drop-shadow-sm space-y-1">
@@ -142,7 +142,7 @@ export default function HeroBanner() {
                             <div className="text-sm font-bold text-neutral-900">Solo to Multi-Staff</div>
                         </div>
                     </div>
-                    <div className="text-xs text-neutral-500">Manage team in one place</div>
+                    <div className="text-xs font-medium text-neutral-500">Manage team in one place</div>
                 </div>
 
                 <div className="rounded-2xl border border-neutral-100 bg-white p-3 drop-shadow-sm space-y-1">
@@ -156,7 +156,7 @@ export default function HeroBanner() {
                             <div className="text-sm font-bold text-neutral-900">WhatsApp &amp; Email Reminders</div>
                         </div>
                     </div>
-                    <div className="text-xs text-neutral-500">Reduce no-shows</div>
+                    <div className="text-xs font-medium text-neutral-500">Reduce no-shows</div>
                 </div>
             </div>
           </div>
@@ -324,7 +324,7 @@ export default function HeroBanner() {
                                     </span>
                                 </div>
                                 <div className="flex gap-1.5">
-                                    <div className="flex flex-col justify-between py-1 text-[10px] text-neutral-400">
+                                    <div className="flex flex-col justify-between py-1 text-[11px] font-medium text-neutral-600">
                                         <span>80</span>
                                         <span>60</span>
                                         <span>40</span>
@@ -364,7 +364,7 @@ export default function HeroBanner() {
                                         />
                                         ))}
                                     </svg>
-                                    <div className="flex justify-between text-[9px] text-neutral-400">
+                                    <div className="flex justify-between text-[11px] font-medium text-neutral-600">
                                         {activityData.map((d) => (
                                         <span key={d.label}>{d.label}</span>
                                         ))}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { pricingTiers, applyRegionalPrices, formatPrice } from "@/lib/pricing-data";
+import { pricingTiers, applyRegionalPrices, formatPrice, getRegionalPricing } from "@/lib/pricing-data";
 import { useRegionalPricing } from "./useRegionalPricing";
 
 function getDisplayPrice(price: string, tierName: string, isAnnual: boolean): number | "Free" {
@@ -90,10 +90,10 @@ export default function PricingHeroPreview() {
 
         <div className="mt-5 flex flex-wrap items-center justify-end gap-3">
           <div className="w-auto flex items-center rounded-full bg-white p-1 text-[11px] shadow-sm">
-            <button type="button" onClick={() => setIsAnnual(false)} aria-label="Monthly billing" role="tab" className={`rounded-full px-3 py-1 font-semibold transition ${!isAnnual ? "bg-indigo-600 text-white" : "text-neutral-500"}`}>
+            <button type="button" onClick={() => setIsAnnual(false)} aria-label="Monthly billing" role="tab" className={`rounded-full px-3 py-2 font-semibold transition ${!isAnnual ? "bg-indigo-600 text-white" : "text-neutral-500"}`}>
               Monthly
             </button>
-            <button type="button" onClick={() => setIsAnnual(true)} aria-label="Yearly billing" role="tab" className={`rounded-full px-3 py-1 font-semibold transition ${isAnnual ? "bg-indigo-600 text-white" : "text-neutral-500"}`}>
+            <button type="button" onClick={() => setIsAnnual(true)} aria-label="Yearly billing" role="tab" className={`rounded-full px-3 py-2 font-semibold transition ${isAnnual ? "bg-indigo-600 text-white" : "text-neutral-500"}`}>
               Yearly
             </button>
           </div>
@@ -126,7 +126,7 @@ export default function PricingHeroPreview() {
                 </div>
                 <p className="mt-2 text-sm font-bold text-neutral-950">{tier.name}</p>
                 <div className="text-xs text-neutral-500">{tier.subtitle}</div>
-                <div className={`mt-2 text-xl font-bold leading-none ${priceClass}`}>
+                <div className={`mt-2 whitespace-nowrap text-xl font-bold tabular-nums leading-none ${priceClass}`}>
                   {displayPrice === "Free" ? "Free" : formatPrice(displayPrice, region.currency)}
                   {displayPrice !== "Free" && <span className="text-[11px] font-medium text-neutral-400"> / month</span>}
                 </div>
@@ -155,7 +155,15 @@ export default function PricingHeroPreview() {
             </svg>
           </span>
           <span>
-            Extra seats <span className="font-semibold">{formatPrice(region.extraSeat, region.currency)}/month + GST</span>
+            Extra seats{" "}
+            <span className="inline-grid align-baseline font-semibold">
+              <span className="invisible col-start-1 row-start-1 whitespace-nowrap tabular-nums" aria-hidden="true">
+                {formatPrice(getRegionalPricing("IN").extraSeat, "INR")}/month + GST
+              </span>
+              <span className="col-start-1 row-start-1 whitespace-nowrap tabular-nums">
+                {formatPrice(region.extraSeat, region.currency)}/month + GST
+              </span>
+            </span>
           </span>
         </div>
       </div>

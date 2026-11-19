@@ -702,7 +702,7 @@ export default function TutorAppointmentBookingSoftwarePage() {
 
                         <div className="space-y-3 p-3 sm:p-4">
                             {/* 01 — Live calendar & lessons */}
-                            <div className="rounded-xl md;border border-slate-100 md:bg-white md:p-3 md:drop-shadow-sm">
+                            <div className="rounded-xl border border-slate-100 bg-white p-3 drop-shadow-sm md:p-3">
                                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                                     <div className="flex items-start gap-2">
                                         <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-indigo-600 text-xs font-semibold text-white">01</span>

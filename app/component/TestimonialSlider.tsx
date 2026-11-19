@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export interface TestimonialItem {
   id: number | string;
@@ -21,12 +21,64 @@ interface TestimonialSliderProps {
   autoRotateMs?: number;
 }
 
+type CardsPerView = 1 | 2 | 3;
+
+const TRACKS: { size: CardsPerView; className: string }[] = [
+  { size: 1, className: "sm:hidden" },
+  { size: 2, className: "hidden sm:block lg:hidden" },
+  { size: 3, className: "hidden lg:block" },
+];
+
 const getInitials = (name: string) => {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return "NA";
   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
   return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
 };
+
+function chunkItems(items: TestimonialItem[], size: number) {
+  const pages: TestimonialItem[][] = [];
+  for (let index = 0; index < items.length; index += size) {
+    pages.push(items.slice(index, index + size));
+  }
+  return pages;
+}
+
+function readCardsPerView(): CardsPerView {
+  if (window.matchMedia("(min-width: 1024px)").matches) return 3;
+  if (window.matchMedia("(min-width: 640px)").matches) return 2;
+  return 1;
+}
+
+function TestimonialCard({ item }: { item: TestimonialItem }) {
+  const review = item.text ?? item.review ?? "";
+  const initials = item.initials ?? getInitials(item.name);
+
+  return (
+    <article className="flex h-full min-w-0 flex-col rounded-2xl bg-white p-6 shadow-lg">
+      <span className="leading-none text-indigo-200" aria-hidden>
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M7.2 6.4c1.7.4 2.8 1.7 2.8 3.6 0 1.2-.5 2.1-1.3 2.8.8.2 1.5.8 1.9 1.7.4.9.5 1.9.2 3.1-.3 1.1-1 1.9-2.1 2.3-1 .4-2.1.2-3-.5-1-.8-1.5-2-1.5-3.6 0-2.3.7-4.2 2.1-5.7.7-.7 1.4-1.2 2.1-1.5l-.2-.2zm9 0c1.7.4 2.8 1.7 2.8 3.6 0 1.2-.5 2.1-1.3 2.8.8.2 1.5.8 1.9 1.7.4.9.5 1.9.2 3.1-.3 1.1-1 1.9-2.1 2.3-1 .4-2.1.2-3-.5-1-.8-1.5-2-1.5-3.6 0-2.3.7-4.2 2.1-5.7.7-.7 1.4-1.2 2.1-1.5l-.2-.2z" />
+        </svg>
+      </span>
+      <p className="mt-3 flex-1 text-neutral-600">{review}</p>
+      <div className="mt-6 flex items-center gap-3">
+        <div className="min-w-0 text-left">
+          <p className="font-bold text-neutral-900">{item.name}</p>
+          <p className="text-sm text-neutral-500">{item.role}</p>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function ArrowIcon({ direction }: { direction: "prev" | "next" }) {
+  return (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+      {direction === "prev" ? <path d="M15 6 9 12l6 6" strokeLinecap="round" strokeLinejoin="round" /> : <path d="m9 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />}
+    </svg>
+  );
+}
 
 export const TestimonialSlider = ({
   badgeLabel,
@@ -36,105 +88,124 @@ export const TestimonialSlider = ({
   autoRotateMs,
 }: TestimonialSliderProps) => {
   const items = useMemo(() => (Array.isArray(testimonials) ? testimonials : []), [testimonials]);
-  const testimonialCount = items.length;
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [animating, setAnimating] = useState(false);
-  const [slideDirection, setSlideDirection] = useState<"prev" | "next">("next");
+  const [page, setPage] = useState(0);
+  const [perView, setPerView] = useState<CardsPerView | null>(null);
 
-  if (testimonialCount === 0) return null;
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const tablet = window.matchMedia("(min-width: 640px)");
+    const update = () => setPerView(readCardsPerView());
+    update();
+    desktop.addEventListener("change", update);
+    tablet.addEventListener("change", update);
+    return () => {
+      desktop.removeEventListener("change", update);
+      tablet.removeEventListener("change", update);
+    };
+  }, []);
 
-  const handleSlide = (direction: "prev" | "next") => {
-    if (animating || testimonialCount <= 1) return;
+  const pageCount = perView ? Math.ceil(items.length / perView) : 1;
+  const activePage = Math.min(page, Math.max(pageCount - 1, 0));
 
-    setSlideDirection(direction);
-    setAnimating(true);
-    setTimeout(() => {
-      setActiveIndex((prev) =>
-        direction === "prev"
-          ? (prev - 1 + testimonialCount) % testimonialCount
-          : (prev + 1) % testimonialCount
-      );
-      setAnimating(false);
-    }, 360);
+  useEffect(() => {
+    if (page !== activePage) setPage(activePage);
+  }, [page, activePage]);
+
+  useEffect(() => {
+    if (!autoRotateMs || perView == null || activePage >= pageCount - 1) return;
+    const timer = window.setTimeout(() => setPage((current) => current + 1), autoRotateMs);
+    return () => window.clearTimeout(timer);
+  }, [autoRotateMs, perView, activePage, pageCount]);
+
+  if (items.length === 0) return null;
+
+  const goToPage = (direction: -1 | 1) => {
+    const size = readCardsPerView();
+    const count = Math.ceil(items.length / size);
+    setPage((current) => Math.min(Math.max(current + direction, 0), count - 1));
   };
 
-  const current = items[activeIndex];
-  const currentReview = current.text ?? current.review ?? "";
-  const currentInitials = current.initials ?? getInitials(current.name);
-
   return (
-    <section className="py-12 sm:py-20 relative bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.15),_transparent_30%),linear-gradient(180deg,#f8faff_0%,#eef2ff_100%)] overflow-hidden">
+    <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.15),_transparent_30%),linear-gradient(180deg,#f8faff_0%,#eef2ff_100%)] py-12 sm:py-20">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-10 top-16 h-72 w-72 rounded-full bg-indigo-600/20 blur-3xl" />
         <div className="absolute bottom-10 right-10 h-80 w-80 rounded-full bg-emerald-400/20 blur-3xl" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center space-y-3">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="space-y-3 text-center">
           <div className="inline-flex items-center gap-3 rounded-full border border-indigo-200 bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-indigo-600 drop-shadow-sm backdrop-blur">
             <span className="h-2 w-2 rounded-full bg-indigo-500" />
             {badgeLabel}
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold text-neutral-900">{title}</h2>
+          <h2 className="text-3xl font-bold text-neutral-900 md:text-5xl">{title}</h2>
           <p>{description}</p>
         </div>
 
-        <div className="mx-auto mt-8 w-full max-w-5xl relative">
-          <div className="grid grid-cols-1 items-center gap-3 sm:grid-cols-[60px_auto_60px] sm:gap-6">
-            <button type="button" onClick={() => handleSlide("prev")} className='mx-auto hidden transition-all duration-500 sm:inline-flex cursor-pointer' aria-label="Previous testimonial">
-              <svg width="40px" height="40px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#4f39f6"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"> <g id="Icon-Set-Filled" transform="translate(-414.000000, -985.000000)" fill="#4f39f6"> <path d="M436,1002 L425.414,1002 L429.535,1006.12 C429.926,1006.51 429.926,1007.15 429.535,1007.54 C429.145,1007.93 428.512,1007.93 428.121,1007.54 L422.465,1001.879 C422.225,1001.639 422.15,1001.311 422.205,1001 C422.15,1000.689 422.225,1000.361 422.465,1000.121 L428.121,994.465 C428.512,994.074 429.145,994.074 429.535,994.465 C429.926,994.855 429.926,995.488 429.535,995.879 L425.414,1000 L436,1000 C436.553,1000 437,1000.448 437,1001 C437,1001.553 436.553,1002 436,1002 L436,1002 Z M442,985 L418,985 C415.791,985 414,986.791 414,989 L414,1013 C414,1015.21 415.791,1017 418,1017 L442,1017 C444.209,1017 446,1015.21 446,1013 L446,989 C446,986.791 444.209,985 442,985 L442,985 Z" id="arrow-left-square"> </path> </g> </g> </g></svg>
-            </button>
-            <div className="relative overflow-hidden">
-              <div className="grid [grid-template-areas:'stack']">
-                <div key={current.id} className="card [grid-area:stack] transition-all duration-300 ease-in-out">
-                  <blockquote
-                    className={`relative text-center rounded-2xl bg-white drop-shadow-sm text-neutral-500 p-6 text-xl transition-all duration-300 ease-in-out ${
-                      animating
-                        ? `${slideDirection === "next" ? "-translate-x-6" : "translate-x-6"} opacity-0`
-                        : "translate-x-0 opacity-100"
-                    }`}
-                  >
-                    <i>{currentReview}</i>
-                  </blockquote>
-                  <div
-                    className={`mt-6 flex items-center justify-center gap-2 transition-all duration-300 ease-in-out ${
-                      animating
-                        ? `${slideDirection === "next" ? "-translate-x-4" : "translate-x-4"} opacity-0`
-                        : "translate-x-0 opacity-100"
-                    }`}
-                  >
-                    {current.avatar ? (
-                      <Image src={current.avatar} alt={current.name} width={48} height={48} priority={true} sizes="(max-width: 768px) 100vw, 50vw" className="h-12 w-12 rounded-xl object-cover" />
-                    ) : (
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-base font-bold text-white">
-                        {currentInitials}
-                      </div>
-                    )}
-                    <div>
-                      <p className="font-bold">{current.name}</p>
-                      <p className="text-sm">{current.role}</p>
+        <div
+          className="mt-8"
+          onTouchStart={(event) => {
+            event.currentTarget.dataset.startX = String(event.touches[0]?.clientX ?? 0);
+          }}
+          onTouchEnd={(event) => {
+            const startX = Number(event.currentTarget.dataset.startX ?? 0);
+            const endX = event.changedTouches[0]?.clientX ?? startX;
+            const delta = endX - startX;
+            if (delta > 48) goToPage(-1);
+            if (delta < -48) goToPage(1);
+          }}
+        >
+          {TRACKS.map((track) => {
+            const pages = chunkItems(items, track.size);
+            const trackPage = Math.min(activePage, pages.length - 1);
+            return (
+              <div key={track.size} className={`overflow-hidden ${track.className}`}>
+                <div
+                  className="flex transition-transform duration-300 ease-out"
+                  style={{ transform: `translateX(-${trackPage * 100}%)` }}
+                >
+                  {pages.map((group, index) => (
+                    <div
+                      key={group.map((item) => item.id).join("-")}
+                      className={`grid w-full shrink-0 gap-4 ${track.size === 1 ? "grid-cols-1" : track.size === 2 ? "grid-cols-2" : "grid-cols-3"}`}
+                      aria-hidden={index !== trackPage}
+                    >
+                      {group.map((item) => (
+                        <TestimonialCard key={item.id} item={item} />
+                      ))}
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
-            </div>
-            <button type="button" onClick={() => handleSlide("next")} className='mx-auto hidden transition-all duration-500 sm:inline-flex cursor-pointer' aria-label="Next testimonial">
-              <svg width="40px" height="40px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#4f39f6"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"> <g id="Icon-Set-Filled" transform="translate(-466.000000, -985.000000)" fill="#4f39f6"> <path d="M489.535,1001.879 L483.879,1007.54 C483.488,1007.93 482.855,1007.93 482.465,1007.54 C482.074,1007.14 482.074,1006.51 482.465,1006.12 L486.586,1002 L476,1002 C475.447,1002 475,1001.552 475,1001 C475,1000.447 475.447,1000 476,1000 L486.586,1000 L482.465,995.879 C482.074,995.488 482.074,994.854 482.465,994.465 C482.855,994.074 483.488,994.074 483.879,994.465 L489.535,1000.121 C489.775,1000.361 489.85,1000.689 489.795,1001 C489.85,1001.311 489.775,1001.639 489.535,1001.879 L489.535,1001.879 Z M494,985 L470,985 C467.791,985 466,986.791 466,989 L466,1013 C466,1015.21 467.791,1017 470,1017 L494,1017 C496.209,1017 498,1015.21 498,1013 L498,989 C498,986.791 496.209,985 494,985 L494,985 Z" id="arrow-right-square"> </path> </g> </g> </g></svg>
-            </button>
-          </div>
-          <div className="mt-6 flex items-center justify-center gap-4 sm:hidden">
-            <button type="button" onClick={() => handleSlide("prev")} className='inline-flex transition-all duration-500 cursor-pointer' aria-label="Previous testimonial">
-              <svg width="30px" height="30px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#4f39f6"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"> <g id="Icon-Set-Filled" transform="translate(-414.000000, -985.000000)" fill="#4f39f6"> <path d="M436,1002 L425.414,1002 L429.535,1006.12 C429.926,1006.51 429.926,1007.15 429.535,1007.54 C429.145,1007.93 428.512,1007.93 428.121,1007.54 L422.465,1001.879 C422.225,1001.639 422.15,1001.311 422.205,1001 C422.15,1000.689 422.225,1000.361 422.465,1000.121 L428.121,994.465 C428.512,994.074 429.145,994.074 429.535,994.465 C429.926,994.855 429.926,995.488 429.535,995.879 L425.414,1000 L436,1000 C436.553,1000 437,1000.448 437,1001 C437,1001.553 436.553,1002 436,1002 L436,1002 Z M442,985 L418,985 C415.791,985 414,986.791 414,989 L414,1013 C414,1015.21 415.791,1017 418,1017 L442,1017 C444.209,1017 446,1015.21 446,1013 L446,989 C446,986.791 444.209,985 442,985 L442,985 Z" id="arrow-left-square"> </path> </g> </g> </g></svg>
-            </button>
-            <button type="button" onClick={() => handleSlide("next")} className='inline-flex transition-all duration-500 cursor-pointer' aria-label="Next testimonial">
-              <svg width="30px" height="30px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#4f39f6"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"> <g id="Icon-Set-Filled" transform="translate(-466.000000, -985.000000)" fill="#4f39f6"> <path d="M489.535,1001.879 L483.879,1007.54 C483.488,1007.93 482.855,1007.93 482.465,1007.54 C482.074,1007.14 482.074,1006.51 482.465,1006.12 L486.586,1002 L476,1002 C475.447,1002 475,1001.552 475,1001 C475,1000.447 475.447,1000 476,1000 L486.586,1000 L482.465,995.879 C482.074,995.488 482.074,994.854 482.465,994.465 C482.855,994.074 483.488,994.074 483.879,994.465 L489.535,1000.121 C489.775,1000.361 489.85,1000.689 489.795,1001 C489.85,1001.311 489.775,1001.639 489.535,1001.879 L489.535,1001.879 Z M494,985 L470,985 C467.791,985 466,986.791 466,989 L466,1013 C466,1015.21 467.791,1017 470,1017 L494,1017 C496.209,1017 498,1015.21 498,1013 L498,989 C498,986.791 496.209,985 494,985 L494,985 Z" id="arrow-right-square"> </path> </g> </g> </g></svg>
-            </button>
-          </div>
-          <div className="mt-6 text-sm text-gray-500 text-center">
-            {activeIndex + 1} / {testimonialCount}
-            {autoRotateMs ? ` · ${Math.round(autoRotateMs / 1000)}s` : ""}
-          </div>
+            );
+          })}
         </div>
+
+        {perView != null && pageCount > 1 && (
+          <div className="mt-6 flex items-center justify-center gap-4">
+            <button
+              type="button"
+              onClick={() => goToPage(-1)}
+              disabled={activePage === 0}
+              className="inline-flex text-indigo-600 disabled:cursor-not-allowed disabled:opacity-30"
+              aria-label="Previous testimonials"
+            >
+              <ArrowIcon direction="prev" />
+            </button>
+            <p className="min-w-12 text-center text-sm text-neutral-500">
+              {activePage + 1} / {pageCount}
+            </p>
+            <button
+              type="button"
+              onClick={() => goToPage(1)}
+              disabled={activePage >= pageCount - 1}
+              className="inline-flex text-indigo-600 disabled:cursor-not-allowed disabled:opacity-30"
+              aria-label="Next testimonials"
+            >
+              <ArrowIcon direction="next" />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

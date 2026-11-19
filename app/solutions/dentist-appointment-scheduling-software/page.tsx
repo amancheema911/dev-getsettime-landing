@@ -461,7 +461,7 @@ return (
               description="From first booking to follow-up reminder, GetSetTime is one of the most complete appointment systems that integrates with your scheduling workflow and handles it all automatically, so your staff doesn't have to."
               wrapperClassName="text-center max-w-4xl mx-auto mb-8 space-y-3"
             />
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
                 {features.map((feature) => (
                 <Card key={feature.title} title={feature.title} description={feature.description} icon={feature.icon} />
                 ))}
@@ -518,7 +518,6 @@ return (
                                         <div className="opacity-90">Upcoming Appointment</div>
                                         <div className="mt-1 font-semibold">Emma Wilson · 11:00 AM</div>
                                         <div className="opacity-90">Dental Checkup</div>
-                                        <span className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold border bg-emerald-50 text-emerald-600 border-emerald-200">Confirmed</span>
                                     </div>
                                 </div>
 
@@ -785,7 +784,7 @@ return (
                 <Image src="/dentist-grow-2.1.webp" alt="Dental Clinic Growth Roadmap" width={700} height={600} priority={true} sizes="(max-width: 768px) 100vw, 50vw" className="w-full h-full rounded-xl object-cover"/>
 
                 <div className="absolute right-0 -top-10 hidden lg:block w-50 rounded-xl bg-white p-4 drop-shadow-md animate-float">
-                    <div className="text-sm uppercase text-neutral-400">Dental Clinic Growth</div>
+                    <div className="text-sm uppercase text-neutral-400">Clinic Growth</div>
                     <div className="font-bold text-neutral-900">30 days to grow your dental clinic</div>
                     <div className="mt-3 flex items-end gap-2">
                     <div className="h-5 w-3 rounded-full bg-indigo-200" />
@@ -802,7 +801,6 @@ return (
                 <div className="pointer-events-none hidden lg:block absolute left-0 -bottom-10 rounded-xl border border-violet-100 bg-white p-4 drop-shadow-xl animate-float">
                     <div className="text-sm uppercase text-neutral-500">New Appointment</div>
                     <div className="mt-1 font-bold text-neutral-900">Jason Howard · 11:30 AM</div>
-                    <div className="text-neutral-600">Synced to Dentist Clinic Operations Board</div>
                 </div>
             </div>
             </ScreenGate>

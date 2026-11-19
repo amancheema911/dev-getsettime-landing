@@ -72,7 +72,7 @@ function CellValue({
   if (emphasized || isPrice || typeof value !== "string") {
     return (
       <span
-        className={`shrink-0 bg-gradient-to-r from-indigo-700 to-violet-600 bg-clip-text font-bold tracking-tight text-transparent ${
+        className={`shrink-0 whitespace-nowrap bg-gradient-to-r from-indigo-700 to-violet-600 bg-clip-text font-bold tabular-nums tracking-tight text-transparent ${
           compact ? "text-lg" : "text-xl sm:text-2xl"
         }`}
       >
@@ -199,7 +199,7 @@ export default function PricingComparison({ rows }: PricingComparisonProps) {
   return (
     <div className="relative">
 
-      <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 drop-shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:rounded-3xl">
+      <div className="relative min-w-0 overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 drop-shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:rounded-3xl">
         <ScreenGate maxWidth={1023}>
         {/* ——— Mobile & tablet: plan tabs + feature list ——— */}
         <div className="relative">
@@ -220,7 +220,7 @@ export default function PricingComparison({ rows }: PricingComparisonProps) {
                     role="tab"
                     aria-selected={isActive}
                     onClick={() => setActivePlan(i)}
-                    className={`flex-1 snap-center rounded-2xl border px-3 py-3 text-left transition-all sm:min-w-[140px] sm:px-4 ${
+                    className={`min-w-0 flex-1 snap-center rounded-2xl border px-3 py-3 text-left transition-all sm:px-4 ${
                       isActive
                         ? isPopular
                           ? "border-indigo-500 bg-gradient-to-b from-indigo-600 to-violet-600 text-white drop-shadow-lg drop-shadow-indigo-300/40"
@@ -288,8 +288,8 @@ export default function PricingComparison({ rows }: PricingComparisonProps) {
                         }`}
                       />
                       <span
-                        className={`text-sm leading-snug ${
-                          row.highlight ? "font-semibold text-neutral-900" : "font-medium text-neutral-700"
+                        className={`text-sm leading-5 ${
+                          row.highlight ? "block min-h-10 font-semibold text-neutral-900" : "font-medium text-neutral-700"
                         }`}
                       >
                         {featureLabel(row)}
