@@ -13,7 +13,8 @@ export default function Newsletter({ className }: NewsletterProps) {
     async function handleSubscribe(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
     
-        if (!email.trim()) {
+        const trimmedEmail = email.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
           setStatus("error");
           setFeedback("Please enter a valid email address.");
           return;
@@ -23,14 +24,13 @@ export default function Newsletter({ className }: NewsletterProps) {
         setFeedback("");
     
         try {
-          const res = await fetch("/api/send-email", {
+          const res = await fetch("/api/send-email/subscribers", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              formType: "newsletter",
-              email,
+              email: trimmedEmail,
             }),
           });
     
@@ -41,12 +41,12 @@ export default function Newsletter({ className }: NewsletterProps) {
           }
     
           setStatus("success");
-          setFeedback("Thank you for subscribing! We'll keep you updated.");
+          setFeedback(data?.message || "Thank you for subscribing! We'll keep you updated.");
           setEmail("");
         } catch (err) {
           console.error("Subscribe error:", err);
           setStatus("error");
-          setFeedback("Something went wrong. Please try again in a moment.");
+          setFeedback(err instanceof Error && err.message ? err.message : "Something went wrong. Please try again in a moment.");
         }
       }
 

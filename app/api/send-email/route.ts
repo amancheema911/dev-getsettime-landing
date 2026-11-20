@@ -80,6 +80,7 @@ function emailShell({
   email,
   phone,
   footerNote,
+  showReply = true,
 }: {
   headerTitle: string;
   subtitle: string;
@@ -89,10 +90,17 @@ function emailShell({
   email: string;
   phone?: string;
   footerNote: string;
+  showReply?: boolean;
 }) {
   const mailtoLink = `mailto:${encodeURIComponent(email)}`;
   const digits = String(phone || "").replace(/\D/g, "");
   const whatsappLink = digits ? `https://wa.me/${digits}` : "";
+  const replyButton = showReply
+    ? `<a href="${mailtoLink}" style="display: inline-block; background-color: #4b39f4; color: #ffffff; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; margin-right: 12px;">Reply via Email</a>`
+    : "";
+  const whatsappButton = whatsappLink
+    ? `<a href="${whatsappLink}" style="display: inline-block; background-color: #ffffff; color: #4b39f4; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; border: 2px solid #4b39f4;">Reply on WhatsApp</a>`
+    : "";
 
   return `<div style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 24px;">
     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
@@ -115,13 +123,11 @@ function emailShell({
             ? `<div style="margin-top: 24px; padding: 16px; background-color: #f8f8f8; border-radius: 8px; font-size: 14px; color: #333; line-height: 1.5;">${messageHtml}</div>`
             : ""
         }
-        <div style="margin-top: 24px;">
-          <a href="${mailtoLink}" style="display: inline-block; background-color: #4b39f4; color: #ffffff; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; margin-right: 12px;">Reply via Email</a>
-          ${ whatsappLink ? 
-            `<a href="${whatsappLink}" style="display: inline-block; background-color: #ffffff; color: #4b39f4; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; border: 2px solid #4b39f4;">Reply on WhatsApp</a>`
-              : ""
-          }
-        </div>
+        ${
+          replyButton || whatsappButton
+            ? `<div style="margin-top: 24px;">${replyButton}${whatsappButton}</div>`
+            : ""
+        }
       </div>
     </div>
     <p style="text-align: center; color: #a0a0a0; font-size: 12px; margin-top: 20px;">${escapeHtml(footerNote)}</p>
@@ -286,13 +292,14 @@ function buildNewsletterEmail(data: NewsletterPayload): MailContent | NextRespon
   return {
     fromName: "Newsletter Subscriber",
     fromEmail: email,
-    subject: `New Newsletter Subscriber: ${email} — ${formatDate()}`,
+    subject: `Newsletter Subscriber`,
     html: emailShell({
-      headerTitle: "New Newsletter Subscription",
-      subtitle: "A new user has subscribed to your newsletter",
+      headerTitle: "Newsletter Subscriber",
+      subtitle: "A new user has subscribed to your newsletter.",
       leadSource: "Newsletter Form",
       email,
-      footerNote: "This email was sent from your website newsletter subscription form.",
+      showReply: false,
+      footerNote: "Sent from GetSetTime CRM System • Do not share customer data",
       rowsHtml: row("Email", email),
     }),
   };
