@@ -75,7 +75,7 @@ function SelectChevron() {
   );
 }
 
-export default function FreeBookingSetupForm() {
+export default function ClaimFreeBookingForm() {
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     businessName: "",
@@ -141,7 +141,7 @@ export default function FreeBookingSetupForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          formType: "free-booking",
+          formType: "claim_free",
           fullName: formData.fullName,
           businessName: formData.businessName,
           businessType: formData.businessType,

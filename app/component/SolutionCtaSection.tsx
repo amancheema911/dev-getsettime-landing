@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-import DemoFreeForm from "@/app/component/DemoFreeForm";
+import SolutionsForm from "@/app/component/SolutionsForm";
 import Heading from "@/app/component/Heading";
 import {
   defaultCtaHighlightFeatures,
@@ -119,7 +119,7 @@ export default function SolutionCtaSection({
 
               <div className="relative mx-auto w-full">
                 {formSlot ?? (
-                  <DemoFreeForm key={businessType ?? "all"} businessType={businessType} />
+                  <SolutionsForm key={businessType ?? "all"} businessType={businessType} />
                 )}
               </div>
             </div>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import Script from "next/script";
 import { APP_NAME, BASE_URL, contactInfo, REGISTER_URL } from "@/lib/config";
 import ClaimFreeBookingButton from "../component/ClaimFreeBookingButton";
-import FreeBookingSetupForm from "../component/FreeBookingSetupForm";
+import ClaimFreeBookingForm from "../component/ClaimFreeBookingForm";
 import FreeBookingPhoneMockup from "../component/FreeBookingPhoneMockup";
 import Heading from "../component/Heading";
 import Card from "../component/Card";
@@ -583,7 +583,7 @@ export default function FreeBookingPage() {
 
                   {/* Right — Form */}
                   <div className="xl:col-span-4 xl:pl-6">
-                      <FreeBookingSetupForm />
+                      <ClaimFreeBookingForm />
                   </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import DemoFreeForm from "../component/DemoFreeForm";
+import DemoFreeForm from "../component/SolutionsForm";
 
 export default function FormTest() {
   return (

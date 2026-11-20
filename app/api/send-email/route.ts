@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
 
-type FormType = "contact" | "demo" | "free-booking" | "newsletter";
+type FormType = "contact" | "solutions" | "claim_free" | "newsletter";
 
 type ContactPayload = {
   name: string;
@@ -11,7 +11,7 @@ type ContactPayload = {
   message: string;
 };
 
-type DemoPayload = {
+type SolutionsPayload = {
   fullName: string;
   businessName: string;
   businessType: string;
@@ -20,10 +20,10 @@ type DemoPayload = {
   staffCount?: string;
   bookingMethod?: string;
   improvements?: string[];
-  additionalInfo?: string;
+  message?: string;
 };
 
-type FreeBookingPayload = {
+type ClaimFreeBookingPayload = {
   fullName: string;
   businessName: string;
   businessType: string;
@@ -170,7 +170,7 @@ function buildContactEmail(data: ContactPayload): MailContent | NextResponse {
   };
 }
 
-function buildDemoEmail(data: DemoPayload): MailContent | NextResponse {
+function buildDemoEmail(data: SolutionsPayload): MailContent | NextResponse {
   const {
     fullName,
     businessName,
@@ -180,10 +180,10 @@ function buildDemoEmail(data: DemoPayload): MailContent | NextResponse {
     staffCount,
     bookingMethod,
     improvements = [],
-    additionalInfo,
+    message,
   } = data;
 
-  if (!fullName || !businessName || !businessType || !email || !phone) {
+  if (!fullName || !businessName || !businessType || !email) {
     return NextResponse.json(
       { success: false, error: "Missing required fields" },
       { status: 400 }
@@ -195,11 +195,11 @@ function buildDemoEmail(data: DemoPayload): MailContent | NextResponse {
   return {
     fromName: fullName,
     fromEmail: email,
-    subject: `New Request: ${fullName} — ${businessType}`,
+    subject: `New Solutions Request: ${fullName} — ${businessType}`,
     html: emailShell({
-      headerTitle: "New Request",
-      subtitle: "Someone requested for their business",
-      leadSource: "Request For Your Business Form",
+      headerTitle: "New Solutions Request",
+      subtitle: "Someone requested solutions for their business.",
+      leadSource: "Solutions Request Form",
       email,
       phone,
       footerNote: "Sent from GetSetTime CRM System • Do not share customer data",
@@ -212,13 +212,13 @@ function buildDemoEmail(data: DemoPayload): MailContent | NextResponse {
         row("Team Size", staffCount || "—"),
         row("Booking Method", bookingMethod || "—"),
         row("Improvements", improvementsText),
-        row("Additional Info", additionalInfo || "—"),
+        row("Message", message || "—"),
       ].join(""),
     }),
   };
 }
 
-function buildFreeBookingEmail(data: FreeBookingPayload): MailContent | NextResponse {
+function buildFreeBookingEmail(data: ClaimFreeBookingPayload): MailContent | NextResponse {
   const {
     fullName,
     businessName,
@@ -308,7 +308,7 @@ function buildNewsletterEmail(data: NewsletterPayload): MailContent | NextRespon
 function resolveFormType(body: Record<string, unknown>): FormType | null {
   if (typeof body.formType === "string") {
     const type = body.formType as FormType;
-    if (["contact", "demo", "free-booking", "newsletter"].includes(type)) {
+    if (["contact", "solutions", "claim_free", "newsletter"].includes(type)) {
       return type;
     }
   }
@@ -318,10 +318,10 @@ function resolveFormType(body: Record<string, unknown>): FormType | null {
     return "newsletter";
   }
   if ("businessName" in body && "preferredTime" in body) {
-    return "free-booking";
+    return "claim_free";
   }
   if ("businessName" in body && ("improvements" in body || "additionalInfo" in body)) {
-    return "demo";
+    return "solutions";
   }
   if ("name" in body && "professions" in body && "message" in body) {
     return "contact";
@@ -367,11 +367,11 @@ export async function POST(req: Request) {
       case "contact":
         mail = buildContactEmail(body as ContactPayload);
         break;
-      case "demo":
-        mail = buildDemoEmail(body as DemoPayload);
+      case "solutions":
+        mail = buildDemoEmail(body as SolutionsPayload);
         break;
-      case "free-booking":
-        mail = buildFreeBookingEmail(body as FreeBookingPayload);
+      case "claim_free":
+        mail = buildFreeBookingEmail(body as ClaimFreeBookingPayload);
         break;
       case "newsletter":
         mail = buildNewsletterEmail(body as NewsletterPayload);

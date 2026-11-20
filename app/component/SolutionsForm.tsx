@@ -18,7 +18,7 @@ type FormData = {
   staffCount: string;
   bookingMethod: string;
   improvements: string[];
-  additionalInfo: string;
+  message: string;
 };
 
 const businessTypeOptions = [
@@ -139,10 +139,10 @@ const createEmptyFormData = (defaultBusinessType: string): FormData => ({
   bookingMethod: "",
   staffCount: "",
   improvements: [],
-  additionalInfo: "",
+  message: "",
 });
 
-type DemoFreeFormProps = {
+type SolutionsFormProps = {
   /** Pre-selected business type label from the solution page */
   businessType?: string;
 };
@@ -199,7 +199,7 @@ function FieldError({ message }: { message?: string }) {
   return <div className="mt-1 text-xs text-red-500">{message}</div>;
 }
 
-export default function DemoFreeForm({ businessType }: DemoFreeFormProps = {}) {
+export default function SolutionsForm({ businessType }: SolutionsFormProps = {}) {
   const defaultBusinessType = businessType ?? PLACEHOLDER_BUSINESS_TYPE;
   const businessTypes = getBusinessTypeOptions(defaultBusinessType);
 
@@ -268,9 +268,9 @@ export default function DemoFreeForm({ businessType }: DemoFreeFormProps = {}) {
     if (errorMessage) setErrorMessage("");
   };
 
-  const handleAdditionalInfoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value.slice(0, 300);
-    setFormData((prev) => ({ ...prev, additionalInfo: value }));
+    setFormData((prev) => ({ ...prev, message: value }));
     if (errorMessage) setErrorMessage("");
   };
 
@@ -306,7 +306,7 @@ export default function DemoFreeForm({ businessType }: DemoFreeFormProps = {}) {
     setStep((s) => Math.max(s - 1, 1));
   };
 
-  const submitDemoRequest = async () => {
+  const submitSolutionsRequest = async () => {
     if (step !== 2 || status === "sending") return;
 
     const step1Errors = validateStep(1, formData);
@@ -326,20 +326,20 @@ export default function DemoFreeForm({ businessType }: DemoFreeFormProps = {}) {
       setStatus("sending");
       setErrorMessage("");
 
-      const res = await fetch("/api/send-email", {
+      const res = await fetch("/api/send-email/submit-forms", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          formType: "demo",
+          formType: "solutions",
           fullName: formData.fullName,
           businessName: formData.businessName,
           businessType: formData.businessType,
           email: formData.email,
-          phone: formData.phone,
+          phone: formData.phone,          
           staffCount: formData.staffCount,
           bookingMethod: formData.bookingMethod,
           improvements: selectedImprovements,
-          additionalInfo: formData.additionalInfo,
+          message: formData.message,
         }),
       });
 
@@ -380,7 +380,7 @@ export default function DemoFreeForm({ businessType }: DemoFreeFormProps = {}) {
     if (step === 1) goNext();
   };
 
-  const inputClass = (hasError = false) =>
+  const inputClass = (hasError = false) => 
     `block w-full rounded-lg border ${hasError ? "border-red-400" : "border-neutral-200"} bg-white py-3 sm:py-2.5 pl-10 pr-3 text-sm text-neutral-800 placeholder:text-neutral-400 focus:border-[#3D3AF3] focus:outline-none focus:ring-2 focus:ring-[#3D3AF3]/20`;
   const selectClass = (hasError = false) =>
     `block w-full rounded-lg border ${hasError ? "border-red-400" : "border-neutral-200"} bg-white py-3 sm:py-2.5 pl-10 pr-8 text-sm text-neutral-800 focus:border-[#3D3AF3] focus:outline-none focus:ring-2 focus:ring-[#3D3AF3]/20 appearance-none`;
@@ -711,15 +711,15 @@ export default function DemoFreeForm({ businessType }: DemoFreeFormProps = {}) {
               <FieldLabel optional>Anything else we should know?</FieldLabel>
               <div className="relative">
                 <textarea
-                  name="additionalInfo"
+                  name="message"
                   rows={4}
                   placeholder="Tell us more about your business or requirements..."
-                  value={formData.additionalInfo}
-                  onChange={handleAdditionalInfoChange}
+                  value={formData.message}
+                  onChange={handleMessageChange}
                   className="block w-full resize-none rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-400 focus:border-[#3D3AF3] focus:outline-none focus:ring-2 focus:ring-[#3D3AF3]/20"
                 />
                 <span className="pointer-events-none absolute bottom-2.5 right-3 text-xs text-neutral-400">
-                  {formData.additionalInfo.length}/300
+                  {formData.message.length}/300
                 </span>
               </div>
             </div>
@@ -900,7 +900,7 @@ export default function DemoFreeForm({ businessType }: DemoFreeFormProps = {}) {
             ) : (
               <button
                 type="button"
-                onClick={submitDemoRequest}
+                onClick={submitSolutionsRequest}
                 disabled={status === "sending"}
                 className="flex flex-[1.4] items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white drop-shadow-md transition hover:bg-indigo-700 disabled:opacity-70"
               >
