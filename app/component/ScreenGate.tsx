@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 type ScreenGateProps = {
   children: ReactNode;
@@ -29,59 +29,37 @@ function buildMediaQuery(minWidth?: number, maxWidth?: number): string | null {
   return conditions.join(" and ");
 }
 
-/** Known breakpoints are styled in globals.css so the first paint already has the right size. */
-function gateShowClass(minWidth?: number, maxWidth?: number): string | null {
-  if (minWidth != null && maxWidth != null) return null;
-  if (minWidth === 640) return "sg-min-640";
-  if (minWidth === 768) return "sg-min-768";
-  if (minWidth === 1024) return "sg-min-1024";
-  if (maxWidth === 639) return "sg-max-639";
-  if (maxWidth === 1023) return "sg-max-1023";
-  return null;
-}
-
-function DynamicGate({
-  query,
-  fallback,
-  children,
-}: {
-  query: string;
-  fallback?: ReactNode;
-  children: ReactNode;
-}) {
-  const id = useId().replace(/:/g, "");
-  const show = `sgc-${id}`;
-  const hide = `sgc-${id}-f`;
-
-  return (
-    <>
-      <style>{`.${show}{display:none}.${hide}{display:contents}@media ${query}{.${show}{display:contents}.${hide}{display:none}}`}</style>
-      <div className={show}>{children}</div>
-      {fallback != null ? <div className={hide}>{fallback}</div> : null}
-    </>
-  );
-}
-
 export default function ScreenGate({
   children,
   fallback = null,
   minWidth,
   maxWidth,
 }: ScreenGateProps) {
-  const query = buildMediaQuery(minWidth, maxWidth);
+  const [matches, setMatches] = useState<boolean | null>(null);
 
-  if (!query) {
-    return <>{children}</>;
+  useEffect(() => {
+    const query = buildMediaQuery(minWidth, maxWidth);
+
+    if (!query) {
+      setMatches(true);
+      return;
+    }
+
+    const mediaQuery = window.matchMedia(query);
+    const update = () => setMatches(mediaQuery.matches);
+
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, [minWidth, maxWidth]);
+
+  if (matches === null) {
+    return null;
   }
 
-  const showClass = gateShowClass(minWidth, maxWidth);
-  if (showClass && fallback == null) {
-    return <div className={showClass}>{children}</div>;
+  if (!matches) {
+    return <>{fallback}</>;
   }
 
-  return (
-    <DynamicGate query={query} fallback={fallback}>
-      {children}
-    </DynamicGate>
-  );
+  return <>{children}</>;
 }

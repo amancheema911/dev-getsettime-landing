@@ -103,7 +103,7 @@ export const blogPosts: BlogPost[] = [
     category: "General",
     publishedAt: "2026-01-29",
     metaTitle: "Schedule Your Appointments Smartly with Clients Without Human Interruptions",
-    metaDescription: "When AI-powered technology smartly schedules appointments, yet professionals like doctors, wellness consultants, and therapists feel stressed managing Manual calendars due to double-bookings, missed calls, and frustrated schedules.",
+    metaDescription: "Eliminate double-bookings and missed calls. Learn how doctors and therapists can automate client appointment scheduling without manual stress.",
     keywords: "",
     faq: [
       {
@@ -123,7 +123,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: "2",
     slug: "much-needed-appointment-booking-system-for-doctors",
-    title: "A Much-Needed Appointment Booking System for Doctors That Work Around the Clock",
+    title: "Appointment Booking System for Doctors That Work Around the Clock",
     excerpt: "Suppose you are managing a clinic and planning to adopt digital solutions for online appointment booking. It may appear complex at first, don't worry—it's simpler than it seems. In reality, this system is efficient for managing daily schedules effortlessly.",
     content: `
      <p>Suppose you are managing a clinic and planning to adopt digital solutions for online appointment booking. It may appear complex at first, don't worry—it's simpler than it seems. In reality, this system is efficient for managing daily schedules effortlessly.</p>
@@ -232,8 +232,8 @@ export const blogPosts: BlogPost[] = [
     },
     category: "Healthcare",
     publishedAt: "2026-02-20",
-    metaTitle: "A Much-Needed Appointment Booking System for Doctors That Work Around the Clock",
-    metaDescription: "Suppose you are managing a clinic and planning to adopt digital solutions for online appointment booking. It may appear complex at first, don't worry—it's simpler than it seems. In reality, this system is efficient for managing daily schedules effortlessly.",
+    metaTitle: "Appointment Booking System for Doctors That Work Around the Clock",
+    metaDescription: "Simplify clinic management with an online appointment booking system for doctors—reduce admin work and manage daily schedules effortlessly.",
     keywords: "",
     faq: [
       {
@@ -325,7 +325,7 @@ export const blogPosts: BlogPost[] = [
     category: "General",
     publishedAt: "2026-05-19",
     metaTitle: "Basics of Scheduling Software: What It Is, How It Works and Who Can Use",
-    metaDescription: "Still managing appointments manually is a common practice in service-based businesses. But it is now costly and inefficient when it can be handled automatically.",
+    metaDescription: "Still managing appointments manually? Learn what scheduling software is, how it works, and how automating bookings saves time and money.",
     keywords: "",
     faq: [
       {
@@ -800,7 +800,7 @@ export const blogPosts: BlogPost[] = [
     <h3>1. Improve Your Dental Appointment Scheduling</h3>
     <p>A well-managed appointment calendar is the foundation of an efficient dental clinic. Poor scheduling can result in long patient waits, unused chair time, rushed procedures, staff pressure, and scheduling conflicts.</p>
     <p>Instead of allocating the same time to different procedures, set realistic appointment times for root canals, implant consultations, or complex restorative treatments.</p>
-    <p>Buffer time can also help the clinic respond to delays without disrupting the entire day. Using <a href="${BASE_URL}/dental-appointment-scheduling-software">dental appointment scheduling software</a> can make this easier. Features such as online booking, automated reminders, provider calendars, and real-time availability can reduce repetitive front-desk work.</p>
+    <p>Buffer time can also help the clinic respond to delays without disrupting the entire day. Using <a href="${BASE_URL}/solutions/dentist-appointment-scheduling-software">dental appointment scheduling software</a> can make this easier. Features such as online booking, automated reminders, provider calendars, and real-time availability can reduce repetitive front-desk work.</p>
     <p>If you see patterns in cancellations and no-shows, strengthen your reminder and confirmation procedures to reduce these appointments.</p>
 
     <h3>2. Standardize Your Daily Clinic Workflows</h3>
@@ -830,7 +830,7 @@ export const blogPosts: BlogPost[] = [
 
     <h3>6. Use Dental Practice Management Software</h3>
     <p>Technology should reduce administrative work, not just digitize paperwork.</p>
-    <p>Modern <a href="${BASE_URL}/dental-appointment-scheduling-software">dental practice management software</a> can bring routine, repetitive tasks into one system, from simple patient booking to complex financial management.</p>
+    <p>Modern <a href="${BASE_URL}/solutions/dentist-appointment-scheduling-software">dental practice management software</a> can bring routine, repetitive tasks into one system, from simple patient booking to complex financial management.</p>
     <p>Before selecting software, identify the problems you actually need to solve. A small dental office may prioritize scheduling, reminders, and patient records. In contrast, a larger dental hospital may require multiple provider calendars, advanced reporting, role-based permissions, billing integrations, and location management.</p>
     <p>Data security and privacy policies are important in healthcare. If you store or digitize patient information, you must define access controls (who can access records), where backups are stored, who can audit, and how you ensure compliance with healthcare privacy regulations.</p>
     <p>Most importantly, train employees properly. Software provides little benefit when staff members continue maintaining unnecessary manual processes alongside it.</p>
@@ -857,14 +857,14 @@ export const blogPosts: BlogPost[] = [
     category: "",
     publishedAt: "2026-09-25",
     metaTitle: "7 Successful Tips: How To Manage A Dental Clinic?",
-    metaDescription: "Whether you manage an independent dental practice, a growing clinic, or a multi-provider dental hospital, the following seven tips can help improve day-to-day operations.",
+    metaDescription: "Manage an independent dental practice or multi-provider clinic more smoothly with these 7 proven tips to streamline daily clinic operations.",
     keywords: "",
     faq: [],
   },
   {
     id: "7",
     slug: "attract-patients-to-your-clinic",
-    title: "Creative Ways: How to Attract Patients to Your Clinic",
+    title: "Creative Ways to Attract Patients to Your Clinic",
     excerpt: "Here are practical and creative ways to increase patient volume while building a stronger local reputation.",
     content: 
     `
@@ -882,7 +882,7 @@ export const blogPosts: BlogPost[] = [
     <h3>2. Make Your Clinic Website Easy to Use</h3>
     <p>Your website should help patients decide, not create extra work. A visitor should quickly understand your services, location, hours, contact options, and how to schedule an appointment.</p>
     <p>Keep navigation simple and make sure the site works properly on mobile devices. Avoid hiding essential information behind several pages or forcing visitors to call to find out whether you provide a particular service.</p>
-    <p>Useful website content can include provider profiles, treatment information, FAQs, directions, insurance or payment information (where appropriate), and a booking link if you use <a href="${BASE_URL}/appointment-booking-software">appointment-booking software.</a></p>
+    <p>Useful website content can include provider profiles, treatment information, FAQs, directions, insurance or payment information (where appropriate), and a booking link if you use <a href="${BASE_URL}">appointment-booking software.</a></p>
     <p>If you want to <b>attract more patients</b>, make it easy for interested visitors to take the next step.</p>
 
     <h3>3. Offer Convenient Online Appointment Scheduling</h3>
@@ -951,7 +951,7 @@ export const blogPosts: BlogPost[] = [
     },
     category: "",
     publishedAt: "2026-10-01",
-    metaTitle: "Creative Ways to Attract Patients to Your Clinic | GetSetTime",
+    metaTitle: "Creative Ways to Attract Patients to Your Clinic",
     metaDescription: "Here are practical and creative ways to increase patient volume while building a stronger local reputation.",
     keywords: "",
     faq: [],
@@ -959,7 +959,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: "8",
     slug: "how-to-reduce-waiting-time-at-a-dermatology-clinic",
-    title: "How to Reduce Patient Waiting Time at a Dermatology Clinic",
+    title: "Practical Guide to Reducing Dermatology Clinic Waiting Time",
     excerpt: "Learn how to reduce patient waiting time at a dermatology clinic and organise long queues with dermatologist software",
     content: 
     `

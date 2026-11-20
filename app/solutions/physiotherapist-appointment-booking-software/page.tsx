@@ -17,14 +17,14 @@ import Button from "@/app/component/ui/button/Button";
 const pageUrl = `${BASE_URL}/solutions/physiotherapist-appointment-booking-software`;
 
 export const metadata: Metadata = {
-  title: `Physiotherapy Appointment Scheduling Software | ${APP_NAME}`,
+  title: `Physio Online Booking and Scheduling Software | ${APP_NAME}`,
   description: `Automated physiotherapy appointment booking app for physiotherapists with online booking, WhatsApp reminders, smart calendar management, and no-show reduction.`,
   keywords: [ "physiotherapy appointment booking app", "physiotherapy booking app", "online appointment booking", "calendar management system", " scheduling tool", "appointment management app"],
   alternates: {
     canonical: `${pageUrl}`,
   },
   openGraph: {
-    title: `Physiotherapy Appointment Scheduling Software | ${APP_NAME}`,
+    title: `Physio Online Booking and Scheduling Software | ${APP_NAME}`,
     description: `Automated physiotherapy appointment booking app for physiotherapists with online booking, WhatsApp reminders, smart calendar management, and no-show reduction.`,
     url: `${pageUrl}`,
     type: "website",
@@ -35,14 +35,14 @@ export const metadata: Metadata = {
         url: `${BASE_URL}${contactInfo.DEFAULT_IMAGE}`,
         width: 1200,
         height: 630,
-        alt: `Physiotherapy Appointment Scheduling Software | ${APP_NAME}`,
+        alt: `Physio Online Booking and Scheduling Software | ${APP_NAME}`,
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: `Physiotherapy Appointment Scheduling Software | ${APP_NAME}`,
+    title: `Physio Online Booking and Scheduling Software | ${APP_NAME}`,
     description: `Automated physiotherapy appointment booking app for physiotherapists with online booking, WhatsApp reminders, smart calendar management, and no-show reduction.`,
     images: [`${BASE_URL}${contactInfo.DEFAULT_IMAGE}`],
   },
@@ -128,7 +128,7 @@ const schemaData = {
       "@type": "WebPage",
       "@id": `${pageUrl}/#webpage`,
       "url": `${pageUrl}`,
-      "name": `Physiotherapy Appointment Scheduling Software | ${APP_NAME}`,
+      "name": `Physio Online Booking and Scheduling Software | ${APP_NAME}`,
       "description": "Automated physiotherapy appointment booking app for physiotherapists with online booking, WhatsApp reminders, smart calendar management, and no-show reduction.",
       "inLanguage": "en",
       "isPartOf": {
@@ -200,7 +200,7 @@ const schemaData = {
       {
         "@type": "ListItem",
         "position": 3,
-        "name": `Physiotherapy Appointment Scheduling Software | ${APP_NAME}`,
+        "name": `Physio Online Booking and Scheduling Software | ${APP_NAME}`,
         "item": `${pageUrl}`,
       },
     ],

@@ -15,15 +15,15 @@ import Button from "@/app/component/ui/button/Button";
 const pageUrl = `${BASE_URL}/solutions/salon-appointment-scheduling-software`;
 
 export const metadata: Metadata = {
-    title: `Salon Appointment Scheduling Software | ${APP_NAME}`,
-    description: `${APP_NAME} - an advanced salon scheduling software. Allow clients to book clients online 24/7, send auto WhatsApp reminders & reduce no-shows — no tech skills needed. Try free today.`,
+    title: `Salon Appointment Booking Software | ${APP_NAME}`,
+    description: `Advanced salon scheduling software. Let clients book online 24/7, send automated WhatsApp reminders, and reduce no-shows easily. Start free today.`,
     keywords: [ "appointment scheduling software for salon", "software for salons", "salon booking systems", "salon scheduling software", "salon booking software", "salon appointment software", "salon management system",],
     alternates: {
       canonical: `${pageUrl}`,
     },
     openGraph: {
-      title: `Salon Appointment Scheduling Software | ${APP_NAME}`,
-      description: `${APP_NAME} - an advanced salon scheduling software. Allow clients to book clients online 24/7, send auto WhatsApp reminders & reduce no-shows — no tech skills needed. Try free today.`,
+      title: `Salon Appointment Booking Software | ${APP_NAME}`,
+      description: `Advanced salon scheduling software. Let clients book online 24/7, send automated WhatsApp reminders, and reduce no-shows easily. Start free today.`,
       url: `${pageUrl}`,
       type: "website",
       siteName: `${APP_NAME}`,
@@ -33,14 +33,14 @@ export const metadata: Metadata = {
           url: `${BASE_URL}${contactInfo.DEFAULT_IMAGE}`,
           width: 1200,
           height: 630,
-          alt: `Salon Appointment Scheduling Software | ${APP_NAME}`,
+          alt: `Salon Appointment Booking Software | ${APP_NAME}`,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: `Salon Appointment Scheduling Software | ${APP_NAME}`,
-      description: `${APP_NAME} - an advanced salon scheduling software. Allow clients to book clients online 24/7, send auto WhatsApp reminders & reduce no-shows — no tech skills needed. Try free today.`,
+      title: `Salon Appointment Booking Software | ${APP_NAME}`,
+      description: `Advanced salon scheduling software. Let clients book online 24/7, send automated WhatsApp reminders, and reduce no-shows easily. Start free today.`,
       images: [`${BASE_URL}${contactInfo.DEFAULT_IMAGE}`],
     },
 };
@@ -113,7 +113,7 @@ const schemaData = {
             "@type": "WebPage",
             "@id": `${pageUrl}/#webpage`,
             "url": `${pageUrl}`,
-            "name": `Salon Appointment Scheduling Software | ${APP_NAME}`,
+            "name": `Salon Appointment Booking Software | ${APP_NAME}`,
             "description": `${APP_NAME} - an advanced salon scheduling software. Allow clients to book clients online 24/7, send auto WhatsApp reminders & reduce no-shows — no tech skills needed. Try free today.`,
             "inLanguage": "en",
             "isPartOf": {
@@ -185,7 +185,7 @@ const schemaData = {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": `Salon Appointment Scheduling Software | ${APP_NAME}`,
+            "name": `Salon Appointment Booking Software | ${APP_NAME}`,
             "item": `${pageUrl}`,
           },
         ],

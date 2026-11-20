@@ -14,14 +14,14 @@ const pageUrl = `${BASE_URL}/features`;
 
 export const metadata: Metadata = {
   title: `Features | ${APP_NAME}`,
-  description: `Explore ${APP_NAME} features: online booking, WhatsApp reminders, Google Calendar sync, staff scheduling, queue management, reporting, and more for clinics, salons, and service businesses.`,
+  description: `Discover GetSetTime features: 24/7 online booking, WhatsApp reminders, Google Calendar sync, staff scheduling, queue management, and reporting.`,
   keywords: ["appointment scheduling features", "WhatsApp booking reminders", "Google Calendar sync", "staff scheduling software", "online appointment booking"],
   alternates: {
     canonical: pageUrl,
   },
   openGraph: {
     title: `Features | ${APP_NAME}`,
-    description: `Explore ${APP_NAME} features: online booking, WhatsApp reminders, Google Calendar sync, staff scheduling, queue management, reporting, and more for clinics, salons, and service businesses.`,
+    description: `Discover GetSetTime features: 24/7 online booking, WhatsApp reminders, Google Calendar sync, staff scheduling, queue management, and reporting.`,
     url: pageUrl,
     type: "website",
     siteName: APP_NAME,
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: `Features | ${APP_NAME}`,
-    description: `Explore ${APP_NAME} features: online booking, WhatsApp reminders, Google Calendar sync, staff scheduling, queue management, reporting, and more for clinics, salons, and service businesses.`,
+    description: `Discover GetSetTime features: 24/7 online booking, WhatsApp reminders, Google Calendar sync, staff scheduling, queue management, and reporting.`,
     images: [`${BASE_URL}${contactInfo.DEFAULT_IMAGE}`],
   },
 };

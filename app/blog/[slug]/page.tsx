@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
   }
 
   return {
-    title: `${post.metaTitle} | Blog | ${APP_NAME}`,
+    title: `${post.metaTitle}`,
     description: post.metaDescription,
     keywords: post.keywords,
     authors: [{ name: post.author.name }],
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
       canonical: `${BASE_URL}/blog/${post.slug}`,
     },
     openGraph: {
-      title: `${post.metaTitle} | Blog | ${APP_NAME}`,
+      title: `${post.metaTitle}`,
       description: post.metaDescription,
       url: `${BASE_URL}/blog/${post.slug}`,
       type: "article",
@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
       card: "summary_large_image",
       site: `${BASE_URL}`,
       creator: `${APP_NAME}`,
-      title: `${post.metaTitle} | Blog | ${APP_NAME}`,
+      title: `${post.metaTitle}`,
       description: post.metaDescription,
       images: `${BASE_URL}/${post.coverImage}`,
     },

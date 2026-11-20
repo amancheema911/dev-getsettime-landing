@@ -10,7 +10,7 @@ const pageUrl = `${BASE_URL}/solutions`;
 
 export const metadata: Metadata = {
   title: `All Business Types | ${APP_NAME}`,
-  description: `${APP_NAME} is the one-stop appointment scheduling solution for service businesses — medical clinics, dentists, physiotherapists, salons, and more. Online booking, WhatsApp reminders, and smart calendars.`,
+  description: `All-in-one appointment scheduling software for clinics, dentists, therapists, and salons—featuring online booking, WhatsApp reminders, and sync.`,
   keywords: [
     "appointment scheduling software",
     "business types",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: `All Business Types | ${APP_NAME}`,
-    description: `${APP_NAME} is the one-stop appointment scheduling solution for service businesses — medical clinics, dentists, physiotherapists, salons, and more. Online booking, WhatsApp reminders, and smart calendars.`,
+    description: `All-in-one appointment scheduling software for clinics, dentists, therapists, and salons—featuring online booking, WhatsApp reminders, and sync.`,
     url: pageUrl,
     type: "website",
     siteName: APP_NAME,
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: `All Business Types | ${APP_NAME}`,
-    description: `${APP_NAME} is the one-stop appointment scheduling solution for service businesses — medical clinics, dentists, physiotherapists, salons, and more. Online booking, WhatsApp reminders, and smart calendars.`,
+    description: `All-in-one appointment scheduling software for clinics, dentists, therapists, and salons—featuring online booking, WhatsApp reminders, and sync.`,
     images: [`${BASE_URL}${contactInfo.DEFAULT_IMAGE}`],
   },
 };

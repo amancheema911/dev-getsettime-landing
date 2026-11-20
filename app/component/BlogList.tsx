@@ -92,69 +92,69 @@ export function BlogList({ posts, postsPerPage = 12 }: BlogListProps) {
     <div className="space-y-12">
       
       <ScreenGate minWidth={768}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 items-center justify-between gap-4">
-          {/* Category Filter */}
-          <div className="flex items-center justify-start w-full">
-            <div ref={categoryDropdownRef} className="relative w-full sm:max-w-xs">
-              <button
-                type="button"
-                onClick={() => setIsCategoryDropdownOpen((prev) => !prev)}
-                className="w-full px-4 py-3 pr-10 rounded-xl bg-white text-neutral-700 border border-neutral-200 drop-shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 cursor-pointer text-left"
-                aria-haspopup="listbox"
-                aria-expanded={isCategoryDropdownOpen}
-              >
-                {selectedCategory}
-              </button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 items-center justify-between gap-4">
+            {/* Category Filter */}
+            <div className="flex items-center justify-start w-full">
+              <div ref={categoryDropdownRef} className="relative w-full sm:max-w-xs">
+                <button
+                  type="button"
+                  onClick={() => setIsCategoryDropdownOpen((prev) => !prev)}
+                  className="w-full px-4 py-3 pr-10 rounded-xl bg-white text-neutral-700 border border-neutral-200 drop-shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 cursor-pointer text-left"
+                  aria-haspopup="listbox"
+                  aria-expanded={isCategoryDropdownOpen}
+                >
+                  {selectedCategory}
+                </button>
 
-              <svg className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d={isCategoryDropdownOpen ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}
-                />
-              </svg>
+                <svg className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d={isCategoryDropdownOpen ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"}
+                  />
+                </svg>
 
-              {isCategoryDropdownOpen && (
-                <ul role="listbox" className="absolute z-20 mt-2 w-full max-h-60 overflow-y-auto rounded-xl border border-neutral-200 bg-white drop-shadow-lg overflow-hidden">
-                  {blogCategories.map((category) => {
-                    const isActive = category === selectedCategory;
-                    return (
-                      <li key={category}>
-                        <button
-                          type="button"
-                          onClick={() => handleCategoryChange(category)}
-                          className={`w-full px-4 py-3 text-left text-sm transition-colors duration-200 ${
-                            isActive
-                              ? "bg-indigo-50 text-indigo-700 font-medium"
-                              : "text-neutral-700 hover:bg-neutral-50"
-                          }`}
-                        >
-                          {category}
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
+                {isCategoryDropdownOpen && (
+                  <ul role="listbox" className="absolute z-20 mt-2 w-full max-h-60 overflow-y-auto rounded-xl border border-neutral-200 bg-white drop-shadow-lg overflow-hidden">
+                    {blogCategories.map((category) => {
+                      const isActive = category === selectedCategory;
+                      return (
+                        <li key={category}>
+                          <button
+                            type="button"
+                            onClick={() => handleCategoryChange(category)}
+                            className={`w-full px-4 py-3 text-left text-sm transition-colors duration-200 ${
+                              isActive
+                                ? "bg-indigo-50 text-indigo-700 font-medium"
+                                : "text-neutral-700 hover:bg-neutral-50"
+                            }`}
+                          >
+                            {category}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Results Count */}
-          <div className="flex items-center justify-end w-full">
-            <div> Showing <span className="font-semibold text-neutral-900">{visiblePosts.length}</span> of{" "}
-              <span className="font-semibold text-neutral-900">{filteredPosts.length}</span> articles
-              {selectedCategory !== "All" && (
-                <span> in <span className="text-indigo-600 font-medium">{selectedCategory}</span></span>
-              )}
+            {/* Results Count */}
+            <div className="flex items-center justify-end w-full">
+              <div> Showing <span className="font-semibold text-neutral-900">{visiblePosts.length}</span> of{" "}
+                <span className="font-semibold text-neutral-900">{filteredPosts.length}</span> articles
+                {selectedCategory !== "All" && (
+                  <span> in <span className="text-indigo-600 font-medium">{selectedCategory}</span></span>
+                )}
+              </div>
             </div>
-          </div>
-      </div>
+        </div>
       </ScreenGate>
 
       {/* Blog Grid */}
       {filteredPosts.length > 0 ? (
-        <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+        <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {visiblePosts.map((post, index) => (
             <div key={post.id} style={{ animationDelay: `${(index % postsPerPage) * 100}ms` }}>
               <BlogCard post={post} />

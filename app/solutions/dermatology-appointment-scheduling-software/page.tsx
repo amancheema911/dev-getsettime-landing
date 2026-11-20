@@ -17,14 +17,14 @@ const pageUrl = `${BASE_URL}/solutions/dermatology-appointment-scheduling-softwa
 const pageDescription = "All-in-one dermatology clinic scheduling software for online appointment booking based on different treatment procedures, durations, or room requirements.";
 
 export const metadata: Metadata = {
-  title: `Dermatology Appointment Scheduling Software | ${APP_NAME}`,
+  title: `Dermatology Appointment Booking Software | ${APP_NAME}`,
   description: pageDescription,
   keywords: [ "appointment software for dermatologists", "dermatologist appointment booking software", "dermatology clinic software for appointment scheduling", "Online booking software for skin care doctor", "Appointment management system for skin care clinic"],
   alternates: {
     canonical: pageUrl,
   },
   openGraph: {
-    title: `Dermatology Appointment Scheduling Software | ${APP_NAME}`,
+    title: `Dermatology Appointment Booking Software | ${APP_NAME}`,
     description: pageDescription,
     url: pageUrl,
     type: "website",
@@ -35,13 +35,13 @@ export const metadata: Metadata = {
         url: `${BASE_URL}${contactInfo.DEFAULT_IMAGE}`,
         width: 1200,
         height: 630,
-        alt: `Dermatology Appointment Scheduling Software | ${APP_NAME}`,
+        alt: `Dermatology Appointment Booking Software | ${APP_NAME}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `Dermatology Appointment Scheduling Software | ${APP_NAME}`,
+    title: `Dermatology Appointment Booking Software | ${APP_NAME}`,
     description: pageDescription,
     images: [`${BASE_URL}${contactInfo.DEFAULT_IMAGE}`],
   },
@@ -280,7 +280,7 @@ const schemaData = {
       "@type": "WebPage",
       "@id": `${pageUrl}/#webpage`,
       url: pageUrl,
-      name: `Dermatology Appointment Scheduling Software | ${APP_NAME}`,
+      name: `Dermatology Appointment Booking Software | ${APP_NAME}`,
       description: pageDescription,
       inLanguage: "en",
       isPartOf: {
@@ -299,7 +299,7 @@ const schemaData = {
       "@type": "SoftwareApplication",
       "@id": `${pageUrl}/#softwareapplication`,
       name: APP_NAME,
-      alternateName: "Dermatology Appointment Scheduling Software",
+      alternateName: "Dermatology Appointment Booking Software",
       url: pageUrl,
       inLanguage: "en",
       author: {
@@ -349,7 +349,7 @@ const schemaData = {
         {
           "@type": "ListItem",
           position: 3,
-          name: `Dermatology Appointment Scheduling Software | ${APP_NAME}`,
+          name: `Dermatology Appointment Booking Software | ${APP_NAME}`,
           item: pageUrl,
         },
       ],

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: `Contact Us | ${APP_NAME}`,
-    description: `Book a quick discussion with ${APP_NAME}. Speak with a product specialist about scheduling and bookings. We reply within 24 hours.`,
+    description: `Book a quick discussion or send a message. Speak with a product specialist about scheduling, bookings, and next steps. We reply within 24 hours.`,
   },
 };
 
