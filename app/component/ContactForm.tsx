@@ -45,17 +45,18 @@ const ContactForm = () => {
     const name = formData.name.trim();
     const email = formData.email.trim();
     const message = formData.message.trim();
+    const professions = formData.professions.trim();
     const phoneDigits = formData.phone.replace(/\D/g, "");
     // Dial codes in this field are 1–4 digits. Anything longer is a number the visitor started typing.
     const hasPhone = phoneDigits.length > 4;
 
-    if (!name || !email || !message) {
+    if (!name || !email || !message || !professions || !hasPhone) {
       setStatus("error");
       setErrorMessage("Please fill all required fields.");
       return;
     }
 
-    if (hasPhone && !isValidInternationalPhone(formData.phone)) {
+    if (!isValidInternationalPhone(formData.phone)) {
       setStatus("error");
       setErrorMessage("Please enter a valid phone number with country code.");
       return;
@@ -65,7 +66,7 @@ const ContactForm = () => {
       setStatus("sending");
       setErrorMessage("");
 
-      const res = await fetch("/api/send-email", {
+      const res = await fetch("/api/send-email/submit-forms", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -73,8 +74,8 @@ const ContactForm = () => {
           name,
           email,
           message,
-          phone: hasPhone ? formData.phone : "",
-          professions: formData.professions,
+          phone: formData.phone,
+          professions,
         }),
       });
 
@@ -138,7 +139,8 @@ const ContactForm = () => {
             id="phone"
             name="phone"
             variant="contact"
-            placeholder="Phone (optional)"
+            placeholder="Phone"
+            required
             value={formData.phone}
             onChange={(phone) => setFormData((prev) => ({ ...prev, phone }))}
           />
@@ -162,7 +164,7 @@ const ContactForm = () => {
               <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
             </svg>
           </span>
-          <select id="professions" aria-label="Select Professions" name="professions" value={formData.professions} onChange={handleChange} className="block w-full appearance-none rounded-xl border border-slate-200/80 bg-white/80 py-3 sm:py-2.5 pl-10 pr-10 text-neutral-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <select id="professions" aria-label="Select Professions" name="professions" required value={formData.professions} onChange={handleChange} className="block w-full appearance-none rounded-xl border border-slate-200/80 bg-white/80 py-3 sm:py-2.5 pl-10 pr-10 text-neutral-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             <option value="">Select a Profession</option>
             {professions.map((profession) => (
               <option key={profession} value={profession}>{profession}</option>
