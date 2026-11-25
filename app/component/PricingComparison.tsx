@@ -1,21 +1,93 @@
 "use client";
 
-import { Fragment, useMemo, useState, type ReactNode } from "react";
-import type { ComparisonCell, ComparisonRow, RegionalPricing } from "@/lib/pricing-data";
-import { pricingTiers, applyRegionalPrices, formatPrice } from "@/lib/pricing-data";
+import { Fragment, useMemo, useState } from "react";
+import type { ComparisonCell, PricingTier, RegionalPricing } from "@/lib/pricing-data";
+import { formatPrice, tiersForRegion } from "@/lib/pricing-data";
+import { bookingSummary, toPricingTier, type PublicPlan, type PublicPlans } from "@/lib/public-plans";
+import { usePlans } from "./usePlans";
 import { useRegionalPricing } from "./useRegionalPricing";
 import ScreenGate from "./ScreenGate";
 
-const PLANS = ["Starter", "Professional", "Enterprise"] as const;
-const POPULAR_INDEX = 1;
+type ComparisonViewRow = {
+  feature: string;
+  cells: ComparisonCell[];
+  highlight?: boolean;
+  category?: string;
+};
 
-const categoryBreaks: { label: string; fromIndex: number }[] = [
-  { label: "Plans & capacity", fromIndex: 0 },
-  { label: "Booking & calendar", fromIndex: 3 },
-  { label: "Automation & brand", fromIndex: 7 },
-  { label: "Team & analytics", fromIndex: 10 },
-  { label: "Enterprise scale", fromIndex: 12 },
+/** Same feature Prices stay on the plans API. */
+const LIVE_COMPARISON: {
+  feature: string;
+  category?: string;
+  values: Record<string, ComparisonCell>;
+}[] = [
+  {
+    category: "Booking & calendar",
+    feature: "Online booking page",
+    values: { starter: true, professional: true, enterprise: true },
+  },
+  {
+    feature: "Google Calendar sync",
+    values: { starter: "Basic", professional: "Advanced", enterprise: "Advanced" },
+  },
+  {
+    feature: "WhatsApp reminders",
+    values: { starter: false, professional: true, enterprise: true },
+  },
+  {
+    feature: "Email notifications",
+    values: { starter: true, professional: true, enterprise: true },
+  },
+  {
+    category: "Automation & brand",
+    feature: "Custom branding",
+    values: { starter: false, professional: true, enterprise: true },
+  },
+  {
+    feature: "Payment processing",
+    values: { starter: false, professional: true, enterprise: true },
+  },
+  {
+    feature: "Staff management",
+    values: { starter: "Basic", professional: true, enterprise: true },
+  },
+  {
+    category: "Team & analytics",
+    feature: "Advanced analytics",
+    values: { starter: false, professional: true, enterprise: true },
+  },
+  {
+    feature: "API access",
+    values: { starter: false, professional: true, enterprise: true },
+  },
+  {
+    category: "Enterprise scale",
+    feature: "Multi-location",
+    values: { starter: false, professional: false, enterprise: true },
+  },
+  {
+    feature: "SSO & custom integrations",
+    values: { starter: false, professional: false, enterprise: true },
+  },
+  {
+    feature: "Support",
+    values: { starter: "Community", professional: "Priority", enterprise: "24/7 + SLA" },
+  },
 ];
+
+const PLAN_ORDER = ["starter", "professional", "enterprise"];
+
+function planKey(plan: PublicPlan) {
+  return (plan.slug || plan.name).trim().toLowerCase();
+}
+
+function orderedPublicPlans(plans: PublicPlan[]) {
+  return [...plans].sort((a, b) => {
+    const aIndex = PLAN_ORDER.indexOf(planKey(a));
+    const bIndex = PLAN_ORDER.indexOf(planKey(b));
+    return (aIndex === -1 ? PLAN_ORDER.length : aIndex) - (bIndex === -1 ? PLAN_ORDER.length : bIndex);
+  });
+}
 
 /** "+ GST" / "+ VAT" / "" — derived from the region's tax label */
 function taxSuffix(region: RegionalPricing): string {
@@ -30,7 +102,7 @@ function CellValue({
   emphasized,
   compact,
 }: {
-  value: ComparisonCell | ReactNode;
+  value: ComparisonCell;
   emphasized?: boolean;
   compact?: boolean;
 }) {
@@ -67,7 +139,9 @@ function CellValue({
     );
   }
 
-  const isPrice = typeof value === "string" && (value.startsWith("₹") || value === "Free");
+  const isPrice =
+    typeof value === "string" &&
+    (value === "Free" || (/[$€£¥₹₩₱฿₫₺₽₴]|\b[A-Z]{3}\s+\d/.test(value) && /\d/.test(value)));
 
   if (emphasized || isPrice || typeof value !== "string") {
     return (
@@ -121,8 +195,63 @@ function CategoryRow({ label, colSpan }: { label: string; colSpan: number }) {
   );
 }
 
-function planColumnClass(index: number, part: "head" | "body") {
-  if (index !== POPULAR_INDEX) {
+function isListedFree(price: string) {
+  const amount = Number(price);
+  return price === "Free" || (Number.isFinite(amount) && amount <= 0);
+}
+
+function tierPriceLabel(tier: PricingTier, fallbackCurrency: string) {
+  if (isListedFree(tier.price)) return "Free";
+  return formatPrice(Number(tier.price), tier.currency || fallbackCurrency);
+}
+
+/** "+ GST" / "+ VAT" / "" — derived from the region's tax label */
+// function priceFeatureLabel(region: RegionalPricing): string {
+//   const tax = taxSuffix(region);
+//   return tax ? `Monthly price (excl.${tax.replace(" + ", " ")})` : "Monthly price";
+// }
+
+function bookingFeatureLabel(plans: PublicPlan[]) {
+  const periods = [...new Set(plans.map((plan) => plan.bookingLimitPeriod.trim().toLowerCase()).filter(Boolean))];
+  if (periods.length === 1 && (periods[0] === "month" || periods[0] === "monthly")) return "Bookings / month";
+  if (periods.length === 1 && periods[0] !== "lifetime") return `Bookings / ${periods[0]}`;
+  return "Bookings";
+}
+
+function buildComparisonRows(catalog: PublicPlans, region: RegionalPricing): ComparisonViewRow[] {
+  const plans = orderedPublicPlans(catalog.plans);
+  const currency = catalog.priceCurrency || region.currency;
+  const rows: ComparisonViewRow[] = [
+    // {
+    //   category: "Plans & capacity",
+    //   feature: "Monthly price",
+    //   highlight: true,
+    //   cells: plans.map((plan) => (plan.price <= 0 ? "Free" : formatPrice(plan.price, plan.currency || currency))),
+    // },
+    {
+      category: "capacity",
+      feature: "Seats included",
+      cells: plans.map((plan) => (plan.seats > 0 ? String(plan.seats) : "—")),
+    },
+    {
+      feature: bookingFeatureLabel(plans),
+      cells: plans.map((plan) => (plan.bookingLimit === "unlimited" ? "Unlimited" : bookingSummary(plan))),
+    },
+  ];
+
+  for (const item of LIVE_COMPARISON) {
+    rows.push({
+      category: item.category,
+      feature: item.feature,
+      cells: plans.map((plan) => item.values[planKey(plan)] ?? false),
+    });
+  }
+
+  return rows;
+}
+
+function planColumnClass(index: number, popularIndex: number, part: "head" | "body") {
+  if (index !== popularIndex) {
     return part === "head" ? "bg-white/60" : "";
   }
   return part === "head"
@@ -165,41 +294,32 @@ function ComparisonLegend({ className = "" }: { className?: string }) {
   );
 }
 
-type PricingComparisonProps = {
-  rows: ComparisonRow[];
-};
-
-export default function PricingComparison({ rows }: PricingComparisonProps) {
-  const [activePlan, setActivePlan] = useState<number>(POPULAR_INDEX);
+export default function PricingComparison() {
   const region = useRegionalPricing();
-  const categoryAt = (index: number) => categoryBreaks.find((c) => c.fromIndex === index)?.label;
-
-  const localizedTiers = useMemo(() => applyRegionalPrices(pricingTiers, region), [region]);
-  const tierMeta = (name: (typeof PLANS)[number]) => localizedTiers.find((t) => t.name === name);
-
-  const priceNode = (plan: "starter" | "professional" | "enterprise"): ReactNode =>
-    formatPrice(region.prices[plan], region.currency);
-
-  const planCells = (row: ComparisonRow): (ComparisonCell | ReactNode)[] => {
-    // The "Monthly price" row follows the visitor's regional pricing
-    if (row.highlight && row.feature.startsWith("Monthly price")) {
-      return [priceNode("starter"), priceNode("professional"), priceNode("enterprise")];
-    }
-    return [row.starter, row.professional, row.enterprise];
-  };
-
-  const featureLabel = (row: ComparisonRow): string => {
-    if (row.highlight && row.feature.startsWith("Monthly price")) {
-      const tax = taxSuffix(region);
-      return tax ? `Monthly price (excl.${tax.replace(" + ", " ")})` : "Monthly price";
-    }
-    return row.feature;
-  };
+  const { plans: catalog, status } = usePlans(region.currency);
+  const tiers = useMemo(
+    () => tiersForRegion(catalog ? orderedPublicPlans(catalog.plans).map(toPricingTier) : [], region),
+    [catalog, region]
+  );
+  const rows = useMemo(() => (catalog ? buildComparisonRows(catalog, region) : []), [catalog, region]);
+  const popularIndex = useMemo(() => {
+    const index = tiers.findIndex((tier) => tier.popular);
+    if (index >= 0) return index;
+    return Math.min(1, Math.max(0, tiers.length - 1));
+  }, [tiers]);
+  const [pickedPlan, setPickedPlan] = useState<number | null>(null);
+  const activePlan = tiers.length === 0 ? 0 : Math.min(pickedPlan ?? popularIndex, tiers.length - 1);
 
   return (
     <div className="relative">
 
       <div className="relative min-w-0 overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 drop-shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:rounded-3xl">
+        {tiers.length === 0 ? (
+          <p className="px-6 py-16 text-center text-sm text-neutral-500">
+            {status === "error" ? "Plans could not be loaded." : "Loading plans…"}
+          </p>
+        ) : (
+        <>
         <ScreenGate maxWidth={1023}>
         {/* ——— Mobile & tablet: plan tabs + feature list ——— */}
         <div className="relative">
@@ -209,17 +329,18 @@ export default function PricingComparison({ rows }: PricingComparisonProps) {
               role="tablist"
               aria-label="Select pricing plan"
             >
-              {PLANS.map((plan, i) => {
-                const meta = tierMeta(plan);
+              {tiers.map((tier, i) => {
+                const plan = tier.name;
                 const isActive = activePlan === i;
-                const isPopular = i === POPULAR_INDEX;
+                const isPopular = i === popularIndex;
+                const priceLabel = tierPriceLabel(tier, region.currency);
                 return (
                   <button
                     key={plan}
                     type="button"
                     role="tab"
                     aria-selected={isActive}
-                    onClick={() => setActivePlan(i)}
+                    onClick={() => setPickedPlan(i)}
                     className={`min-w-0 flex-1 snap-center rounded-2xl border px-3 py-3 text-left transition-all sm:px-4 ${
                       isActive
                         ? isPopular
@@ -244,38 +365,33 @@ export default function PricingComparison({ rows }: PricingComparisonProps) {
                     >
                       {plan}
                     </span>
-                    {meta && (
-                      <>
-                        <span
-                          className={`mt-1 block text-lg font-black leading-none sm:text-xl ${
-                            isActive && isPopular ? "text-white" : "text-neutral-900"
-                          }`}
-                        >
-                          {meta.price === "Free" ? "Free" : formatPrice(Number(meta.price), region.currency)}
-                        </span>
-                        <span
-                          className={`mt-0.5 block text-[10px] ${
-                            isActive && isPopular ? "text-indigo-100" : "text-neutral-500"
-                          }`}
-                        >
-                          {meta.price === "Free" ? "" : `/mo${taxSuffix(region)}`}
-                        </span>
-                      </>
-                    )}
+                    <span
+                      className={`mt-1 block text-lg font-black leading-none sm:text-xl ${
+                        isActive && isPopular ? "text-white" : "text-neutral-900"
+                      }`}
+                    >
+                      {priceLabel}
+                    </span>
+                    <span
+                      className={`mt-0.5 block text-[10px] ${
+                        isActive && isPopular ? "text-indigo-100" : "text-neutral-500"
+                      }`}
+                    >
+                      {priceLabel === "Free" ? "" : `/mo${taxSuffix(region)}`}
+                    </span>
                   </button>
                 );
               })}
             </div>
           </div>
 
-          <div role="tabpanel" aria-label={`${PLANS[activePlan]} plan features`}>
-            {rows.map((row, index) => {
-              const categoryLabel = categoryAt(index);
-              const cell = planCells(row)[activePlan];
+          <div role="tabpanel" aria-label={`${tiers[activePlan]?.name ?? "Plan"} features`}>
+            {rows.map((row) => {
+              const cell = row.cells[activePlan];
 
               return (
                 <Fragment key={row.feature}>
-                  {categoryLabel && <CategoryLabel label={categoryLabel} />}
+                  {row.category && <CategoryLabel label={row.category} />}
                   <div
                     className={`flex items-center justify-between gap-3 border-b border-slate-100/80 px-4 py-3.5 sm:px-5 ${
                       row.highlight ? "bg-gradient-to-r from-indigo-50/90 to-violet-50/50" : ""
@@ -292,7 +408,7 @@ export default function PricingComparison({ rows }: PricingComparisonProps) {
                           row.highlight ? "block min-h-10 font-semibold text-neutral-900" : "font-medium text-neutral-700"
                         }`}
                       >
-                        {featureLabel(row)}
+                        {row.feature}
                       </span>
                     </div>
                     <div className="flex shrink-0 items-center justify-end">
@@ -311,10 +427,6 @@ export default function PricingComparison({ rows }: PricingComparisonProps) {
         <ScreenGate minWidth={1024}>
         {/* ——— Desktop: full comparison table ——— */}
         <div className="relative">
-          <div className="border-b border-slate-100 bg-gradient-to-r from-slate-50/90 via-white to-slate-50/90 px-6 py-3">
-            <p className="text-xs font-medium text-neutral-500">Side-by-side comparison of all plans</p>
-          </div>
-
           <div className="overflow-x-auto overscroll-x-contain">
             <table className="w-full border-collapse">
               <thead>
@@ -323,38 +435,36 @@ export default function PricingComparison({ rows }: PricingComparisonProps) {
                     <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">Compare</span>
                     <p className="mt-1 text-base font-bold text-neutral-900">What&apos;s included</p>
                   </th>
-                  {PLANS.map((plan, i) => {
-                    const meta = tierMeta(plan);
-                    const isPopular = i === POPULAR_INDEX;
+                  {tiers.map((tier, i) => {
+                    const isPopular = i === popularIndex;
+                    const priceLabel = tierPriceLabel(tier, region.currency);
                     return (
                       <th
-                        key={plan}
-                        className={`w-[26%] border-b px-3 py-5 text-center align-bottom xl:px-4 ${planColumnClass(i, "head")} ${
+                        key={tier.name}
+                        className={`border-b px-3 py-5 text-center align-bottom xl:px-4 ${planColumnClass(i, popularIndex, "head")} ${
                           isPopular ? "border-indigo-500/30" : "border-slate-100"
                         }`}
                       >
                         {isPopular && (
                           <span className="mb-2 inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white ring-1 ring-white/25">
                             <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
-                            Most popular
+                            {tier.badge || "Most popular"}
                           </span>
                         )}
                         <p className={`text-sm font-bold uppercase tracking-wide ${isPopular ? "text-white" : "text-indigo-600"}`}>
-                          {plan}
+                          {tier.name}
                         </p>
-                        {meta && (
-                          <>
-                            <p className={`mt-2 text-2xl font-black tracking-tight xl:text-3xl ${isPopular ? "text-white" : "text-neutral-900"}`}>
-                              {meta.price === "Free" ? "Free" : formatPrice(Number(meta.price), region.currency)}
-                            </p>
-                            <p className={`mt-0.5 text-xs ${isPopular ? "text-indigo-100" : "text-neutral-500"}`}>
-                              {meta.price === "Free" ? "No credit card required" : `/month${taxSuffix(region)}`}
-                            </p>
-                            <p className={`mt-2 text-[11px] leading-snug ${isPopular ? "text-indigo-100/90" : "text-neutral-500"}`}>
-                              {meta.seatTitle}
-                            </p>
-                          </>
-                        )}
+                        <p className={`mt-2 text-2xl font-black tracking-tight xl:text-3xl ${isPopular ? "text-white" : "text-neutral-900"}`}>
+                          {priceLabel}
+                        </p>
+                        <p className={`mt-0.5 text-xs ${isPopular ? "text-indigo-100" : "text-neutral-500"}`}>
+                          {priceLabel === "Free" ? "No credit card required" : `/month${taxSuffix(region)}`}
+                        </p>
+                        {/* {tier.seatTitle && (
+                          <p className={`mt-2 text-[11px] leading-snug ${isPopular ? "text-indigo-100/90" : "text-neutral-500"}`}>
+                            {tier.seatTitle}
+                          </p>
+                        )} */}
                       </th>
                     );
                   })}
@@ -362,13 +472,10 @@ export default function PricingComparison({ rows }: PricingComparisonProps) {
               </thead>
 
               <tbody>
-                {rows.map((row, index) => {
-                  const categoryLabel = categoryAt(index);
-                  const cells = planCells(row);
-
+                {rows.map((row) => {
                   return (
                     <Fragment key={row.feature}>
-                      {categoryLabel && <CategoryRow label={categoryLabel} colSpan={4} />}
+                      {row.category && <CategoryRow label={row.category} colSpan={tiers.length + 1} />}
                       <tr
                         className={`group border-b border-slate-100/80 transition-colors last:border-b-0 ${
                           row.highlight
@@ -390,15 +497,15 @@ export default function PricingComparison({ rows }: PricingComparisonProps) {
                                 row.highlight ? "font-semibold text-neutral-900" : "text-neutral-700"
                               }`}
                             >
-                              {featureLabel(row)}
+                              {row.feature}
                             </span>
                           </div>
                         </td>
-                        {cells.map((cell, colIndex) => (
+                        {row.cells.map((cell, colIndex) => (
                           <td
                             key={colIndex}
-                            className={`px-4 py-3.5 text-center xl:px-5 ${planColumnClass(colIndex, "body")} ${
-                              colIndex === POPULAR_INDEX ? "border-x border-indigo-100/80" : ""
+                            className={`px-4 py-3.5 text-center xl:px-5 ${planColumnClass(colIndex, popularIndex, "body")} ${
+                              colIndex === popularIndex ? "border-x border-indigo-100/80" : ""
                             }`}
                           >
                             <CellValue value={cell} emphasized={row.highlight} />
@@ -415,6 +522,8 @@ export default function PricingComparison({ rows }: PricingComparisonProps) {
           <ComparisonLegend />
         </div>
         </ScreenGate>
+        </>
+        )}
       </div>
     </div>
   );

@@ -95,7 +95,7 @@ const schemaData = {
         "width": 1200,
         "height": 630
       },
-      "description": "GetSetTime is a smart appointment scheduling platform trusted by 5,000+ doctors, salon owners, and wellness professionals. Simple to set up, smart enough to run itself.",
+      "description": "GetSetTime is a smart appointment scheduling platform trusted by doctors, salon owners, and wellness professionals. Simple to set up, smart enough to run itself.",
       "slogan": "Precision Scheduling for Modern Care",
       "foundingDate": "2025",
       "numberOfEmployees": {
@@ -305,50 +305,50 @@ const growthRoadmap = [
 
               <ScreenGate minWidth={768}>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-neutral-100 bg-white p-3 drop-shadow-sm space-y-1">
-                    <div className="flex items-center gap-2">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-600">
-                            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4 0m4 0a4 4 0 014 4" />
-                            </svg>
-                        </span>
-                        <div>
-                            <div className="text-lg font-bold text-neutral-900">10,000+</div>
-                            <div className="text-xs font-semibold text-neutral-800">Appointments</div>
-                        </div>
-                    </div>
-                    <div className="text-xs text-neutral-500">Booked across clinics using GetSetTime</div>
-                </div>
+                  <div className="rounded-2xl border border-neutral-100 bg-white p-3 drop-shadow-sm space-y-1">
+                      <div className="flex items-center gap-2">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-600">
+                              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17 2v4M7 2v4M4 8h16M6 4h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2zm8 8l-2 2 2 2" />
+                              </svg>
+                          </span>
+                          <div>
+                              <div className="text-lg font-bold text-neutral-900">4–12</div>
+                              <div className="text-xs font-semibold text-neutral-800">Session packages</div>
+                          </div>
+                      </div>
+                      <div className="text-xs text-neutral-500">Repeat daily, weekly, or monthly with the same physiotherapist</div>
+                  </div>
 
-                <div className="rounded-2xl border border-neutral-100 bg-white p-3 drop-shadow-sm space-y-1">
-                    <div className="flex items-center gap-2">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
-                            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </span>
-                        <div>
-                            <div className="text-lg font-bold text-neutral-900">3 hrs</div>
-                            <div className="text-xs font-semibold text-neutral-800">Time Saved</div>
-                        </div>
-                    </div>
-                    <div className="text-xs text-neutral-500">Daily admin time back for your team</div>
-                </div>
+                  <div className="rounded-2xl border border-neutral-100 bg-white p-3 drop-shadow-sm space-y-1">
+                      <div className="flex items-center gap-2">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                          </span>
+                          <div>
+                              <div className="text-lg font-bold text-neutral-900">3 hrs</div>
+                              <div className="text-xs font-semibold text-neutral-800">Time Saved</div>
+                          </div>
+                      </div>
+                      <div className="text-xs text-neutral-500">Daily admin time back for your team</div>
+                  </div>
 
-                <div className="rounded-2xl border border-neutral-100 bg-white p-3 drop-shadow-sm space-y-1">
-                    <div className="flex items-center gap-2">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
-                            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.98 9.11c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                            </svg>
-                        </span>
-                        <div>
-                            <div className="text-lg font-bold text-neutral-900">4.8 ★</div>
-                            <div className="text-xs font-semibold text-neutral-800">Patient Rating</div>
-                        </div>
-                    </div>
-                    <div className="text-xs text-neutral-500">Average feedback from patients</div>
-                </div>
+                  <div className="rounded-2xl border border-neutral-100 bg-white p-3 drop-shadow-sm space-y-1">
+                      <div className="flex items-center gap-2">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+                              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0a3 3 0 11-6 0" />
+                              </svg>
+                          </span>
+                          <div>
+                              <div className="text-lg font-bold text-neutral-900">98%</div>
+                              <div className="text-xs font-semibold text-neutral-800">Reminders delivered</div>
+                          </div>
+                      </div>
+                      <div className="text-xs text-neutral-500">Better attendance for scheduled physiotherapy visits</div>
+                  </div>
               </div>
               </ScreenGate>
             </div>

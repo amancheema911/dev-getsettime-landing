@@ -11,7 +11,7 @@ type UpstreamBody = {
   reason?: string;
 };
 
-type FormType = "contact" | "solutions";
+type FormType = "contact" | "solutions" | "claim_free";
 
 type ContactLead = {
   name: string;
@@ -31,6 +31,20 @@ type SolutionsLead = {
   bookingMethod: string;
   improvements: string[];
   message: string;
+};
+
+type ClaimFreeLead = {
+  fullName: string;
+  businessName: string;
+  businessType: string;
+  website: string;
+  country: string;
+  email: string;
+  phone: string;
+  bookingMethod: string;
+  staffCount: string;
+  message: string;
+  preferredTime: string;
 };
 
 function text(value: unknown, max = 4000) {
@@ -63,7 +77,7 @@ function siteOrigin(req: Request) {
 
 function resolveFormType(body: Record<string, unknown>): FormType | null {
   const raw = body.formType ?? body.form_type;
-  if (raw === "contact" || raw === "solutions") return raw;
+  if (raw === "contact" || raw === "solutions" || raw === "claim_free") return raw;
 
   if (
     typeof body.name === "string" &&
@@ -72,6 +86,10 @@ function resolveFormType(body: Record<string, unknown>): FormType | null {
     ("professions" in body || "profession" in body)
   ) {
     return "contact";
+  }
+
+  if (typeof body.businessName === "string" && typeof body.preferredTime === "string") {
+    return "claim_free";
   }
 
   if (typeof body.fullName === "string" && typeof body.businessName === "string" && typeof body.businessType === "string") {
@@ -210,6 +228,98 @@ async function saveSolutionsLead(
   return { response, data };
 }
 
+function readClaimFreeLead(body: Record<string, unknown>): ClaimFreeLead | { error: string } {
+  const fullName = text(body.fullName, 200);
+  const businessName = text(body.businessName, 200);
+  const businessType = text(body.businessType, 200);
+  const website = text(body.website, 500);
+  const country = text(body.country, 120);
+  const email = normalizeEmail(body.email);
+  const phone = text(body.phone, 40);
+  const phoneDigits = phone.replace(/\D/g, "");
+  const bookingMethod = text(body.bookingMethod, 80);
+  const staffCount = text(body.staffCount, 40);
+  const message = text(body.message, 5000);
+  const preferredTime = text(body.preferredTime, 80);
+
+  if (
+    !fullName ||
+    !businessName ||
+    !businessType ||
+    businessType === "Select your business type" ||
+    !country ||
+    country === "Select your country" ||
+    !email ||
+    !phone ||
+    !bookingMethod ||
+    bookingMethod === "Select your booking method" ||
+    !staffCount ||
+    staffCount === "Select number of staff/providers" ||
+    !message ||
+    !preferredTime ||
+    preferredTime === "Select preferred time"
+  ) {
+    return { error: "Please fill all required fields." };
+  }
+
+  if (phoneDigits.length < 8) {
+    return { error: "Please enter a valid phone number with country code." };
+  }
+
+  return {
+    fullName,
+    businessName,
+    businessType,
+    website,
+    country,
+    email,
+    phone,
+    bookingMethod,
+    staffCount,
+    message,
+    preferredTime,
+  };
+}
+
+async function saveClaimFreeLead(
+  apiUrl: string,
+  token: string,
+  origin: string | null,
+  source: string,
+  lead: ClaimFreeLead
+) {
+  const response = await fetch(apiUrl, {
+    method: "POST",
+    cache: "no-store",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      ...(origin ? { Origin: origin } : {}),
+    },
+    body: JSON.stringify({
+      form_type: "claim_free",
+      formType: "claim_free",
+      source,
+      name: lead.fullName,
+      business_name: lead.businessName,
+      business_type: lead.businessType,
+      website: lead.website,
+      country: lead.country,
+      email: lead.email,
+      phone: lead.phone,
+      current_booking_method: lead.bookingMethod,
+      staff_provider_count: lead.staffCount,
+      main_services: lead.message,
+      message: lead.message,
+      preferred_call_demo_time: lead.preferredTime,
+    }),
+  });
+
+  const data = (await response.json().catch(() => ({}))) as UpstreamBody;
+  return { response, data };
+}
+
 async function notifyAdmin(req: Request, payload: Record<string, unknown>) {
   const response = await fetch(`${siteOrigin(req)}/api/send-email`, {
     method: "POST",
@@ -272,7 +382,7 @@ export async function POST(req: Request) {
         message: lead.message,
       };
       successMessage = "Thank you for contacting GetSetTime! Your inquiry has been submitted successfully.";
-    } else {
+    } else if (formType === "solutions") {
       const lead = readSolutionsLead(body);
       if ("error" in lead) {
         return NextResponse.json({ success: false, error: lead.error }, { status: 400 });
@@ -291,6 +401,27 @@ export async function POST(req: Request) {
         message: lead.message,
       };
       successMessage = "Thank you! Your request has been submitted successfully.";
+    } else {
+      const lead = readClaimFreeLead(body);
+      if ("error" in lead) {
+        return NextResponse.json({ success: false, error: lead.error }, { status: 400 });
+      }
+      saved = await saveClaimFreeLead(apiUrl, token, origin, source, lead);
+      mailPayload = {
+        formType: "claim_free",
+        fullName: lead.fullName,
+        businessName: lead.businessName,
+        businessType: lead.businessType,
+        website: lead.website,
+        country: lead.country,
+        email: lead.email,
+        phone: lead.phone,
+        bookingMethod: lead.bookingMethod,
+        staffCount: lead.staffCount,
+        message: lead.message,
+        preferredTime: lead.preferredTime,
+      };
+      successMessage = "Application received! We'll contact you within 24 hours.";
     }
 
     if (!saved.response.ok || saved.data.success === false) {

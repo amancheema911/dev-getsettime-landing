@@ -61,7 +61,7 @@ export default function SolutionsPage() {
           "width": 1200,
           "height": 630,
         },
-        "description": "GetSetTime is a smart appointment scheduling platform trusted by 5,000+ doctors, salon owners, and wellness professionals. Simple to set up, smart enough to run itself.",
+        "description": "GetSetTime is a smart appointment scheduling platform trusted by doctors, salon owners, and wellness professionals. Simple to set up, smart enough to run itself.",
         "slogan": "Precision Scheduling for Modern Care",
         "foundingDate": "2025",
         "numberOfEmployees": {

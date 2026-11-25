@@ -262,9 +262,9 @@ export default function GymAppointmentBookingSoftwarePage() {
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 {[
-                  { value: "10,000+", label: "Sessions Scheduled", hint: "Across gyms using GetSetTime", icon: "M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4 0m4 0a4 4 0 014 4", bg: "bg-violet-50 text-violet-600" },
+                  { value: "Capped", label: "Class capacity", hint: "Full classes and booked trainers stay closed, so members only see open spots", icon: "M4 6h16M4 12h16M4 18h10", bg: "bg-violet-50 text-violet-600" },
                   { value: "3 hrs", label: "Time Saved", hint: "Daily scheduling admin back for your team", icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z", bg: "bg-emerald-50 text-emerald-600" },
-                  { value: "4.8 ★", label: "Gym Rating", hint: "Average feedback from members", icon: "M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.98 9.11c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z", bg: "bg-amber-50 text-amber-600" },
+                  { value: "Waitlist", label: "Spots refilled", hint: "When a member cancels, the next person is offered the class before it starts", icon: "M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8M19 8v6M22 11h-6", bg: "bg-amber-50 text-amber-600" },
                 ].map((stat) => (
                   <div key={stat.label} className="space-y-1 rounded-2xl border border-neutral-100 bg-white p-3 drop-shadow-sm">
                     <div className="flex items-center gap-2">

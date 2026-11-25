@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
 import { APP_NAME, BASE_URL, REGISTER_URL, REGISTER_GOOGLE_URL, contactInfo, LOGIN_URL } from "@/lib/config";
-import { comparisonRows, pricingTiers, } from "@/lib/pricing-data";
+import { loadPublicPlans } from "@/lib/load-public-plans";
+import { toPricingTier } from "@/lib/public-plans";
 import Pricing from "../component/Pricing";
 import PricingComparison from "../component/PricingComparison";
 import PricingHeroPreview from "../component/PricingHeroPreview";
-import RegionalPrice from "../component/RegionalPrice";
+import RegionalPrice, { AnnualDiscountPercent } from "../component/RegionalPrice";
 import { PricingFaqItem, pricingFaqItems } from "../component/PricingFaqSection";
 import Heading from "../component/Heading";
 import SigngoogleButton from "../component/ui/button/SigngoogleButton";
@@ -74,8 +75,15 @@ const valueProps = [
     featured: false,
   },
   {
-    stat: <RegionalPrice plan="extraSeat" />,
-    statUnit: "+ GST per extra seat",
+    stat: (
+      <RegionalPrice
+        plan="extraSeat"
+        amountClassName="text-3xl tracking-tight sm:text-4xl font-bold text-violet-600"
+        suffix=" + GST per extra seat"
+        suffixClassName="text-sm font-medium text-neutral-600"
+      />
+    ),
+    statClassName: "empty:hidden",
     title: "Pay for seats, not surprises",
     description: "Plans bundle provider seats upfront. Add stylists, doctors, or therapists anytime without switching platforms.",
     bullets: ["1 · 2 · 5 seats by tier", "Prorated mid-cycle adds", "GST shown at checkout"],
@@ -91,7 +99,7 @@ const valueProps = [
     featured: true,
   },
   {
-    stat: "10%",
+    stat: <AnnualDiscountPercent />,
     statUnit: "saved yearly",
     title: "Rewards when you commit",
     description: (
@@ -151,7 +159,7 @@ const trustPoints = [
   },
   {
     title: "Real support, real people",
-    detail: "From community help to a 24/7 SLA line ",
+    detail: "From community help to a 24/7 support line",
     iconBg: "bg-amber-100 text-amber-600",
     border: "border-amber-100 hover:border-amber-200",
     icon: (
@@ -162,17 +170,8 @@ const trustPoints = [
   },
 ];
 
-export default function PricingPage() {
- 
-  const schemaOffers = pricingTiers.map((tier) => ({
-    "@type": "Offer",
-    "@id": `${pageUrl}/#offer-${tier.name.toLowerCase()}`,
-    "name": `${APP_NAME} ${tier.name}`,
-    "price": tier.price === "Free" ? "0" : tier.price,
-    "priceCurrency": "INR",
-    "description": tier.description,
-    "url": `${pageUrl}`,
-  }));
+export default async function PricingPage() {
+  const catalog = await loadPublicPlans("INR");
 
   const schemaData = {
     "@context": "https://schema.org",
@@ -188,7 +187,7 @@ export default function PricingPage() {
           "width": 1200,
           "height": 630
         },
-        "description": "GetSetTime is a smart appointment scheduling platform trusted by 5,000+ doctors, salon owners, and wellness professionals. Simple to set up, smart enough to run itself.",
+        "description": "GetSetTime is a smart appointment scheduling platform trusted by doctors, salon owners, and wellness professionals. Simple to set up, smart enough to run itself.",
         "slogan": "Precision Scheduling for Modern Care",
         "foundingDate": "2025",
         "numberOfEmployees": {
@@ -313,7 +312,15 @@ export default function PricingPage() {
         "name": `${APP_NAME}`,
         "description": `Plans from ₹999/month. 250 bookings included on Starter. Scale with WhatsApp reminders, branding, and multi-location support.`,
         "brand": { "@type": "Brand", "name": `${APP_NAME}` },
-        "offers": schemaOffers,
+        "offers": catalog?.plans.map((plan) => ({
+          "@type": "Offer",
+          "@id": `${pageUrl}/#offer-${plan.slug}`,
+          "name": `${APP_NAME} ${plan.name}`,
+          "price": String(plan.price),
+          "priceCurrency": catalog.priceCurrency,
+          "description": plan.description,
+          "url": `${pageUrl}`,
+        })),
       },
       {
         "@type": "FAQPage",
@@ -366,9 +373,19 @@ export default function PricingPage() {
 
               <div className="flex flex-wrap gap-2 font-medium text-neutral-600">
                 {heroHighlights.map((item) => (
-                  <span key={item.key} className="inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-white/80 px-2 py-1.5 text-xs text-neutral-700 drop-shadow-sm">
-                    {item.node}
-                  </span>
+                  item.key === "seats" ? (
+                    <RegionalPrice
+                      key={item.key}
+                      plan="extraSeat"
+                      prefix="Extra seats "
+                      suffix="/month + GST"
+                      className="inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-white/80 px-2 py-1.5 text-xs text-neutral-700 drop-shadow-sm"
+                    />
+                  ) : (
+                    <span key={item.key} className="inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-white/80 px-2 py-1.5 text-xs text-neutral-700 drop-shadow-sm">
+                      {item.node}
+                    </span>
+                  )
                 ))}
               </div>
               
@@ -451,7 +468,7 @@ export default function PricingPage() {
                   iconNode={item.icon}
                   stat={item.stat}
                   statUnit={item.statUnit}
-                  statClassName={`text-3xl tracking-tight sm:text-4xl font-bold ${item.valueColor}`}
+                  statClassName={item.statClassName ?? `text-3xl tracking-tight sm:text-4xl font-bold ${item.valueColor}`}
                   title={item.title}
                   description={item.description}
                   iconWrapperClassName={`flex h-12 w-12 items-center justify-center rounded-xl ${item.iconBg}`}
@@ -492,7 +509,7 @@ export default function PricingPage() {
                 description="See exactly what you get on Starter, Professional, and Enterprise before you commit."
                 wrapperClassName="mb-8 space-y-3 text-center"
             />
-            <PricingComparison rows={comparisonRows} />
+            <PricingComparison />
             </div>
         </section>
 
@@ -514,8 +531,7 @@ export default function PricingPage() {
                     <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur sm:mt-6 sm:p-5">
                       <p className="text-sm text-indigo-200">Extra seat pricing</p>
                       <p className="mt-1 text-3xl tracking-tight sm:text-4xl">
-                        <RegionalPrice plan="extraSeat" />
-                        <span className="text-lg font-semibold text-white"> / month</span>
+                        <RegionalPrice plan="extraSeat" suffix=" / month" />
                       </p>
                       <p className="mt-1 text-sm text-white sm:text-base">+ 18% GST · prorated when added mid-cycle</p>
                     </div>

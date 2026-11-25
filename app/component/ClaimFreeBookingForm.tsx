@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import InternationalPhoneField from "./InternationalPhoneField";
 import { isValidInternationalPhone } from "./InternationalPhoneField";
 import { COUNTRY_LIST } from "@/lib/CountryList";
+import { useProfessions } from "./useProfessions";
 
 type FormData = {
   fullName: string;
@@ -15,19 +16,9 @@ type FormData = {
   phone: string;
   bookingMethod: string;
   staffCount: string;
-  services: string;
+  message: string;
   preferredTime: string;
 };
-
-const businessTypes = [
-  "Clinic / Healthcare",
-  "Dental Clinic",
-  "Physiotherapy Clinic",
-  "Salon & Beauty",
-  "Personal Meetings",
-  "Sports & Fitness",
-  "Other",
-];
 
 const countries = COUNTRY_LIST.map((country) => country.name + " (" + country.iso + ")");
 
@@ -45,7 +36,6 @@ const preferredTimes = [
   "Morning (9 AM – 12 PM)",
   "Afternoon (12 PM – 5 PM)",
   "Evening (5 PM – 8 PM)",
-  "Custom",
 ];
 
 function FieldLabel({ children, required = true }: { children: React.ReactNode; required?: boolean }) {
@@ -76,6 +66,7 @@ function SelectChevron() {
 }
 
 export default function ClaimFreeBookingForm() {
+  const { professions, status: professionsStatus } = useProfessions();
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     businessName: "",
@@ -86,7 +77,7 @@ export default function ClaimFreeBookingForm() {
     phone: "",
     bookingMethod: "",
     staffCount: "",
-    services: "",
+    message: "",
     preferredTime: "",
   });
 
@@ -117,7 +108,7 @@ export default function ClaimFreeBookingForm() {
       formData.phone,
       formData.bookingMethod,
       formData.staffCount,
-      formData.services,
+      formData.message,
       formData.preferredTime,
     ];
 
@@ -137,7 +128,7 @@ export default function ClaimFreeBookingForm() {
       setStatus("sending");
       setErrorMessage("");
 
-      const res = await fetch("/api/send-email", {
+      const res = await fetch("/api/send-email/submit-forms", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -151,7 +142,7 @@ export default function ClaimFreeBookingForm() {
           phone: formData.phone,
           bookingMethod: formData.bookingMethod,
           staffCount: formData.staffCount,
-          services: formData.services,
+          message: formData.message,
           preferredTime: formData.preferredTime,
         }),
       });
@@ -184,7 +175,7 @@ export default function ClaimFreeBookingForm() {
           phone: "",
           bookingMethod: "",
           staffCount: "",
-          services: "",
+          message: "",
           preferredTime: "",
         });
       } else {
@@ -265,14 +256,21 @@ export default function ClaimFreeBookingForm() {
               <select
                 name="businessType"
                 required
+                aria-busy={professionsStatus === "loading"}
                 value={formData.businessType}
                 onChange={handleChange}
                 className={selectClass}
               >
-                <option value="">Select your business type</option>
-                {businessTypes.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
+                <option value="">
+                  {professionsStatus === "loading"
+                    ? "Loading professions…"
+                    : professionsStatus === "error"
+                      ? "Professions unavailable"
+                      : "Select your business type"}
+                </option>
+                {professions.map((profession) => (
+                  <option key={profession.id} value={profession.name}>
+                    {profession.name}
                   </option>
                 ))}
               </select>
@@ -281,7 +279,7 @@ export default function ClaimFreeBookingForm() {
           </div>
 
           <div>
-            <FieldLabel required={false}>Website or Instagram Link</FieldLabel>
+            <FieldLabel required={false}>Website Link</FieldLabel>
             <div className="relative">
               <InputIcon>
                 <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -292,7 +290,7 @@ export default function ClaimFreeBookingForm() {
               <input
                 name="website"
                 type="url"
-                placeholder="https:// or @instagram"
+                placeholder="https://yourwebsite.com"
                 value={formData.website}
                 onChange={handleChange}
                 className={inputClass}
@@ -450,14 +448,14 @@ export default function ClaimFreeBookingForm() {
         </div>
 
         <div>
-          <FieldLabel>Main services you offer</FieldLabel>
+          <FieldLabel>Tell us about your business</FieldLabel>
           <div className="relative">
             <textarea
-              name="services"
+              name="message"
               required
               rows={3}
-              placeholder="e.g. Haircut, coloring, spa treatments..."
-              value={formData.services}
+              placeholder="e.g. We are a doctor's office..."
+              value={formData.message}
               onChange={handleChange}
               className={textareaClass}
             />

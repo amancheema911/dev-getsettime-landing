@@ -818,12 +818,12 @@ export default function TutorAppointmentBookingSoftwarePage() {
             </div>
 
             <div className="relative z-10 container mx-auto min-w-0 px-4 sm:px-6 lg:px-8">
-              <div className="grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
-                <div className="relative order-2 min-w-0 lg:order-1 lg:col-span-7 lg:pb-2">
+              <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-10">
+                <div className="relative order-2 min-w-0 lg:order-1 lg:pb-2">
                   <BookingFlowConsole steps={bookingSteps.map(({ step, title, description }) => ({ step, title, description }))} />
                 </div>
 
-                <div className="order-1 min-w-0 space-y-4 lg:order-2 lg:col-span-5">
+                <div className="order-1 min-w-0 space-y-4 lg:order-2">
                   <Heading
                       badge="booking flow"
                       title="Let's Allow Students to Book Sessions Anytime with"

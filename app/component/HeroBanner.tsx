@@ -90,9 +90,6 @@ export default function HeroBanner() {
 
             <div className="flex gap-2 max-[425px]:flex-col flex-row flex-wrap">
                 <SigngoogleButton signupSource="home" />
-                {/* <Link href={`${REGISTER_URL}`} target="_blank" aria-label="Start Free - Hero Banner" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-900 px-4 py-3 text-sm text-white drop-shadow-lg transition">
-                    Start Free
-                </Link> */}
                 <DemoVideoButton />
             </div>
 
@@ -179,27 +176,6 @@ export default function HeroBanner() {
                     <span className="text-[10px] sm:text-xs font-medium text-neutral-700">LIVE</span>
                   </div>
                 </div>
-
-                {/* Top header */}
-                {/* <div className="hidden md:flex flex-wrap items-center justify-between px-3 py-3">
-                    <div className="flex items-center gap-2.5">
-                        <Logo />
-                    </div>
-                    <div className="flex items-center gap-5 text-center">
-                        <div>
-                            <div className="text-base font-bold text-indigo-600">24</div>
-                            <div className="text-xs text-neutral-500">Today</div>
-                        </div>
-                        <div>
-                            <div className="text-base font-bold text-neutral-900">7</div>
-                            <div className="text-xs text-neutral-500">Pending</div>
-                        </div>
-                        <div>
-                            <div className="text-base font-bold text-emerald-600">92%</div>
-                            <div className="text-xs text-neutral-500">Filled</div>
-                        </div>
-                    </div>
-                </div> */}
 
                 <div className="flex">
                     {/* Sidebar */}

@@ -1,19 +1,15 @@
 "use client";
-import { REGISTER_GOOGLE_URL, REGISTER_URL } from "@/lib/config";
-import {
-  pricingTiers,
-  applyRegionalPrices,
-  formatPrice,
-  formatRegionalPrice,
-  getRegionalPricing,
-  type PricingTier,
-  type RegionalPricing,
-} from "@/lib/pricing-data";
+import { REGISTER_URL } from "@/lib/config";
+import { formatPrice } from "@/utils/currency";
+import { tiersForRegion } from "@/lib/pricing-data";
+import { annualDiscountForTier, discountedPrice, toPricingTier } from "@/lib/public-plans";
+import { usePlans } from "./usePlans";
 import { useRegionalPricing } from "./useRegionalPricing";
 import Button from "./ui/button/Button";
 import type { FC } from "react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Heading from "./Heading";
+import type { PricingTier } from "@/lib/pricing-data";
 
 function getSlidesPerView(width: number) {
   if (width >= 1280) return 3;
@@ -34,12 +30,12 @@ interface PricingHeaderContent {
 const defaultPricingHeaderContent: Required<Pick<PricingHeaderContent, "badge" | "title" | "description" | "wrapperClassName">> = {
   badge: "Pricing Plans",
   title: "Choose the plan that fits your team",
-  description: "Transparent monthly pricing in {currency}. Toggle annual billing on Professional and Enterprise to save 10%.",
+  description: "Transparent monthly pricing in {currency}. Annual billing saves {discount}%.",
   wrapperClassName: "mb-6 space-y-3 text-center",
 };
 
-function resolvePricingHeaderDescription(template: string, currencyLabel: string) {
-  return template.replaceAll("{currency}", currencyLabel);
+function resolvePricingHeaderDescription(template: string, currencyLabel: string, discount: number) {
+  return template.replaceAll("{currency}", currencyLabel).replaceAll("{discount}", String(discount));
 }
 
 interface CtaButton {
@@ -77,19 +73,20 @@ export type { PricingHeaderContent };
 export const PricingCard: FC<{
   tier: PricingTier;
   isAnnual: boolean;
-  region: RegionalPricing;
   pricingSource?: string;
-}> = ({ tier, isAnnual, region, pricingSource }) => {
-  const annualDiscount = tier.name === "Starter" || tier.price === "Free" ? 1 : 0.9;
+}> = ({ tier, isAnnual, pricingSource }) => {
+  const currency = tier.currency || "INR";
+  const discountPercent = annualDiscountForTier(tier.name, tier.annualDiscountPercent);
   const monthlyPrice = Number(tier.price);
-  const annualPrice = Math.round(monthlyPrice * annualDiscount);
-  const displayPrice = tier.price === "Free" ? "Free" : isAnnual ? `${annualPrice}` : `${monthlyPrice}`;
+  const annualPrice = discountedPrice(monthlyPrice, discountPercent, true);
+  const displayPrice = tier.price === "Free" ? "Free" : isAnnual ? annualPrice : monthlyPrice;
+  const showDiscount = tier.price !== "Free" && isAnnual && discountPercent > 0 && annualPrice !== monthlyPrice;
 
   return (
     <div className={`pricing-card relative flex h-full flex-col rounded-2xl bg-white px-4 py-6 transition-transform duration-300 hover:-translate-y-2 hover:drop-shadow-xl ${tier.popular ? "border-indigo-300 drop-shadow-xl drop-shadow-indigo-200/70 ring-2 ring-indigo-200" : "drop-shadow-xl drop-shadow-slate-200/70"}`}>
       {tier.popular && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-          <div className="rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white drop-shadow-lg">Most Popular</div>
+          <div className="rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white drop-shadow-lg">{tier.badge || "Most Popular"}</div>
         </div>
       )}
 
@@ -99,27 +96,23 @@ export const PricingCard: FC<{
             <div className="text-xs font-semibold uppercase tracking-widest text-indigo-600">{tier.name}</div>
             <div className="min-h-5 text-sm">{tier.subtitle}</div>
           </div>
-          <span className="flex h-7 w-[8.75rem] shrink-0 items-center justify-end">
-            {tier.price !== "Free" && region.taxLabel ? (
-              <span className="inline-flex max-w-full items-center truncate whitespace-nowrap rounded-lg border border-indigo-200 bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-600">
-                {region.taxLabel}
-              </span>
-            ) : null}
-          </span>
         </div>
 
-        <div className="relative flex min-h-11 items-baseline whitespace-nowrap">
-          <span className="text-4xl font-bold tabular-nums text-neutral-900">
-            {tier.price === "Free"
-              ? displayPrice
-              : formatPrice(Number(displayPrice), region.currency)}
-          </span>
-          <span className={`ml-1 text-neutral-600 ${tier.price === "Free" ? "invisible" : ""}`}>
-            /{tier.period}
-          </span>
-          {/* {isAnnual && tier.price !== "Free" && annualDiscount < 1 && (
-            <div className="mt-1 text-sm font-medium text-emerald-600">Save 10% annually</div>
-          )} */}
+        <div className="relative min-h-11">
+          <div className="flex items-baseline whitespace-nowrap">
+            <span className="text-4xl font-bold tabular-nums text-neutral-900">
+              {tier.price === "Free" ? displayPrice : formatPrice(Number(displayPrice), currency)}
+            </span>
+            <span className={`ml-1 text-neutral-600 ${tier.price === "Free" ? "invisible" : ""}`}>
+              /{tier.period}
+            </span>
+          </div>
+          {showDiscount && (
+            <div className="mt-1 text-sm font-medium text-emerald-600">
+              <span className="mr-1 font-normal text-neutral-400 line-through">{formatPrice(monthlyPrice, currency)}</span>
+              Save {discountPercent}% annually
+            </div>
+          )}
         </div>
 
         <div>{tier.description}</div>
@@ -128,6 +121,9 @@ export const PricingCard: FC<{
           <div className="space-y-1 rounded-xl bg-indigo-50 p-4">
             <div className="text-md font-semibold text-indigo-700">{tier.seatTitle}</div>
             <div className="text-sm text-indigo-600">{tier.seatDescription}</div>
+            {tier.extraSeatPrice && tier.extraSeatPrice > 0 ? (
+              <div className="text-sm text-indigo-600">Extra seat {formatPrice(tier.extraSeatPrice, currency)}/{tier.period}</div>
+            ) : null}
           </div>
         )}
       </div>
@@ -159,17 +155,19 @@ export const PricingCard: FC<{
   );
 };
 
-export const BillingToggle: FC<{ isAnnual: boolean; onChange: (annual: boolean) => void; pricingSource?: string }> = ({ isAnnual, onChange, pricingSource }) => (
+export const BillingToggle: FC<{ isAnnual: boolean; onChange: (annual: boolean) => void; pricingSource?: string; savePercent?: number }> = ({ isAnnual, onChange, pricingSource, savePercent = 0 }) => (
   <div className="flex flex-col items-center gap-4 px-4 py-3" data-source={pricingSource}>
     <div className="relative">
+      {savePercent > 0 && (
       <div className="pointer-events-none absolute -right-2 -top-3 z-20 sm:-right-5 sm:-top-3.5" aria-hidden>
         <div className="flex items-center gap-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-lg shadow-emerald-500/25 ring-2 ring-white sm:px-3 sm:text-[11px]">
           <svg className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
           </svg>
-          Save 10%
+          Save {savePercent}%
         </div>
       </div>
+      )}
 
       <div role="radiogroup" aria-label="Billing cycle" className="relative grid grid-cols-2 rounded-2xl border border-slate-200/90 bg-slate-50/90 p-1.5 shadow-[0_10px_40px_-16px_rgba(15,23,42,0.25)] backdrop-blur-sm">
         <div aria-hidden className={`pointer-events-none absolute bottom-1.5 top-1.5 w-[calc(50%-6px)] rounded-xl bg-white shadow-[0_4px_14px_-6px_rgba(79,70,229,0.35)] ring-1 ring-indigo-100 transition-all duration-300 ease-out ${ isAnnual ? "left-[calc(50%+3px)]" : "left-1.5" }`}/>
@@ -205,9 +203,8 @@ export const BillingToggle: FC<{ isAnnual: boolean; onChange: (annual: boolean) 
 const PricingCardsSlider: FC<{
   tiers: PricingTier[];
   isAnnual: boolean;
-  region: RegionalPricing;
   pricingSource?: string;
-}> = ({ tiers, isAnnual, region, pricingSource }) => {
+}> = ({ tiers, isAnnual, pricingSource }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slidesPerView, setSlidesPerView] = useState(1);
   const touchStartX = useRef<number | null>(null);
@@ -288,7 +285,7 @@ const PricingCardsSlider: FC<{
         <div className="flex items-stretch gap-6 transition-transform duration-300 ease-out" style={{ transform: `translateX(${trackOffset})` }}>
           {tiers.map((tier) => (
             <div key={tier.name} className="pricing-slide flex flex-col py-4">
-              <PricingCard tier={tier} isAnnual={isAnnual} region={region} pricingSource={pricingSource} />
+              <PricingCard tier={tier} isAnnual={isAnnual} pricingSource={pricingSource} />
             </div>
           ))}
         </div>
@@ -348,28 +345,36 @@ export default function Pricing({
   const [isAnnual, setIsAnnual] = useState(false);
   const isPage = variant === "page";
   const region = useRegionalPricing();
+  const { plans, status } = usePlans(region.currency);
+  const priceCurrency = region.fromTable ? region.currency : plans?.priceCurrency ?? region.currency;
+  const discountPercent = useMemo(() => {
+    const percents = (plans?.plans ?? []).map((plan) => annualDiscountForTier(plan.name, plan.annualDiscountPercent));
+    return percents.length ? Math.max(...percents) : 0;
+  }, [plans]);
+  const includedPlan = plans?.plans.find((plan) => typeof plan.bookingLimit === "number");
+  const includedBookings = includedPlan && typeof includedPlan.bookingLimit === "number" ? includedPlan.bookingLimit : null;
+  const includedPeriod = includedPlan?.bookingLimitPeriod === "lifetime" ? "included" : includedPlan?.bookingLimitPeriod || "month";
 
   const plansHeading = {
     badge: headerContent?.badge ?? defaultPricingHeaderContent.badge,
     title: headerContent?.title ?? defaultPricingHeaderContent.title,
     highlightText: headerContent?.highlightText,
     description: resolvePricingHeaderDescription(
-      headerContent?.description ?? defaultPricingHeaderContent.description,
-      region.currencyLabel,
+      headerContent?.description ?? (discountPercent > 0 ? defaultPricingHeaderContent.description : "Transparent monthly pricing in {currency}."),
+      priceCurrency,
+      discountPercent,
     ),
     wrapperClassName: headerContent?.wrapperClassName ?? defaultPricingHeaderContent.wrapperClassName,
     titleClassName: headerContent?.titleClassName,
     descriptionClassName: headerContent?.descriptionClassName,
   };
 
-  const tiers = useMemo(() => {
-    const localized = applyRegionalPrices(pricingTiers, region);
-    return localized.map((tier) =>
-      tier.name === "Enterprise"
-        ? tier
-        : { ...tier, buttonLink: tier.buttonText === "Get Started" ? `${REGISTER_GOOGLE_URL}` : `${tier.buttonLink}` }
-    );
-  }, [region]);
+  const tiers = useMemo(
+    () => tiersForRegion(plans?.plans.length ? plans.plans.map(toPricingTier) : [], region),
+    [plans, region]
+  );
+  const extraSeatPrice = region.fromTable ? region.extraSeat.starter : plans?.extraSeatPrice ?? 0;
+  const extraSeatCurrency = region.fromTable ? region.currency : plans?.priceCurrency ?? region.currency;
 
   return (
     <section id="pricing" className={`relative bg-[#f6f7fb] scroll-mt-20 py-14 sm:py-20`}>
@@ -391,8 +396,10 @@ export default function Pricing({
               <div>
                 <Heading
                   badge="Important Pricing Benefit"
-                  title="Start Free with 250 Bookings/Month"
-                  description="Every workspace gets the first 250 appointments free. After that, choose a plan based on the number of seats/service providers you need."
+                  title={includedBookings ? `Start with ${includedBookings} bookings` : "Plans are loading"}
+                  description={includedBookings
+                    ? `The first plan includes ${includedBookings} bookings ${includedPeriod}. Choose a plan based on the seats returned for your currency.`
+                    : "Plan prices, seats, and booking limits load from the plans API."}
                   titleClassName="text-2xl sm:text-3xl font-bold text-white md:text-4xl lg:text-[40px]"
                   descriptionClassName="text-indigo-50"
                 />
@@ -405,8 +412,8 @@ export default function Pricing({
               <div className="rounded-3xl bg-white p-4 drop-shadow-2xl sm:p-6 space-y-3">
                 <div className="text-sm font-semibold uppercase tracking-widest text-neutral-500">Included Free</div>
                 <div className="flex items-end gap-2">
-                  <span className="text-5xl font-black tracking-tight text-neutral-900">250</span>
-                  <span className="pb-2 text-sm font-bold text-neutral-600">bookings/month</span>
+                  <span className="text-5xl font-black tracking-tight text-neutral-900">{includedBookings ?? "—"}</span>
+                  <span className="pb-2 text-sm font-bold text-neutral-600">bookings {includedPeriod}</span>
                 </div>
                 <div className="rounded-2xl bg-indigo-50 p-4">
                   <div className="text-sm">Start accepting appointments without payment. Upgrade when your workspace needs more seats or more capacity.</div>
@@ -427,9 +434,15 @@ export default function Pricing({
           descriptionClassName={plansHeading.descriptionClassName}
         />        
 
-        <BillingToggle isAnnual={isAnnual} onChange={setIsAnnual} />
+        <BillingToggle isAnnual={isAnnual} onChange={setIsAnnual} pricingSource={pricingSource} savePercent={discountPercent} />
 
-        <PricingCardsSlider tiers={tiers} isAnnual={isAnnual} region={region} pricingSource={pricingSource} />
+        {tiers.length > 0 ? (
+          <PricingCardsSlider tiers={tiers} isAnnual={isAnnual} pricingSource={pricingSource} />
+        ) : (
+          <p className="py-10 text-center text-sm text-neutral-500">
+            {status === "error" ? "Plans could not be loaded." : "Loading plans…"}
+          </p>
+        )}
 
         {/* BOTTOM CTA SECTION */}
         <div className="mt-10 rounded-2xl bg-white p-6 drop-shadow-sm">
@@ -441,14 +454,9 @@ export default function Pricing({
             <div className="rounded-xl bg-neutral-900 px-6 py-4 text-white">
               <p className="text-sm text-white">Extra Seat</p>
               <p className="text-2xl font-bold">
-                <span className="inline-grid">
-                  <span className="invisible col-start-1 row-start-1 whitespace-nowrap tabular-nums" aria-hidden="true">
-                    {formatRegionalPrice("extraSeat", getRegionalPricing("IN"))} / month + GST
-                  </span>
-                  <span className="col-start-1 row-start-1 whitespace-nowrap tabular-nums">
-                    {formatRegionalPrice("extraSeat", region)} / month + GST
-                  </span>
-                </span>
+                {extraSeatPrice > 0
+                  ? `${formatPrice(extraSeatPrice, extraSeatCurrency)} / month`
+                  : "Included"}
               </p>
             </div>
           </div>

@@ -1,16 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { pricingTiers, applyRegionalPrices, formatPrice, getRegionalPricing } from "@/lib/pricing-data";
+import { formatPrice, tiersForRegion } from "@/lib/pricing-data";
+import { annualDiscountForTier, discountedPrice, toPricingTier } from "@/lib/public-plans";
+import { usePlans } from "./usePlans";
 import { useRegionalPricing } from "./useRegionalPricing";
-
-function getDisplayPrice(price: string, tierName: string, isAnnual: boolean): number | "Free" {
-  if (price === "Free") return "Free";
-  const annualDiscount = tierName === "Starter" || tierName === "Free" ? 1 : 0.9;
-  const monthlyPrice = Number(price);
-  const annualPrice = Math.round(monthlyPrice * annualDiscount);
-  return isAnnual ? annualPrice : monthlyPrice;
-}
 
 const planHighlights: Record<string, string[]> = {
   Starter: ["Public booking page", "Email notifications"],
@@ -42,7 +36,13 @@ const BOOKING_ALLOWANCE = 250;
 export default function PricingHeroPreview() {
   const [isAnnual, setIsAnnual] = useState(false);
   const region = useRegionalPricing();
-  const tiers = useMemo(() => applyRegionalPrices(pricingTiers, region), [region]);
+  const plans = usePlans(region.currency).plans;
+  const tiers = useMemo(
+    () => tiersForRegion(plans?.plans.length ? plans.plans.map(toPricingTier) : [], region),
+    [plans, region]
+  );
+  const extraSeatPrice = region.fromTable ? region.extraSeat.starter : plans?.extraSeatPrice ?? 0;
+  const extraSeatCurrency = region.fromTable ? region.currency : plans?.priceCurrency ?? region.currency;
   const starter = tiers.find((tier) => tier.name === "Starter") ?? tiers[0];
   const usagePercent = Math.round((USED_BOOKINGS / BOOKING_ALLOWANCE) * 100);
 
@@ -102,7 +102,11 @@ export default function PricingHeroPreview() {
         <div className="mt-3 grid gap-2.5 sm:grid-cols-3">
           {tiers.map((tier) => {
             const icons = planIcons[tier.name] ?? planIcons.Starter;
-            const displayPrice = getDisplayPrice(tier.price, tier.name, isAnnual);
+            const discountPercent = annualDiscountForTier(tier.name, tier.annualDiscountPercent);
+            const monthlyPrice = tier.price === "Free" ? "Free" : Number(tier.price);
+            const displayPrice = monthlyPrice === "Free" ? "Free" : discountedPrice(monthlyPrice, discountPercent, isAnnual);
+            const showDiscount = displayPrice !== "Free" && isAnnual && discountPercent > 0 && displayPrice !== monthlyPrice;
+            const priceCurrency = tier.currency || region.currency;
             const highlights = planHighlights[tier.name] ?? tier.features.slice(0, 2);
             const isCurrent = tier.name === "Starter";
             const priceClass = tier.name === "Enterprise" ? "text-emerald-600" : tier.popular ? "text-violet-600" : "text-indigo-600";
@@ -127,9 +131,15 @@ export default function PricingHeroPreview() {
                 <p className="mt-2 text-sm font-bold text-neutral-950">{tier.name}</p>
                 <div className="text-xs text-neutral-500">{tier.subtitle}</div>
                 <div className={`mt-2 whitespace-nowrap text-xl font-bold tabular-nums leading-none ${priceClass}`}>
-                  {displayPrice === "Free" ? "Free" : formatPrice(displayPrice, region.currency)}
+                  {displayPrice === "Free" ? "Free" : formatPrice(displayPrice, priceCurrency)}
                   {displayPrice !== "Free" && <span className="text-[11px] font-medium text-neutral-400"> / month</span>}
                 </div>
+                {showDiscount && monthlyPrice !== "Free" && (
+                  <div className="mt-1 text-[10px] font-medium leading-tight text-emerald-600">
+                    <span className="mr-1 font-normal text-neutral-400 line-through">{formatPrice(monthlyPrice, priceCurrency)}</span>
+                    Save {discountPercent}% annually
+                  </div>
+                )}
                 <div
                   className={`mt-3 rounded-xl px-2 py-2 text-center text-[11px] font-semibold ${
                     isCurrent
@@ -146,6 +156,7 @@ export default function PricingHeroPreview() {
           })}
         </div>
 
+        {extraSeatPrice > 0 && (
         <div className="mt-3 flex items-center gap-2 rounded-xl bg-white px-3 py-2.5 text-[12px] text-neutral-700 shadow-sm">
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-violet-50 text-violet-600">
             <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden>
@@ -156,16 +167,12 @@ export default function PricingHeroPreview() {
           </span>
           <span>
             Extra seats{" "}
-            <span className="inline-grid align-baseline font-semibold">
-              <span className="invisible col-start-1 row-start-1 whitespace-nowrap tabular-nums" aria-hidden="true">
-                {formatPrice(getRegionalPricing("IN").extraSeat, "INR")}/month + GST
-              </span>
-              <span className="col-start-1 row-start-1 whitespace-nowrap tabular-nums">
-                {formatPrice(region.extraSeat, region.currency)}/month + GST
-              </span>
+            <span className="whitespace-nowrap font-semibold tabular-nums">
+              {formatPrice(extraSeatPrice, extraSeatCurrency)}/month + GST
             </span>
           </span>
         </div>
+        )}
       </div>
     </div>
   );

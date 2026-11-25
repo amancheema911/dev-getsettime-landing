@@ -14,94 +14,13 @@ export type PricingTier = {
   seatDescription?: string;
   features: string[];
   popular?: boolean;
+  badge?: string;
   buttonText: string;
   buttonLink: string;
+  annualDiscountPercent?: number;
+  currency?: string;
+  extraSeatPrice?: number;
 };
-
-export const pricingTiers: PricingTier[] = [
-  // {
-  //   name: "Free",
-  //   subtitle: "Try GetSetTime at no cost",
-  //   price: "Free",
-  //   period: "month",
-  //   description: "Perfect for starting and testing the software with essential features - without paying.",
-  //   seatTitle: "1 seat included",
-  //   seatDescription: "First 250 bookings/month included free",
-  //   features: [
-  //     "First 250 bookings/month free",
-  //     "Public booking page",
-  //     "Email notifications",
-  //     "Mobile-responsive booking",
-  //     "Basic calendar view",
-  //     "Community support",
-  //   ],
-  //   buttonText: "Sign Up for Free",
-  //   buttonLink: `${REGISTER_URL}`,
-  // },
-  {
-    name: "Starter",
-    subtitle: "Great for getting started",
-    price: "999",
-    period: "month",
-    description: "Perfect for solo providers and small teams launching online booking.",
-    seatTitle: "1 seat included",
-    seatDescription: "First 250 bookings/month included free",
-    features: [
-      "First 250 bookings/month free",
-      "Public booking page",
-      "Basic calendar integration",
-      "Email notifications",
-      "Mobile-responsive booking",
-      "Basic reporting",
-      "Community support",
-    ],
-    buttonText: "Start Free",
-    buttonLink: `${REGISTER_URL}`,
-  },
-  {
-    name: "Professional",
-    subtitle: "Best for scaling businesses",
-    price: "1499",
-    period: "month",
-    description: "Ideal for growing clinics and salons that need automation and branding.",
-    seatTitle: "2 seats included",
-    seatDescription: "First 250 bookings/month included free",
-    features: [
-      "First 250 bookings/month free",
-      "Advanced calendar sync",
-      "WhatsApp & email reminders",
-      "Custom branding",
-      "Payment processing",
-      "Staff management",
-      "Advanced analytics",
-      "API access",
-      "Priority support",
-    ],
-    popular: true,
-    buttonText: "Get Started Free",
-    buttonLink: `${LOGIN_URL}`,
-  },
-  {
-    name: "Enterprise",
-    subtitle: "For advanced operations",
-    price: "2999",
-    period: "month",
-    description: "For multi-location teams needing security, roles, and dedicated support.",
-    seatTitle: "5 seats included",
-    seatDescription: "First 250 bookings/month included free",
-    features: [
-      "First 250 bookings/month free",
-      "Multi-location support",
-      "Advanced user roles",
-      "SSO integration",
-      "Custom integrations",
-      "Dedicated Support Team",
-      "Priority Calling Support"
-    ],
-    buttonText: "Contact Sales",
-    buttonLink: `${BASE_URL}/contact-us`,
-  },
-];
 
 export type ComparisonCell = boolean | string;
 
@@ -113,24 +32,6 @@ export type ComparisonRow = {
   enterprise: ComparisonCell;
   highlight?: boolean;
 };
-
-export const comparisonRows: ComparisonRow[] = [
-  { feature: "Monthly price (excl. GST)", free: "Free", starter: "₹999", professional: "₹1,499", enterprise: "₹2,999", highlight: true },
-  { feature: "Seats included", free: "1", starter: "1", professional: "2", enterprise: "5" },
-  { feature: "Bookings / month", free: "250 included", starter: "250 included", professional: "Unlimited", enterprise: "Unlimited" },
-  { feature: "Online booking page", free: true, starter: true, professional: true, enterprise: true },
-  { feature: "Google Calendar sync", free: false, starter: "Basic", professional: "Advanced", enterprise: "Advanced" },
-  { feature: "WhatsApp reminders", free: false, starter: false, professional: true, enterprise: true },
-  { feature: "Email notifications", free: true, starter: true, professional: true, enterprise: true },
-  { feature: "Custom branding", free: false, starter: false, professional: true, enterprise: true },
-  { feature: "Payment processing", free: false, starter: false, professional: true, enterprise: true },
-  { feature: "Staff management", free: false, starter: "Basic", professional: true, enterprise: true },
-  { feature: "Advanced analytics", free: false, starter: false, professional: true, enterprise: true },
-  { feature: "API access", free: false, starter: false, professional: true, enterprise: true },
-  { feature: "Multi-location", free: false, starter: false, professional: false, enterprise: true },
-  { feature: "SSO & custom integrations", free: false, starter: false, professional: false, enterprise: true },
-  { feature: "Support", free: "Community", starter: "Community", professional: "Priority", enterprise: "24/7 + SLA" },
-];
 
 /**
  * Configurable regional rates by ISO2 country or currency code.
@@ -147,7 +48,11 @@ export type RegionalPricingRates = {
     professional: number;
     enterprise: number;
   };
-  extraSeat: number;
+  extraSeat: {
+    starter: number;
+    professional: number;
+    enterprise: number;
+  };
 };
 
 /** Fully resolved pricing for UI (includes Intl-derived symbol). */
@@ -156,23 +61,34 @@ export type RegionalPricing = {
   symbol: string;
   taxLabel: string;
   currencyLabel: string;
+  /** True only when amounts come from `regionalPricing`, not the unlisted-country fallback. */
+  fromTable: boolean;
   prices: {
     starter: number;
     professional: number;
     enterprise: number;
   };
-  extraSeat: number;
+  extraSeat: {
+    starter: number;
+    professional: number;
+    enterprise: number;
+  };
 };
 
-function resolveRegionalPricing(rates: RegionalPricingRates): RegionalPricing {
+function resolveRegionalPricing(rates: RegionalPricingRates, fromTable: boolean): RegionalPricing {
   const currency = rates.currency.trim().toUpperCase();
   return {
     currency,
     symbol: getCurrencySymbol(currency),
     taxLabel: rates.taxLabel ?? "",
     currencyLabel: currency,
+    fromTable,
     prices: rates.prices,
-    extraSeat: rates.extraSeat,
+    extraSeat: {
+      starter: rates.extraSeat.starter,
+      professional: rates.extraSeat.professional,
+      enterprise: rates.extraSeat.enterprise,
+    },
   };
 }
 
@@ -182,17 +98,6 @@ function resolveRegionalPricing(rates: RegionalPricingRates): RegionalPricing {
  * Unlisted countries resolve via CountryList currency, then nearest matching rates.
  */
 export const regionalPricing: Record<string, RegionalPricingRates> = {
-  IN: {
-    currency: "INR",
-    taxLabel: "GST Extra",
-    prices: {
-      starter: 999,
-      professional: 1499,
-      enterprise: 2999,
-    },
-    extraSeat: 799,
-  },
-
   US: {
     currency: "USD",
     taxLabel: "Taxes may apply",
@@ -201,28 +106,13 @@ export const regionalPricing: Record<string, RegionalPricingRates> = {
       professional: 18,
       enterprise: 36,
     },
-    extraSeat: 10,
-  },
-  CA: {
-    currency: "CAD",
-    taxLabel: "Taxes may apply",
-    prices: {
-      starter: 16,
-      professional: 24,
-      enterprise: 48,
-    },
-    extraSeat: 14,
-  },
-  GB: {
-    currency: "GBP",
-    taxLabel: "VAT Extra",
-    prices: {
+    extraSeat: {
       starter: 10,
       professional: 15,
       enterprise: 30,
     },
-    extraSeat: 8,
   },
+  
   AE: {
     currency: "AED",
     taxLabel: "VAT Extra",
@@ -231,27 +121,27 @@ export const regionalPricing: Record<string, RegionalPricingRates> = {
       professional: 65,
       enterprise: 130,
     },
-    extraSeat: 35,
-  },
-  AU: {
-    currency: "AUD",
-    taxLabel: "GST Extra",
-    prices: {
-      starter: 18,
-      professional: 27,
-      enterprise: 54,
+    extraSeat: {
+      starter: 35,
+      professional: 50,
+      enterprise: 100,
     },
-    extraSeat: 15,
   },
-  SG: {
-    currency: "SGD",
-    taxLabel: "GST Extra",
+
+  /** Pound — United Kingdom and other GBP markets */
+  GB: {
+    currency: "GBP",
+    taxLabel: "VAT Extra",
     prices: {
-      starter: 16,
-      professional: 24,
-      enterprise: 48,
+      starter: 10,
+      professional: 15,
+      enterprise: 30,
     },
-    extraSeat: 14,
+    extraSeat: {
+      starter: 8,
+      professional: 12,
+      enterprise: 24,
+    },
   },
 
   /** Eurozone template — IT, ES, NL, FR, DE, etc. resolve here via CountryList currency */
@@ -263,7 +153,11 @@ export const regionalPricing: Record<string, RegionalPricingRates> = {
       professional: 17,
       enterprise: 34,
     },
-    extraSeat: 9,
+    extraSeat: {
+      starter: 9,
+      professional: 14,
+      enterprise: 28,
+    },
   },
 };
 
@@ -271,40 +165,39 @@ export const regionalPricing: Record<string, RegionalPricingRates> = {
  * Resolve pricing for an ISO2 country code.
  * 1. Exact country override (IN, US, …)
  * 2. Currency from CountryList → currency template (EUR) or matching rates
- * 3. US amounts with the visitor's real currency (e.g. JP → JPY / ¥)
+ * 3. US amounts kept only as a non-display fallback (`fromTable: false`)
  */
 export function getRegionalPricing(countryCode?: string | null): RegionalPricing {
   const key = (countryCode || "").trim().toUpperCase();
 
   if (key && regionalPricing[key]) {
-    return resolveRegionalPricing(regionalPricing[key]);
+    return resolveRegionalPricing(regionalPricing[key], true);
   }
 
   const currency = getCurrencyForCountry(key || "US");
 
-  // Currency-keyed template (e.g. FR → EUR)
+  // Currency-keyed template (e.g. FR → EUR, GB → GBP)
   if (regionalPricing[currency]) {
-    return resolveRegionalPricing(regionalPricing[currency]);
+    return resolveRegionalPricing(regionalPricing[currency], true);
   }
 
   // Same currency as a country-specific entry (e.g. other USD markets → US rates)
   for (const rates of Object.values(regionalPricing)) {
     if (rates.currency === currency) {
-      return resolveRegionalPricing(rates);
+      return resolveRegionalPricing(rates, true);
     }
   }
 
-  // No configured rates: keep US amounts, but show the visitor country's currency
-  // (JP → JPY ¥, BR → BRL R$, …) instead of forcing USD $.
+  // Unlisted countries keep API prices in the UI. This fallback is not shown.
   const fallback = regionalPricing.US;
   if (currency && currency !== fallback.currency) {
     return resolveRegionalPricing({
       ...fallback,
       currency,
-    });
+    }, false);
   }
 
-  return resolveRegionalPricing(fallback);
+  return resolveRegionalPricing(fallback, true);
 }
 
 export type RegionalPricePlan = "starter" | "professional" | "enterprise" | "extraSeat";
@@ -318,8 +211,8 @@ export function getRegionalPlanAmount(
     ? countryOrRegion
     : getRegionalPricing(typeof countryOrRegion === "string" ? countryOrRegion : null);
 
-  const amount = plan === "extraSeat" ? region.extraSeat : region.prices[plan];
-  return { amount, currency: region.currency, region };
+  const amount = plan === "extraSeat" ? region.extraSeat.starter : region.prices[plan];
+  return { amount: amount as number, currency: region.currency, region };
 }
 
 function isRegionalPricing(value: unknown): value is RegionalPricing {
@@ -327,7 +220,9 @@ function isRegionalPricing(value: unknown): value is RegionalPricing {
   const v = value as RegionalPricing;
   return (
     typeof v.currency === "string" &&
-    typeof v.extraSeat === "number" &&
+    typeof v.extraSeat.starter === "number" &&
+    typeof v.extraSeat.professional === "number" &&
+    typeof v.extraSeat.enterprise === "number" &&
     !!v.prices &&
     typeof v.prices.starter === "number"
   );
@@ -349,6 +244,12 @@ export function formatRegionalPrice(
   return formatPrice(amount, currency);
 }
 
+/** Apply regional prices onto API tiers when this visitor has a configured rate row. */
+export function tiersForRegion(tiers: PricingTier[], region: RegionalPricing): PricingTier[] {
+  if (!region.fromTable) return tiers;
+  return applyRegionalPrices(tiers, region);
+}
+
 /** Apply regional prices onto base pricingTiers (Free stays Free). */
 export function applyRegionalPrices(
   tiers: PricingTier[],
@@ -357,9 +258,12 @@ export function applyRegionalPrices(
   return tiers.map((tier) => {
     if (tier.price === "Free" || tier.name === "Free") return tier;
     const name = tier.name.toLowerCase();
-    if (name === "starter") return { ...tier, price: String(region.prices.starter) };
-    if (name === "professional") return { ...tier, price: String(region.prices.professional) };
-    if (name === "enterprise") return { ...tier, price: String(region.prices.enterprise) };
-    return tier;
+    if (name !== "starter" && name !== "professional" && name !== "enterprise") return tier;
+    return {
+      ...tier,
+      price: String(region.prices[name]),
+      currency: region.currency,
+      extraSeatPrice: region.extraSeat[name],
+    };
   });
 }

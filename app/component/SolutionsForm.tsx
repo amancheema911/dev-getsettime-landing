@@ -8,6 +8,7 @@ import InternationalPhoneField, {
 } from "./InternationalPhoneField";
 import PrivacyPolicyContent from "./PrivacyPolicyContent";
 import { useDialogBehavior } from "./useDialogBehavior";
+import { useProfessions } from "./useProfessions";
 
 type FormData = {
   fullName: string;
@@ -21,25 +22,7 @@ type FormData = {
   message: string;
 };
 
-const businessTypeOptions = [
-  "Doctor",
-  "Dentist",
-  "Therapy Consultant",
-  "Salon",
-  "Education",
-  "Consultant",
-  "Fitness",
-  "Real Estate",
-];
-
 const PLACEHOLDER_BUSINESS_TYPE = "Select Business Type";
-
-function getBusinessTypeOptions(selected?: string): string[] {
-  if (selected && selected !== PLACEHOLDER_BUSINESS_TYPE) {
-    return [selected];
-  }
-  return [PLACEHOLDER_BUSINESS_TYPE, ...businessTypeOptions];
-}
 
 const staffCounts = ["Just me", "2–5", "6–10", "11–25", "26+"];
 
@@ -143,7 +126,6 @@ const createEmptyFormData = (defaultBusinessType: string): FormData => ({
 });
 
 type SolutionsFormProps = {
-  /** Pre-selected business type label from the solution page */
   businessType?: string;
 };
 
@@ -185,9 +167,7 @@ function validateStep(step: number, data: FormData): FieldErrors {
   if (!data.businessName.trim()) errors.businessName = "Please enter your business name.";
   if (!data.email.trim()) errors.email = "Please enter your work email.";
   else if (!EMAIL_PATTERN.test(data.email.trim())) errors.email = "Please enter a valid work email.";
-  // if (!data.phone.trim() || !isValidInternationalPhone(data.phone)) {
-  //   errors.phone = "Please enter a valid phone number with country code.";
-  // }
+  
   if (!data.businessType || data.businessType === PLACEHOLDER_BUSINESS_TYPE) {
     errors.businessType = "Please select your business type.";
   }
@@ -200,8 +180,12 @@ function FieldError({ message }: { message?: string }) {
 }
 
 export default function SolutionsForm({ businessType }: SolutionsFormProps = {}) {
+  const { professions, status: professionsStatus } = useProfessions();
   const defaultBusinessType = businessType ?? PLACEHOLDER_BUSINESS_TYPE;
-  const businessTypes = getBusinessTypeOptions(defaultBusinessType);
+  const hasPreset = defaultBusinessType !== PLACEHOLDER_BUSINESS_TYPE;
+  const professionNames = professions.map((profession) => profession.name);
+  const businessTypes = hasPreset ? [defaultBusinessType] : professionNames;
+  const businessTypeKey = businessTypes.join("\0");
 
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>(() => createEmptyFormData(defaultBusinessType));
@@ -244,7 +228,7 @@ export default function SolutionsForm({ businessType }: SolutionsFormProps = {})
         option.removeAttribute("selected");
       }
     });
-  }, [formData.businessType, businessTypes]);
+  }, [formData.businessType, businessTypeKey]);
 
   const [status, setStatus] = useState<"" | "sending" | "success" | "error">("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -567,12 +551,22 @@ export default function SolutionsForm({ businessType }: SolutionsFormProps = {})
                   name="businessType"
                   value={formData.businessType}
                   onChange={handleChange}
+                  aria-busy={professionsStatus === "loading"}
                   aria-invalid={Boolean(fieldErrors.businessType)}
                   className={selectClass(Boolean(fieldErrors.businessType))}
                 >
-                  {businessTypes.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
+                  {!hasPreset && (
+                    <option value={PLACEHOLDER_BUSINESS_TYPE}>
+                      {professionsStatus === "loading" && businessTypes.length === 0
+                        ? "Loading professions…"
+                        : professionsStatus === "error" && businessTypes.length === 0
+                          ? "Professions unavailable"
+                          : PLACEHOLDER_BUSINESS_TYPE}
+                    </option>
+                  )}
+                  {businessTypes.map((name) => (
+                    <option key={name} value={name}>
+                      {name}
                     </option>
                   ))}
                 </select>

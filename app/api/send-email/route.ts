@@ -33,7 +33,7 @@ type ClaimFreeBookingPayload = {
   phone: string;
   bookingMethod: string;
   staffCount: string;
-  services: string;
+  message: string;
   preferredTime: string;
 };
 
@@ -193,7 +193,7 @@ function buildDemoEmail(data: SolutionsPayload): MailContent | NextResponse {
   const improvementsText = improvements.length ? improvements.join(", ") : "—";
 
   return {
-    fromName: fullName,
+    fromName: "GetSetTime",
     fromEmail: email,
     subject: `New Solutions Request: ${fullName} — ${businessType}`,
     html: emailShell({
@@ -229,7 +229,7 @@ function buildFreeBookingEmail(data: ClaimFreeBookingPayload): MailContent | Nex
     phone,
     bookingMethod,
     staffCount,
-    services,
+    message,
     preferredTime,
   } = data;
 
@@ -242,7 +242,7 @@ function buildFreeBookingEmail(data: ClaimFreeBookingPayload): MailContent | Nex
     !phone ||
     !bookingMethod ||
     !staffCount ||
-    !services ||
+    !message ||
     !preferredTime
   ) {
     return NextResponse.json(
@@ -252,13 +252,13 @@ function buildFreeBookingEmail(data: ClaimFreeBookingPayload): MailContent | Nex
   }
 
   return {
-    fromName: fullName,
+    fromName: "GetSetTime",
     fromEmail: email,
-    subject: `📅 Free Booking Setup: ${fullName} — ${businessType} (${formatDate()})`,
+    subject: `Claim Free Booking Request: ${fullName} — ${businessType}`,
     html: emailShell({
-      headerTitle: "Free Booking Page Setup",
-      subtitle: "New free booking page challenge submission",
-      leadSource: "Free Booking Setup Form",
+      headerTitle: "Claim Free Booking Request",
+      subtitle: "A new free booking page request has been submitted.",
+      leadSource: "Claim Free Booking Request Form",
       email,
       phone,
       footerNote: "Sent from GetSetTime CRM System • Do not share customer data",
@@ -266,13 +266,13 @@ function buildFreeBookingEmail(data: ClaimFreeBookingPayload): MailContent | Nex
         row("Full Name", fullName),
         row("Business Name", businessName),
         row("Business Type", businessType),
-        row("Website/Instagram", website || "—"),
+        row("Website", website || "—"),
         row("Country", country),
         row("Email", email),
         row("Phone", phone),
         row("Booking Method", bookingMethod),
         row("Staff Count", staffCount),
-        row("Main Services", services),
+        row("Message", message),
         row("Preferred Call Time", preferredTime),
       ].join(""),
     }),

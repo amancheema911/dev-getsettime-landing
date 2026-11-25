@@ -12,6 +12,7 @@ import { FaqSection } from "../component/FaqSection";
 import ScreenGate from "@/app/component/ScreenGate";
 import DemoVideoButton from "@/app/component/DemoVideoButton";
 import Button from "@/app/component/ui/button/Button";
+import { TestimonialSlider } from "@/app/component/TestimonialSlider";
 
 const pageUrl = `${BASE_URL}/claim-now-free-appointment-scheduling-software`;
 
@@ -80,42 +81,44 @@ const partnerLogos = [
 
 const stats = [
   {
-    value: "500+",
-    label: "Businesses Trust Us",
+    value: "One link",
+    label: "For every booking",
     icon: (
       <svg className="h-9 w-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-        <path d="M3 6h18M16 10a4 4 0 0 1-8 0" />
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
       </svg>
     ),
   },
   {
-    value: "50,000+",
-    label: "Appointments Booked Daily",
+    value: "Reminders",
+    label: "Sent automatically",
     icon: (
       <svg className="h-9 w-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="3" y="4" width="18" height="18" rx="2" />
-        <path d="M16 2v4M8 2v4M3 10h18" />
+        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
       </svg>
     ),
   },
   {
-    value: "95%",
-    label: "Customer Satisfaction",
+    value: "Meet link",
+    label: "Added when needed",
     icon: (
       <svg className="h-9 w-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M3 3v16a2 2 0 0 0 2 2h16" />
-        <path d="m7 14 4-4 4 4 5-6" />
+        <path d="M15 10l4.553-2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1-1.447.894L15 14" />
+        <rect x="3" y="6" width="12" height="12" rx="2" />
       </svg>
     ),
   },
   {
-    value: "24 Hrs",
-    label: "Setup Time",
+    value: "Reschedule",
+    label: "Clients change the visit",
     icon: (
       <svg className="h-9 w-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 6v6l4 2" />
+        <path d="M3 12a9 9 0 0 1 15.5-6.3L21 8" />
+        <path d="M21 3v5h-5" />
+        <path d="M21 12a9 9 0 0 1-15.5 6.3L3 16" />
+        <path d="M3 21v-5h5" />
       </svg>
     ),
   },
@@ -295,22 +298,22 @@ const faqItems = [
 
 const testimonials = [
   {
+    id: "ava-reynolds",
     name: "Ava Reynolds",
-    role: "Salon Owner, Mumbai",
-    image: "/salon-staff.webp",
-    review: '"GetSetTime completely transformed how we manage appointments. Our bookings increased by 60% in the first month!"',
+    role: "Salon Owner",
+    review: "GetSetTime completely transformed how we manage appointments. Our bookings increased by 60% in the first month!",
   },
   {
+    id: "mia-taylor",
     name: "Dr. Mia Taylor",
-    role: "Dentist, New York",
-    image: "/dentist-profile.webp",
-    review: '"No-shows reduced by 70% after we started using automated reminders. Highly recommend!"',
+    role: "Dentist",
+    review: "No-shows reduced by 70% after we started using automated reminders. Highly recommend!",
   },
   {
+    id: "camille-dubois",
     name: "Camille Dubois",
-    role: "Business Coach, London",
-    image: "/physiotherapy-profile.webp",
-    review: '"The free setup was amazing. Our new booking page looks so professional and our clients love it!"',
+    role: "Business Coach",
+    review: "The free setup was amazing. Our new booking page looks so professional and our clients love it!",
   },
 ];
 
@@ -746,47 +749,12 @@ export default function FreeBookingPage() {
           </div>
         </section>
 
-        {/* Loved by Business Owners Section */}
-        <section className="bg-white py-14 sm:py-20">
-          <div className="mx-auto container px-4 sm:px-6 lg:px-8">
-            {/* Heading */}
-            <Heading 
-              title="Loved by" 
-              highlightText="Business Owners"
-              wrapperClassName="text-center"
-            />
-            {/* Cards */}
-            <div className="mt-8 grid gap-8 lg:grid-cols-3">
-              {testimonials.map((item, index) => (
-                <div key={index} className="flex h-full flex-col rounded-2xl bg-white p-4 drop-shadow-lg transition-transform duration-300 hover:-translate-y-2 hover:drop-shadow-xl sm:p-6 lg:p-8">
-                  {/* Stars */}
-                  <div className="mb-5 flex gap-1">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                      <svg key={index} width="18" height="18" viewBox="0 0 18 18" fill="none">
-                        <path d="M9 0L11.29 6.77L18.5 7.5L13 12.5L14.22 19.23L9 15.75L3.78 19.23L5 12.5L-0.5 7.5L7.71 6.77L9 0Z" fill="#FFD700"/>
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="min-h-[4.5rem] flex-1">{item.review}</p>
-                  <div className="mt-6 flex min-h-12 items-center gap-3">
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      width={48}
-                      height={48}
-                      sizes="48px"
-                      className="h-12 w-12 shrink-0 rounded-full object-cover"
-                    />
-                    <div>
-                      <div className="text-md font-bold text-neutral-900">{item.name}</div>
-                      <p>{item.role}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <TestimonialSlider
+          badgeLabel="Testimonials"
+          title="Loved by Business Owners"
+          description="Salons, clinics, and coaches use their free booking page to take appointments without the back-and-forth."
+          testimonials={testimonials}
+        />
 
         {/* FAQ */}
         <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.14),transparent_28%),radial-gradient(circle_at_top_right,rgba(168,85,247,0.16),transparent_24%),linear-gradient(180deg,#f8fafc_0%,#ffffff_48%,#f8fafc_100%)] py-14 sm:py-20">

@@ -154,7 +154,7 @@ export default function DoctorAppointmentSchedulingSoftware() {
           "width": 1200,
           "height": 630
         },
-        "description": "GetSetTime is a smart appointment scheduling platform trusted by 5,000+ doctors, salon owners, and wellness professionals. Simple to set up, smart enough to run itself.",
+        "description": "GetSetTime is a smart appointment scheduling platform trusted by doctors, salon owners, and wellness professionals. Simple to set up, smart enough to run itself.",
         "slogan": "Precision Scheduling for Modern Care",
         "foundingDate": "2025",
         "numberOfEmployees": {
@@ -339,11 +339,11 @@ export default function DoctorAppointmentSchedulingSoftware() {
                           </svg>
                       </span>
                       <div>
-                          <div className="text-lg font-bold text-neutral-900">10,000+</div>
-                          <div className="text-xs font-semibold text-neutral-800">Appointments</div>
+                          <div className="text-lg font-bold text-neutral-900">24/7</div>
+                          <div className="text-xs font-semibold text-neutral-800">Online booking</div>
                       </div>
                   </div>
-                  <div className="text-xs text-neutral-500">Booked across clinics using GetSetTime</div>
+                  <div className="text-xs text-neutral-500">Patients book a slot without calling the clinic</div>
               </div>
 
               <div className="rounded-2xl border border-neutral-100 bg-white p-3 drop-shadow-sm space-y-1">
@@ -365,15 +365,15 @@ export default function DoctorAppointmentSchedulingSoftware() {
                   <div className="flex items-center gap-2">
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
                           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.98 9.11c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0a3 3 0 11-6 0" />
                           </svg>
                       </span>
                       <div>
-                          <div className="text-lg font-bold text-neutral-900">4.8 ★</div>
-                          <div className="text-xs font-semibold text-neutral-800">Patient Rating</div>
+                          <div className="text-lg font-bold text-neutral-900">60%</div>
+                          <div className="text-xs font-semibold text-neutral-800">Fewer no-shows</div>
                       </div>
                   </div>
-                  <div className="text-xs text-neutral-500">Average feedback from patients</div>
+                  <div className="text-xs text-neutral-500">Reminders go out before every patient visit</div>
               </div>
             </div>
             </ScreenGate>

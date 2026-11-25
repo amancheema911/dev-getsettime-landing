@@ -1,12 +1,9 @@
 "use client";
-import {
-  formatRegionalPrice,
-  getRegionalPricing,
-  type RegionalPricePlan,
-} from "@/lib/pricing-data";
+import type { RegionalPricePlan } from "@/lib/pricing-data";
+import { findPublicPlan } from "@/lib/public-plans";
+import { formatPrice } from "@/utils/currency";
+import { usePlans } from "./usePlans";
 import { useRegionalPricing } from "./useRegionalPricing";
-
-const INR_REGION = getRegionalPricing("IN");
 
 type RegionalPriceProps = {
   /** Which value to display */
@@ -15,33 +12,59 @@ type RegionalPriceProps = {
   prefix?: string;
   /** Text rendered after the amount, e.g. "/month" */
   suffix?: string;
+  className?: string;
+  amountClassName?: string;
+  suffixClassName?: string;
 };
 
-/**
- * Client UI wrapper around `formatRegionalPrice` from `@/lib/pricing-data`.
- * Updates when the visitor/selected country changes.
- *
- * For non-React / server use, call formatRegionalPrice(plan, countryCode) directly.
- */
+/** Starter and extra-seat amounts from the plans API for the visitor currency. */
 export default function RegionalPrice({
   plan = "extraSeat",
   prefix,
   suffix,
+  className,
+  amountClassName,
+  suffixClassName,
 }: RegionalPriceProps) {
   const region = useRegionalPricing();
-  const amount = formatRegionalPrice(plan, region);
-  const reserved = formatRegionalPrice(plan, INR_REGION);
+  const { plans, status } = usePlans(region.currency);
+  const regionalAmount = region.fromTable
+    ? plan === "extraSeat"
+      ? region.extraSeat.starter
+      : region.prices[plan]
+    : null;
+  const apiPlan = plan === "extraSeat" ? null : findPublicPlan(plans, plan);
+  const apiAmount = !plans
+    ? null
+    : plan === "extraSeat"
+      ? plans.extraSeatPrice
+      : apiPlan
+        ? apiPlan.price
+        : null;
+  const currency = region.fromTable ? region.currency : plans?.priceCurrency || region.currency;
+  const resolvedAmount = region.fromTable ? regionalAmount : apiAmount;
+  const amount = resolvedAmount == null || resolvedAmount <= 0 ? null : formatPrice(resolvedAmount, currency);
 
-  return (
+  if (plan === "extraSeat" && !amount) return null;
+
+  const price = (
     <>
       {prefix}
-      <span className="inline-grid align-baseline">
-        <span className="invisible col-start-1 row-start-1 whitespace-nowrap tabular-nums" aria-hidden="true">
-          {reserved}
-        </span>
-        <span className="col-start-1 row-start-1 whitespace-nowrap tabular-nums">{amount}</span>
+      <span className={amountClassName ?? "inline-block whitespace-nowrap tabular-nums"}>
+        {amount ?? (status === "error" ? "—" : "\u00a0")}
       </span>
-      {suffix}
+      {suffix ? <span className={suffixClassName}>{suffix}</span> : null}
     </>
   );
+
+  if (!className) return price;
+  return <span className={className}>{price}</span>;
+}
+
+/** Highest annual discount percent returned by the plans API. */
+export function AnnualDiscountPercent() {
+  const region = useRegionalPricing();
+  const plans = usePlans(region.currency).plans;
+  const percent = plans?.annualDiscountPercent ?? 0;
+  return <>{percent > 0 ? `${percent}%` : "—"}</>;
 }

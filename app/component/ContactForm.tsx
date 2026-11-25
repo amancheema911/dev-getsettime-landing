@@ -3,6 +3,7 @@ import { useState } from "react";
 import InternationalPhoneField, {
   isValidInternationalPhone,
 } from "./InternationalPhoneField";
+import { useProfessions } from "./useProfessions";
 
 type FormData = {
   name: string;
@@ -13,15 +14,7 @@ type FormData = {
 };
 
 const ContactForm = () => {
-  const professions = [
-    "Healthcare",
-    "Beauty & Wellness",
-    "Education",
-    "Artist",
-    "Salon",
-    "Financial Services",
-    "Professional Services",
-  ];
+  const { professions, status: professionsStatus } = useProfessions();
 
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -164,10 +157,16 @@ const ContactForm = () => {
               <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
             </svg>
           </span>
-          <select id="professions" aria-label="Select Professions" name="professions" required value={formData.professions} onChange={handleChange} className="block w-full appearance-none rounded-xl border border-slate-200/80 bg-white/80 py-3 sm:py-2.5 pl-10 pr-10 text-neutral-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <option value="">Select a Profession</option>
+          <select id="professions" aria-label="Select Professions" aria-busy={professionsStatus === "loading"} name="professions" required value={formData.professions} onChange={handleChange} className="block w-full appearance-none rounded-xl border border-slate-200/80 bg-white/80 py-3 sm:py-2.5 pl-10 pr-10 text-neutral-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="">
+              {professionsStatus === "loading"
+                ? "Loading professions…"
+                : professionsStatus === "error"
+                  ? "Professions unavailable"
+                  : "Select a Profession"}
+            </option>
             {professions.map((profession) => (
-              <option key={profession} value={profession}>{profession}</option>
+              <option key={profession.id} value={profession.name}>{profession.name}</option>
             ))}
           </select>
         </div>

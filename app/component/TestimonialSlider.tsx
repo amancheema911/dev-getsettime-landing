@@ -159,7 +159,7 @@ export const TestimonialSlider = ({
             const pages = chunkItems(items, track.size);
             const trackPage = Math.min(activePage, pages.length - 1);
             return (
-              <div key={track.size} className={`overflow-hidden ${track.className}`}>
+              <div key={track.size} className={`overflow-hidden py-4 ${track.className}`}>
                 <div
                   className="flex transition-transform duration-300 ease-out"
                   style={{ transform: `translateX(-${trackPage * 100}%)` }}

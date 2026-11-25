@@ -155,15 +155,15 @@ const faqItems = [
                             <div className="flex items-center gap-2">
                                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-600">
                                     <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4 0m4 0a4 4 0 014 4" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-10.5z" />
                                     </svg>
                                 </span>
                                 <div>
-                                    <div className="text-lg font-bold text-neutral-900">10,000+</div>
-                                    <div className="text-xs font-semibold text-neutral-800">Appointments</div>
+                                    <div className="text-lg font-bold text-neutral-900">On the listing</div>
+                                    <div className="text-xs font-semibold text-neutral-800">Site visits</div>
                                 </div>
                             </div>
-                            <div className="text-xs text-neutral-500">Booked across real-estate using GetSetTime</div>
+                            <div className="text-xs text-neutral-500">Buyers book a viewing from the link on your listing, WhatsApp, or website</div>
                         </div>
 
                         <div className="rounded-2xl border border-neutral-100 bg-white p-3 drop-shadow-sm space-y-1">
@@ -185,15 +185,15 @@ const faqItems = [
                             <div className="flex items-center gap-2">
                                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
                                     <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.98 9.11c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                     </svg>
                                 </span>
                                 <div>
-                                    <div className="text-lg font-bold text-neutral-900">4.8 ★</div>
-                                    <div className="text-xs font-semibold text-neutral-800">Real Estate Rating</div>
+                                    <div className="text-lg font-bold text-neutral-900">On Teams</div>
+                                    <div className="text-xs font-semibold text-neutral-800">Remote consults</div>
                                 </div>
                             </div>
-                            <div className="text-xs text-neutral-500">Average feedback from buyers</div>
+                            <div className="text-xs text-neutral-500">Buyers book a video call when they can&apos;t visit the property</div>
                         </div>
                       </div>
                   </div>

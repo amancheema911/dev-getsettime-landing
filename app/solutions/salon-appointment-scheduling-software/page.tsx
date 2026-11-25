@@ -80,7 +80,7 @@ const schemaData = {
               "width": 1200,
               "height": 630
             },
-            "description": "GetSetTime is a smart appointment scheduling platform trusted by 5,000+ doctors, salon owners, and wellness professionals. Simple to set up, smart enough to run itself.",
+            "description": "GetSetTime is a smart appointment scheduling platform trusted by doctors, salon owners, and wellness professionals. Simple to set up, smart enough to run itself.",
             "slogan": "Precision Scheduling for Modern Care",
             "foundingDate": "2025",
             "numberOfEmployees": {
@@ -342,11 +342,11 @@ return (
                                         </svg>
                                     </span>
                                     <div>
-                                        <div className="text-lg font-bold text-neutral-900">10,000+</div>
-                                        <div className="text-xs font-semibold text-neutral-800">Appointments</div>
+                                        <div className="text-lg font-bold text-neutral-900">No clashes</div>
+                                        <div className="text-xs font-semibold text-neutral-800">Stylist calendars</div>
                                     </div>
                                 </div>
-                                <div className="text-xs text-neutral-500">Booked across salons using GetSetTime</div>
+                                <div className="text-xs text-neutral-500">Each stylist keeps their own hours, so two clients never share a chair</div>
                             </div>
 
                             <div className="rounded-2xl border border-neutral-100 bg-white p-3 drop-shadow-sm space-y-1">
@@ -368,15 +368,15 @@ return (
                                 <div className="flex items-center gap-2">
                                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
                                         <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.98 9.11c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
                                         </svg>
                                     </span>
                                     <div>
-                                        <div className="text-lg font-bold text-neutral-900">4.8 ★</div>
-                                        <div className="text-xs font-semibold text-neutral-800">Customer Rating</div>
+                                        <div className="text-lg font-bold text-neutral-900">2×</div>
+                                        <div className="text-xs font-semibold text-neutral-800">Faster confirmations</div>
                                     </div>
                                 </div>
-                                <div className="text-xs text-neutral-500">Average feedback from clients</div>
+                                <div className="text-xs text-neutral-500">Clients confirm from the link you share on WhatsApp and Instagram</div>
                             </div>
                         </div>
                     </ScreenGate>
@@ -384,7 +384,6 @@ return (
                 
                 {/* Right column - Interactive Demo */}
                 <div className="relative space-y-4 animate-fade-in-scale">
-                    
                     <ScreenGate minWidth={768}>
                     <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
                         <div className="rounded-2xl overflow-hidden drop-shadow-lg">
@@ -395,10 +394,8 @@ return (
                         </div>
                     </div>
                     </ScreenGate>
-
                     <div className="relative">
                         <div className="relative overflow-hidden rounded-2xl border border-neutral-200/80 bg-white drop-shadow-xl">
-
                             <div className="relative bg-gradient-to-br from-white via-indigo-50/30 to-white p-3 sm:p-4">
                                 <ScreenGate minWidth={640}>
                                 {/* KPI strip */}
@@ -477,15 +474,6 @@ return (
                                                 </div>
                                             ))}
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div className="relative mt-4 flex items-center gap-3 rounded-xl border border-indigo-100 bg-indigo-50 px-3 py-3 sm:px-4">
-                                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-white">
-                                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                                    </span>
-                                    <div className="text-sm font-medium leading-relaxed text-indigo-700">
-                                        WhatsApp reminders sent to <span className="font-bold">15 clients</span> for tomorrow&apos;s bookings.
                                     </div>
                                 </div>
                             </div>

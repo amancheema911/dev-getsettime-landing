@@ -1,18 +1,42 @@
 import Image from "next/image";
 
+function buildCurrentMonth(date = new Date()) {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const today = date.getDate();
+  const monthLabel = date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  const firstWeekday = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPreviousMonth = new Date(year, month, 0).getDate();
+
+  const calendarDays: { day: number; muted: boolean; current: boolean }[] = [];
+
+  for (let i = firstWeekday - 1; i >= 0; i--) {
+    calendarDays.push({ day: daysInPreviousMonth - i, muted: true, current: false });
+  }
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    calendarDays.push({ day, muted: false, current: day === today });
+  }
+
+  const trailingDays = (7 - (calendarDays.length % 7)) % 7;
+  for (let day = 1; day <= trailingDays; day++) {
+    calendarDays.push({ day, muted: true, current: false });
+  }
+
+  return { monthLabel, calendarDays };
+}
+
 export default function FreeBookingPhoneMockup() {
   const services = [
-    { name: "Hair Cut & Styling", price: "$40", selected: true },
-    { name: "Hair Color", price: "$70", selected: false },
-    { name: "Spa & Treatment", price: "$80", selected: false },
+    { name: "Hair Cut & Styling", selected: true },
+    { name: "Hair Color", selected: false },
+    { name: "Spa & Treatment", selected: false },
   ];
 
   const timeSlots = ["10:00 AM", "11:00 AM", "12:00 PM", "02:00 PM"];
   const days = ["S", "M", "T", "W", "T", "F", "S"];
-  const mayDays = [
-    ...[28, 29, 30].map((d) => ({ day: d, muted: true })),
-    ...Array.from({ length: 31 }, (_, i) => ({ day: i + 1, muted: false })),
-  ];
+  const { monthLabel, calendarDays } = buildCurrentMonth();
 
   return (
     <div className="relative mx-auto w-full max-w-[320px]">
@@ -83,19 +107,18 @@ export default function FreeBookingPhoneMockup() {
                       />
                       <span className="font-medium text-neutral-700">{s.name}</span>
                     </span>
-                    <span className="font-semibold text-neutral-600">{s.price}</span>
                   </div>
                 ))}
               </div>
-              <div className="mt-4 text-xs text-indigo-600">View More Services</div>
+              {/* <div className="mt-4 text-xs text-indigo-600">View More Services</div> */}
             </div>
 
             {/* Calendar */}
+            <div className="mb-1 text-sm font-semibold text-neutral-800">Select Date &amp; Time</div>
             <div className="rounded-lg bg-white p-2 drop-shadow-sm">
-              <div className="mb-1 text-sm font-semibold text-neutral-800">Select Date &amp; Time</div>
               <div className="mb-1 flex items-center justify-between text-xs font-semibold text-neutral-700">
                 <span>‹</span>
-                <span>May 2024</span>
+                <span>{monthLabel}</span>
                 <span>›</span>
               </div>
               <div className="grid grid-cols-7 gap-0.5 text-center text-xs text-neutral-400">
@@ -104,11 +127,11 @@ export default function FreeBookingPhoneMockup() {
                 ))}
               </div>
               <div className="mt-0.5 grid grid-cols-7 gap-1 text-center text-xs">
-                {mayDays.slice(0, 35).map((d, i) => (
+                {calendarDays.map((d, i) => (
                   <span
                     key={i}
                     className={`flex h-6 w-6 items-center justify-center rounded-full mx-auto ${
-                      d.day === 16 && !d.muted
+                      d.current
                         ? "bg-[#3D3AF3] font-bold text-white"
                         : d.muted
                           ? "text-neutral-300"
