@@ -96,6 +96,15 @@ export const PricingCard: FC<{
             <div className="text-xs font-semibold uppercase tracking-widest text-indigo-600">{tier.name}</div>
             <div className="min-h-5 text-sm">{tier.subtitle}</div>
           </div>
+          <span className="shrink-0 text-right">
+            {tier.price === "Free" || !tier.taxLabel ? (
+              null
+            ) : (
+              <span className="inline-block rounded-lg border border-indigo-200 bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-600">
+                {tier.taxLabel}
+              </span>
+            )}
+          </span>
         </div>
 
         <div className="relative min-h-11">

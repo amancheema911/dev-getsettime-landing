@@ -347,17 +347,6 @@ export default function HeroBanner() {
                                     </div>
                                     </div>
                                 </div>
-                                <div className="mt-2 flex flex-wrap gap-2">
-                                    <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-600">
-                                    Confirmed <span className="font-bold">128</span>
-                                    </span>
-                                    <span className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-600">
-                                    Pending <span className="font-bold">32</span>
-                                    </span>
-                                    <span className="inline-flex items-center gap-1 rounded-md bg-red-50 px-2 py-0.5 text-[10px] font-medium text-red-600">
-                                    Cancelled <span className="font-bold">6</span>
-                                    </span>
-                                </div>
                             </div>
 
                             {/* Calendar */}

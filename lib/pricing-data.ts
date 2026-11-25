@@ -20,6 +20,7 @@ export type PricingTier = {
   annualDiscountPercent?: number;
   currency?: string;
   extraSeatPrice?: number;
+  taxLabel?: string;
 };
 
 export type ComparisonCell = boolean | string;
@@ -185,6 +186,7 @@ export function getRegionalPricing(countryCode?: string | null): RegionalPricing
     return resolveRegionalPricing({
       ...regionalPricing.US,
       currency: "INR",
+      taxLabel: "GST Extra",
     }, false);
   }
 
@@ -259,8 +261,12 @@ export function plansRequestCurrency(region: RegionalPricing): string {
  * INR and every other currency keep the plans API amounts, labeled in the visitor currency.
  */
 export function tiersForRegion(tiers: PricingTier[], region: RegionalPricing): PricingTier[] {
-  if (region.fromTable) return applyRegionalPrices(tiers, region);
-  return tiers.map((tier) => ({ ...tier, currency: region.currency }));
+  const priced = region.fromTable
+    ? applyRegionalPrices(tiers, region)
+    : tiers.map((tier) => ({ ...tier, currency: region.currency }));
+  return priced.map((tier) =>
+    tier.price === "Free" || tier.name === "Free" ? tier : { ...tier, taxLabel: region.taxLabel }
+  );
 }
 
 /** Apply regional prices onto base pricingTiers (Free stays Free). */

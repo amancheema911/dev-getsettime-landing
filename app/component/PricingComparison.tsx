@@ -71,7 +71,7 @@ const LIVE_COMPARISON: {
   },
   {
     feature: "Support",
-    values: { starter: "Community", professional: "Priority", enterprise: "24/7 + SLA" },
+    values: { starter: "Community", professional: "Priority", enterprise: "24/7" },
   },
 ];
 
