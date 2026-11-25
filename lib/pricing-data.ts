@@ -107,24 +107,9 @@ export const regionalPricing: Record<string, RegionalPricingRates> = {
       enterprise: 36,
     },
     extraSeat: {
-      starter: 10,
-      professional: 15,
-      enterprise: 30,
-    },
-  },
-  
-  AE: {
-    currency: "AED",
-    taxLabel: "VAT Extra",
-    prices: {
-      starter: 45,
-      professional: 65,
-      enterprise: 130,
-    },
-    extraSeat: {
-      starter: 35,
-      professional: 50,
-      enterprise: 100,
+      starter: 6,
+      professional: 9,
+      enterprise: 13,
     },
   },
 
@@ -244,10 +229,13 @@ export function formatRegionalPrice(
   return formatPrice(amount, currency);
 }
 
-/** Apply regional prices onto API tiers when this visitor has a configured rate row. */
+/**
+ * USD, GBP, and EUR amounts come only from `regionalPricing`.
+ * Every other currency keeps the plans API amounts and is labeled with the visitor currency.
+ */
 export function tiersForRegion(tiers: PricingTier[], region: RegionalPricing): PricingTier[] {
-  if (!region.fromTable) return tiers;
-  return applyRegionalPrices(tiers, region);
+  if (region.fromTable) return applyRegionalPrices(tiers, region);
+  return tiers.map((tier) => ({ ...tier, currency: region.currency }));
 }
 
 /** Apply regional prices onto base pricingTiers (Free stays Free). */

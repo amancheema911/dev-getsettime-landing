@@ -42,7 +42,7 @@ export default function PricingHeroPreview() {
     [plans, region]
   );
   const extraSeatPrice = region.fromTable ? region.extraSeat.starter : plans?.extraSeatPrice ?? 0;
-  const extraSeatCurrency = region.fromTable ? region.currency : plans?.priceCurrency ?? region.currency;
+  const extraSeatCurrency = region.currency;
   const starter = tiers.find((tier) => tier.name === "Starter") ?? tiers[0];
   const usagePercent = Math.round((USED_BOOKINGS / BOOKING_ALLOWANCE) * 100);
 

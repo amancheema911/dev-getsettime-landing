@@ -346,7 +346,7 @@ export default function Pricing({
   const isPage = variant === "page";
   const region = useRegionalPricing();
   const { plans, status } = usePlans(region.currency);
-  const priceCurrency = region.fromTable ? region.currency : plans?.priceCurrency ?? region.currency;
+  const priceCurrency = region.currency;
   const discountPercent = useMemo(() => {
     const percents = (plans?.plans ?? []).map((plan) => annualDiscountForTier(plan.name, plan.annualDiscountPercent));
     return percents.length ? Math.max(...percents) : 0;
@@ -374,7 +374,7 @@ export default function Pricing({
     [plans, region]
   );
   const extraSeatPrice = region.fromTable ? region.extraSeat.starter : plans?.extraSeatPrice ?? 0;
-  const extraSeatCurrency = region.fromTable ? region.currency : plans?.priceCurrency ?? region.currency;
+  const extraSeatCurrency = region.currency;
 
   return (
     <section id="pricing" className={`relative bg-[#f6f7fb] scroll-mt-20 py-14 sm:py-20`}>

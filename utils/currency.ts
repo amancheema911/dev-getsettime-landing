@@ -4,67 +4,18 @@
 
 /** Preferred display symbols for common ISO 4217 codes. */
 const CURRENCY_SYMBOLS: Record<string, string> = {
-  // Major
   USD: "$",
   EUR: "€",
   GBP: "£",
   INR: "₹",
-  JPY: "¥",
-  CNY: "¥",
-  KRW: "₩",
-
-  // Middle East
-  AED: "AED",
-  SAR: "SAR",
-  QAR: "QAR",
-  KWD: "KWD",
-  BHD: "BHD",
-  OMR: "OMR",
-
-  // Asia-Pacific
-  HKD: "HK$",
-  SGD: "S$",
-  MYR: "RM",
-  PHP: "₱",
-  THB: "฿",
-  IDR: "Rp",
-  VND: "₫",
-  TWD: "NT$",
-  PKR: "Rs",
-  BDT: "৳",
-  LKR: "Rs",
-  NPR: "Rs",
-
-  // Americas / Oceania (disambiguate from USD $)
-  CAD: "CA$",
-  AUD: "A$",
-  NZD: "NZ$",
-  MXN: "MX$",
-  BRL: "R$",
-  CLP: "CLP$",
-  ARS: "ARS$",
-  COP: "COL$",
-
-  // Europe (non-euro)
-  CHF: "CHF",
-  SEK: "kr",
-  NOK: "kr",
-  DKK: "kr",
-  PLN: "zł",
-  CZK: "Kč",
-  HUF: "Ft",
-  RON: "lei",
-  TRY: "₺",
-  RUB: "₽",
-  UAH: "₴",
-
-  // Africa
-  ZAR: "R",
-  NGN: "₦",
-  EGP: "E£",
-  KES: "KSh",
-  GHS: "GH₵",
 };
+
+/** Currencies that display with a dollar sign, including non-USD dollars. */
+const DOLLAR_CURRENCIES = new Set([
+  "USD", "CAD", "AUD", "NZD", "SGD", "HKD", "TWD", "MXN", "COP", "CLP", "ARS",
+  "XCD", "BBD", "BMD", "BSD", "BZD", "FJD", "GYD", "JMD", "KYD", "LRD", "NAD",
+  "SBD", "SRD", "TTD", "BND",
+]);
 
 /** True when Intl accepts this as an ISO 4217 currency code. */
 export function isValidCurrencyCode(currencyCode: string): boolean {
@@ -95,16 +46,8 @@ export function isValidCurrencyCode(currencyCode: string): boolean {
  * @example getCurrencySymbol("THB") → "฿"
  * @example getCurrencySymbol("UNKNOWN") → "UNKNOWN"
  */
-export function getCurrencySymbol(currencyCode: string): string {
-  const code = currencyCode.trim().toUpperCase();
-  if (!code) return "";
-
-  if (CURRENCY_SYMBOLS[code]) return CURRENCY_SYMBOLS[code];
-
-  if (!isValidCurrencyCode(code)) return code;
-
+function intlCurrencySymbol(code: string): string {
   try {
-    // Prefer symbol, then narrowSymbol, so HKD/SGD-style codes resolve better when unmapped.
     for (const currencyDisplay of ["symbol", "narrowSymbol"] as const) {
       const part = new Intl.NumberFormat("en", {
         style: "currency",
@@ -112,16 +55,30 @@ export function getCurrencySymbol(currencyCode: string): string {
         currencyDisplay,
       })
         .formatToParts(0)
-        .find((p) => p.type === "currency");
-
+        .find((entry) => entry.type === "currency");
       const symbol = part?.value?.trim() ?? "";
-      if (symbol && symbol.toUpperCase() !== code) return symbol;
       if (symbol) return symbol;
     }
-    return code;
   } catch {
-    return code;
+    return "";
   }
+  return "";
+}
+
+export function getCurrencySymbol(currencyCode: string): string {
+  const code = currencyCode.trim().toUpperCase();
+  if (!code) return "";
+
+  if (CURRENCY_SYMBOLS[code]) return CURRENCY_SYMBOLS[code];
+  if (DOLLAR_CURRENCIES.has(code)) return "$";
+  if (!isValidCurrencyCode(code)) return code;
+
+  const symbol = intlCurrencySymbol(code);
+  if (!symbol || symbol.toUpperCase() === code) return code;
+  if (symbol.includes("$") || symbol.includes("＄")) return "$";
+  if (symbol.includes("£")) return "£";
+  if (symbol.includes("€")) return "€";
+  return symbol;
 }
 
 /**
@@ -129,9 +86,11 @@ export function getCurrencySymbol(currencyCode: string): string {
  *
  * @example formatPrice(999, "INR") → "₹999"
  * @example formatPrice(12, "USD") → "$12"
- * @example formatPrice(16, "SGD") → "S$16"
- * @example formatPrice(10, "HKD") → "HK$10"
- * @example formatPrice(14, "CAD") → "CA$14"
+ * @example formatPrice(16, "SGD") → "$16"
+ * @example formatPrice(10, "HKD") → "$10"
+ * @example formatPrice(14, "CAD") → "$14"
+ * @example formatPrice(10, "GBP") → "£10"
+ * @example formatPrice(11, "EUR") → "€11"
  * @example formatPrice(45, "AED") → "AED 45"
  * @example formatPrice(100, "UNKNOWN") → "UNKNOWN 100"
  */

@@ -41,7 +41,7 @@ export default function RegionalPrice({
       : apiPlan
         ? apiPlan.price
         : null;
-  const currency = region.fromTable ? region.currency : plans?.priceCurrency || region.currency;
+  const currency = region.currency;
   const resolvedAmount = region.fromTable ? regionalAmount : apiAmount;
   const amount = resolvedAmount == null || resolvedAmount <= 0 ? null : formatPrice(resolvedAmount, currency);
 
