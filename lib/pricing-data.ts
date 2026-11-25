@@ -180,16 +180,15 @@ export function getRegionalPricing(countryCode?: string | null): RegionalPricing
   if (symbol === "£") return resolveRegionalPricing(regionalPricing.GB, true);
   if (symbol === "€") return resolveRegionalPricing(regionalPricing.EUR, true);
 
-  // Other currencies, including INR, keep the plans API.
-  const fallback = regionalPricing.US;
-  if (currency && currency !== fallback.currency) {
+  // India keeps the plans API. Every other currency uses the dollar prices.
+  if (currency === "INR") {
     return resolveRegionalPricing({
-      ...fallback,
-      currency,
+      ...regionalPricing.US,
+      currency: "INR",
     }, false);
   }
 
-  return resolveRegionalPricing(fallback, true);
+  return resolveRegionalPricing(regionalPricing.US, true);
 }
 
 export type RegionalPricePlan = "starter" | "professional" | "enterprise" | "extraSeat";
@@ -238,8 +237,8 @@ export function formatRegionalPrice(
 
 /**
  * Currency shown for a selected country.
- * Dollar-sign countries use the USD row, pound countries the GBP row, and euro countries the EUR row.
- * India and every other currency keep the plans API.
+ * Dollar countries use the USD row, pound countries the GBP row, and euro countries the EUR row.
+ * Every other country uses the dollar prices too. India keeps the plans API.
  */
 export function currencyForCountry(countryCode?: string | null): string {
   return getRegionalPricing(countryCode).currency;
