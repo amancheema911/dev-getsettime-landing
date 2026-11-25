@@ -1,5 +1,5 @@
 "use client";
-import type { RegionalPricePlan } from "@/lib/pricing-data";
+import { plansRequestCurrency, type RegionalPricePlan } from "@/lib/pricing-data";
 import { findPublicPlan } from "@/lib/public-plans";
 import { formatPrice } from "@/utils/currency";
 import { usePlans } from "./usePlans";
@@ -17,7 +17,7 @@ type RegionalPriceProps = {
   suffixClassName?: string;
 };
 
-/** Starter and extra-seat amounts from the plans API for the visitor currency. */
+/** Starter price and extra-seat price for the selected country. INR comes from the plans API. USD, GBP, and EUR come from pricing-data. */
 export default function RegionalPrice({
   plan = "extraSeat",
   prefix,
@@ -27,7 +27,7 @@ export default function RegionalPrice({
   suffixClassName,
 }: RegionalPriceProps) {
   const region = useRegionalPricing();
-  const { plans, status } = usePlans(region.currency);
+  const { plans, status } = usePlans(plansRequestCurrency(region));
   const regionalAmount = region.fromTable
     ? plan === "extraSeat"
       ? region.extraSeat.starter
@@ -64,7 +64,7 @@ export default function RegionalPrice({
 /** Highest annual discount percent returned by the plans API. */
 export function AnnualDiscountPercent() {
   const region = useRegionalPricing();
-  const plans = usePlans(region.currency).plans;
+  const plans = usePlans(plansRequestCurrency(region)).plans;
   const percent = plans?.annualDiscountPercent ?? 0;
   return <>{percent > 0 ? `${percent}%` : "—"}</>;
 }

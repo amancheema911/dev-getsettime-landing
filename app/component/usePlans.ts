@@ -38,7 +38,7 @@ function loadPlans(priceCurrency: string) {
   return request;
 }
 
-/** Plans for the visitor currency. That code is sent as `priceCurrency`. */
+/** Plans catalog for one ISO currency. USD, GBP, and EUR prices are not requested here. */
 export function usePlans(priceCurrency: string) {
   const code = (priceCurrency || "INR").trim().toUpperCase();
   const [plans, setPlans] = useState<PublicPlans | null>(memory.get(code) ?? null);

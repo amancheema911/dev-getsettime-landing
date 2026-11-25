@@ -1,7 +1,7 @@
 "use client";
 import { REGISTER_URL } from "@/lib/config";
 import { formatPrice } from "@/utils/currency";
-import { tiersForRegion } from "@/lib/pricing-data";
+import { plansRequestCurrency, tiersForRegion } from "@/lib/pricing-data";
 import { annualDiscountForTier, discountedPrice, toPricingTier } from "@/lib/public-plans";
 import { usePlans } from "./usePlans";
 import { useRegionalPricing } from "./useRegionalPricing";
@@ -345,7 +345,7 @@ export default function Pricing({
   const [isAnnual, setIsAnnual] = useState(false);
   const isPage = variant === "page";
   const region = useRegionalPricing();
-  const { plans, status } = usePlans(region.currency);
+  const { plans, status } = usePlans(plansRequestCurrency(region));
   const priceCurrency = region.currency;
   const discountPercent = useMemo(() => {
     const percents = (plans?.plans ?? []).map((plan) => annualDiscountForTier(plan.name, plan.annualDiscountPercent));

@@ -2,7 +2,7 @@
 
 import { Fragment, useMemo, useState } from "react";
 import type { ComparisonCell, PricingTier, RegionalPricing } from "@/lib/pricing-data";
-import { formatPrice, tiersForRegion } from "@/lib/pricing-data";
+import { formatPrice, plansRequestCurrency, tiersForRegion } from "@/lib/pricing-data";
 import { bookingSummary, toPricingTier, type PublicPlan, type PublicPlans } from "@/lib/public-plans";
 import { usePlans } from "./usePlans";
 import { useRegionalPricing } from "./useRegionalPricing";
@@ -296,7 +296,7 @@ function ComparisonLegend({ className = "" }: { className?: string }) {
 
 export default function PricingComparison() {
   const region = useRegionalPricing();
-  const { plans: catalog, status } = usePlans(region.currency);
+  const { plans: catalog, status } = usePlans(plansRequestCurrency(region));
   const tiers = useMemo(
     () => tiersForRegion(catalog ? orderedPublicPlans(catalog.plans).map(toPricingTier) : [], region),
     [catalog, region]

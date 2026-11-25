@@ -85,6 +85,7 @@ export function getCurrencySymbol(currencyCode: string): string {
  * Format an amount with a currency symbol or code.
  *
  * @example formatPrice(999, "INR") → "₹999"
+ * @example formatPrice(1499, "INR") → "₹1,499"
  * @example formatPrice(12, "USD") → "$12"
  * @example formatPrice(16, "SGD") → "$16"
  * @example formatPrice(10, "HKD") → "$10"
@@ -94,10 +95,20 @@ export function getCurrencySymbol(currencyCode: string): string {
  * @example formatPrice(45, "AED") → "AED 45"
  * @example formatPrice(100, "UNKNOWN") → "UNKNOWN 100"
  */
+function formatAmount(amount: number): string {
+  const safe = Number.isFinite(amount) ? amount : 0;
+  const fractionDigits = Number.isInteger(safe) ? 0 : 2;
+  return new Intl.NumberFormat("en", {
+    useGrouping: true,
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(safe);
+}
+
 export function formatPrice(amount: number, currencyCode: string): string {
   const code = currencyCode.trim().toUpperCase() || "USD";
   const symbol = getCurrencySymbol(code);
-  const value = Number.isFinite(amount) ? String(amount) : "0";
+  const value = formatAmount(amount);
 
   if (!symbol) return `${code} ${value}`;
 

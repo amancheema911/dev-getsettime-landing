@@ -230,8 +230,27 @@ export function formatRegionalPrice(
 }
 
 /**
+ * Currency shown for a selected country.
+ * India → INR, United States → USD, United Kingdom → GBP, euro countries → EUR.
+ * Any other country keeps its own currency and the plans API.
+ */
+export function currencyForCountry(countryCode?: string | null): string {
+  return getRegionalPricing(countryCode).currency;
+}
+
+/**
+ * Plans API currency for this visitor.
+ * USD, GBP, and EUR amounts live in `regionalPricing`, so those visitors still
+ * load plan details with the INR catalog and never request those codes from the API.
+ */
+export function plansRequestCurrency(region: RegionalPricing): string {
+  if (region.fromTable) return "INR";
+  return region.currency || "INR";
+}
+
+/**
  * USD, GBP, and EUR amounts come only from `regionalPricing`.
- * Every other currency keeps the plans API amounts and is labeled with the visitor currency.
+ * INR and every other currency keep the plans API amounts, labeled in the visitor currency.
  */
 export function tiersForRegion(tiers: PricingTier[], region: RegionalPricing): PricingTier[] {
   if (region.fromTable) return applyRegionalPrices(tiers, region);

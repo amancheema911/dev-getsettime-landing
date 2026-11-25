@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { formatPrice, tiersForRegion } from "@/lib/pricing-data";
+import { formatPrice, plansRequestCurrency, tiersForRegion } from "@/lib/pricing-data";
 import { annualDiscountForTier, discountedPrice, toPricingTier } from "@/lib/public-plans";
 import { usePlans } from "./usePlans";
 import { useRegionalPricing } from "./useRegionalPricing";
@@ -36,7 +36,7 @@ const BOOKING_ALLOWANCE = 250;
 export default function PricingHeroPreview() {
   const [isAnnual, setIsAnnual] = useState(false);
   const region = useRegionalPricing();
-  const plans = usePlans(region.currency).plans;
+  const plans = usePlans(plansRequestCurrency(region)).plans;
   const tiers = useMemo(
     () => tiersForRegion(plans?.plans.length ? plans.plans.map(toPricingTier) : [], region),
     [plans, region]
