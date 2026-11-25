@@ -173,7 +173,14 @@ export function getRegionalPricing(countryCode?: string | null): RegionalPricing
     }
   }
 
-  // Unlisted countries keep API prices in the UI. This fallback is not shown.
+  // Dollar, pound, and euro countries use those rows even when the ISO code differs
+  // (Argentina → $, Canada → $, Australia → $). Amounts stay the configured prices.
+  const symbol = getCurrencySymbol(currency);
+  if (symbol === "$") return resolveRegionalPricing(regionalPricing.US, true);
+  if (symbol === "£") return resolveRegionalPricing(regionalPricing.GB, true);
+  if (symbol === "€") return resolveRegionalPricing(regionalPricing.EUR, true);
+
+  // Other currencies, including INR, keep the plans API.
   const fallback = regionalPricing.US;
   if (currency && currency !== fallback.currency) {
     return resolveRegionalPricing({
@@ -231,8 +238,8 @@ export function formatRegionalPrice(
 
 /**
  * Currency shown for a selected country.
- * India → INR, United States → USD, United Kingdom → GBP, euro countries → EUR.
- * Any other country keeps its own currency and the plans API.
+ * Dollar-sign countries use the USD row, pound countries the GBP row, and euro countries the EUR row.
+ * India and every other currency keep the plans API.
  */
 export function currencyForCountry(countryCode?: string | null): string {
   return getRegionalPricing(countryCode).currency;
