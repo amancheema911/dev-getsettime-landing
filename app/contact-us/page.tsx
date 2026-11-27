@@ -171,7 +171,7 @@ export default function ContactUs() {
                 <div className="space-y-6">
                   <Heading
                     badge="Contact Sales"
-                    title="Book a discussion with a product specialist"
+                    title="Let’s make booking easier for your business"
                     description="Speak with a product specialist to explore your requirements and get started with GetSetTime."
                     headingTag="h1"
                     titleClassName="text-2xl sm:text-3xl md:text-4xl font-black text-neutral-900 capitalize"
@@ -228,7 +228,7 @@ export default function ContactUs() {
                 <div className="space-y-3">
                   <Heading
                     badge="Built for Modern Business"
-                    title="Ready for GetSetTime To Manage Your Appointments"
+                    title="What would your day look like with less time spent scheduling?"
                     description="Switch your manual operations to a unified scheduling platform to meet modern needs like online booking, reminders and more."
                     titleClassName="text-2xl sm:text-3xl font-bold text-white md:text-4xl lg:text-[40px] capitalize"
                     descriptionClassName = "text-white"

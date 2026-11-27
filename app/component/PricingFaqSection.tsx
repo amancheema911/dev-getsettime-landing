@@ -11,11 +11,11 @@ export type PricingFaqItem = {
 export const pricingFaqItems: PricingFaqItem[] = [
   {
     title: "Which plan is best for me?",
-    content: `Our price plans are tailored to meet everyone's requirements. Solo practitioners can start for free for the first 250 bookings and upgrade at any time. <br/>For handling appointments across 2 sheets with automated scheduling, the Professional plan is perfect. <br/> For a team of more than two service providers across multiple locations with full automation, the Enterprise plan is best.`,
+    content: `Our price plans are tailored to meet everyone's requirements. Solo practitioners can start for free for the first 250 bookings and upgrade at any time. <br/>For handling appointments across 2 providers sheets with automated scheduling, the Professional plan is perfect. <br/> For a team of more than two service providers across multiple locations with full automation, the Enterprise plan is best.`,
   },
   {
     title: "What happens when I hit my booking limit?",
-    content: `In the free plan, your first 250 bookings are included at no fee for a single sheet. Either you hit the limit before the month ends, or you complete three months of subscription; then you have to choose a paid plan to keep scheduling appointments. <br/> Paid plans include unlimited bookings from day one.`,
+    content: `In the free plan, your first 250 bookings are included at no fee for a single Provider sheet. Either you hit the limit before the month ends, or you complete three months of subscription; then you have to choose a paid plan to keep scheduling appointments.`,
   },
   {
     title: "Can I try GetSetTime before committing to a paid plan?",

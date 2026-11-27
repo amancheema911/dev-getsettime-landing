@@ -616,7 +616,7 @@ export default async function PricingPage() {
         {/* Call-to-Action Section */}
         <CallToAction
           badge="Built for Modern Business"
-          title="Ready for GetSetTime To Manage Your Appointments"
+          title="What would your day look like with less time spent scheduling?"
           description="Switch your manual operations to a unified scheduling platform to meet modern needs like online booking, reminders and more."
           buttonLink={`${LOGIN_URL}`}
           buttonText="Sign Up for Free"

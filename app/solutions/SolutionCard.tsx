@@ -6,7 +6,7 @@ import type {
 } from "@/lib/solutions-hub-data";
 
 const iconProps = {
-  className: "h-5 w-5",
+  className: "h-6 w-6 text-indigo-600",
   viewBox: "0 0 24 24",
   fill: "none",
   stroke: "currentColor",
@@ -149,20 +149,15 @@ export function SolutionCardGrid({ solutions }: { solutions: readonly HubSolutio
 
 export function PlatformBenefits({ benefits }: { benefits: readonly PlatformBenefit[] }) {
   return (
-    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
-      {benefits.map((benefit) => (
-        <li key={benefit.id} className="min-w-0">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 justify-center gap-3">
+      {benefits.map((benefit) => (        
           <Card
+            key={benefit.id}          
             title={benefit.title}
             description={benefit.description}
-            iconNode={<BenefitIcon id={benefit.id} />}
-            wrapperClassName="group relative h-full"
-            iconWrapperClassName="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-600 text-white"
-            titleClassName="text-base font-semibold tracking-tight text-neutral-950"
-            descriptionClassName="text-sm leading-6 text-neutral-600"
+            iconNode={<BenefitIcon id={benefit.id} />}            
           />
-        </li>
       ))}
-    </ul>
+    </div>
   );
 }

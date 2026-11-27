@@ -116,7 +116,7 @@ export const dentistCtaTrustBadges: CtaTrustBadge[] = [
 
 export const defaultCtaSectionContent = {
   badge: "Built for Modern Business",
-  title: "Ready for GetSetTime To Manage Your Appointments",
+  title: "What would your day look like with less time spent scheduling?",
   description: "Switch your manual operations to a unified scheduling platform to meet modern needs like online booking, reminders and more.",
   trustedBusinessContent: "Trusted by 2,500+ businesses worldwide",
 };

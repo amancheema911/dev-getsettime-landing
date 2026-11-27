@@ -112,25 +112,21 @@ export const platformBenefits: readonly PlatformBenefit[] = [
   {
     id: "booking-link",
     title: "A booking link that stays open",
-    description:
-      "Clients book from a page you share on your website, Google profile, or messages — including after hours.",
+    description: "Clients book from a page you share on your website, Google profile, or messages — including after hours.",
   },
   {
     id: "reminders",
     title: "Reminders on the channels you use",
-    description:
-      "Send WhatsApp, SMS, and email reminders on the schedule you choose, so fewer appointments go empty.",
+    description: "Send WhatsApp, SMS, and email reminders on the schedule you choose, so fewer appointments go empty.",
   },
   {
     id: "calendar-sync",
     title: "Calendars that match",
-    description:
-      "Two-way Google Calendar sync and live availability keep the book you show clients aligned with your day.",
+    description: "Two-way Google Calendar sync and live availability keep the book you show clients aligned with your day.",
   },
   {
     id: "team",
     title: "A roster the whole team can use",
-    description:
-      "Add staff, assign services, and give each person a view of their own schedule from phone, tablet, or desktop.",
+    description: "Add staff, assign services, and give each person a view of their own schedule from phone, tablet, or desktop.",
   },
 ];

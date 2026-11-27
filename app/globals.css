@@ -69,7 +69,32 @@ p{
   to { transform: translateX(0); opacity: 1; }
 }
 
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes float-reverse {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(6px); }
+}
+
+@keyframes cursor-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  70% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
 .animate-float { animation: float 6s ease-in-out infinite; }
+.animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
+.animate-float-reverse { animation: float-reverse 7s ease-in-out infinite; }
+.animate-cursor { animation: cursor-blink 0.9s steps(1) infinite; }
+.animate-pulse-ring { animation: pulse-ring 2s cubic-bezier(0.24, 0, 0.38, 1) infinite; }
 .animate-float-delayed { animation: float 6s ease-in-out 1.5s infinite; }
 .animate-fade-in-scale { animation: fade-in-scale 0.5s ease-out; }
 .animate-fade-in { animation: fade-in 0.3s ease-out; }
